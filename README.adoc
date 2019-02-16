@@ -1,4 +1,6 @@
 = AddressBook (Level 3)
+
+image:https://api.codacy.com/project/badge/Grade/51c69cebaf554816a9f9dc3f61f0a60f[link="https://app.codacy.com/app/seanieyap/main?utm_source=github.com&utm_medium=referral&utm_content=seanieyap/main&utm_campaign=Badge_Grade_Dashboard"]
 ifdef::env-github,env-browser[:relfileprefix: docs/]
 ifdef::env-github,env-browser[:imagesDir: docs/images]
 
