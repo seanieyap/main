@@ -66,9 +66,14 @@ public class AddressBook {
     }
 
     /**
-     * Sorts all persons in the address book in ascending order.
+     * Sorts all persons in the address book in lexicographical order.
      */
     public void sort() { allPersons.sort(); }
+
+    /**
+     * Sorts all persons in the address book in colexicographical order.
+     */
+    public void sortReverse() { allPersons.sortReverse(); }
 
     /**
      * Defensively copied UniquePersonList of all persons in the address book at the time of the call.

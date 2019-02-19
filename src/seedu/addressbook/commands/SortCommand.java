@@ -9,13 +9,21 @@ public class SortCommand extends Command {
     public static final String COMMAND_WORD = "sort";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ":\n"
-            + "Sort all persons in the address book in lexicographical order.\n"
+            + "Sort all persons in the address book in lexicographical order.\n\t"
+            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n\t"
             + "Example: " + COMMAND_WORD;
 
     public static final String MESSAGE_SUCCESS_ASCENDING = "Address book has been sorted in lexicographical order!";
     public static final String MESSAGE_SUCCESS_DESCENDING = "Address book has been sorted in colexicographical order!";
     private boolean ascending = true;
 
+    public SortCommand(){
+        super();
+    }
+    public SortCommand(boolean ascending){
+        super();
+        this.ascending = ascending;
+    }
 
     @Override
     public CommandResult execute() {
@@ -25,9 +33,5 @@ public class SortCommand extends Command {
         }
         addressBook.sortReverse();
         return new CommandResult(MESSAGE_SUCCESS_DESCENDING);
-    }
-
-    public void setAscending(boolean ascending) {
-        this.ascending = ascending;
     }
 }

@@ -89,6 +89,6 @@ public class Person implements ReadOnlyPerson, Comparable<Person> {
 
     @Override
     public int compareTo(Person p) {
-        return (p.name.fullName).compareTo(name.fullName);
+        return name.fullName.compareToIgnoreCase(p.name.fullName);
     }
 }

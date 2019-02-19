@@ -114,10 +114,17 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
-     * Sorts all persons in list by name in ascending order.
+     * Sorts all persons in list by name in lexicographical order.
      */
     public void sort() {
         Collections.sort(internalList);
+    }
+
+    /**
+     * Sorts all persons in list by name in colexicographical order.
+     */
+    public void sortReverse() {
+        Collections.reverse(internalList);
     }
 
     @Override
