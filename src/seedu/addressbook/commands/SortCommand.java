@@ -10,8 +10,8 @@ public class SortCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ":\n"
             + "Sort all persons in the address book in lexicographical order.\n\t"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n\t"
-            + "Example: " + COMMAND_WORD;
+            + "Parameters: sort [ascending | asc] | [descending | desc] \n\t"
+            + "Example: " + COMMAND_WORD + "desc";
 
     public static final String MESSAGE_SUCCESS_ASCENDING = "Address book has been sorted in lexicographical order!";
     public static final String MESSAGE_SUCCESS_DESCENDING = "Address book has been sorted in colexicographical order!";
