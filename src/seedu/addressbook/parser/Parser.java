@@ -67,7 +67,7 @@ public class Parser {
                 return new ClearCommand();
 
             case SortCommand.COMMAND_WORD:
-                return new SortCommand();
+                return prepareSort(arguments);
 
             case FindCommand.COMMAND_WORD:
                 return prepareFind(arguments);
@@ -229,5 +229,33 @@ public class Parser {
         return new FindCommand(keywordSet);
     }
 
+    /**
+     * Parses arguments in the context of the sort command.
+     *
+     * @param args full command args string
+     * @return the prepared command
+     */
+    private Command prepareSort(String args) {
+        if (args.isEmpty()) {
+            return new SortCommand();
+        }
+        final Matcher matcher = KEYWORDS_ARGS_FORMAT.matcher(args.trim());
+        if (!matcher.matches()) {
+            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    SortCommand.MESSAGE_USAGE));
+        }
 
+        // keywords delimited by whitespace
+        final String[] keywords = matcher.group("keywords").split("\\s+");
+        final String keyword = keywords[0];
+
+        if (keyword.equalsIgnoreCase("desc") || keyword.equalsIgnoreCase("descending")) {
+            return new SortCommand(false);
+        } else if (keyword.equalsIgnoreCase("asc") || keyword.equalsIgnoreCase("ascending")) {
+            return new SortCommand();
+        }
+
+        return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                SortCommand.MESSAGE_USAGE));
+    }
 }
