@@ -417,6 +417,52 @@ public class LogicTest {
     }
 
     @Test
+    public void execute_sort_lexicographical() throws Exception {
+        TestDataHelper helper = new TestDataHelper();
+        Person alice = helper.generatePersonWithName("Alice");
+        Person bob = helper.generatePersonWithName("bob");
+        Person charlie = helper.generatePersonWithName("charlie");
+        Person douglas = helper.generatePersonWithName("douglas");
+
+        List<Person> personsSorted = helper.generatePersonList(alice, bob, charlie, douglas);
+        AddressBook expectedAB = helper.generateAddressBook(personsSorted);
+
+        List<Person> personsUnsorted = helper.generatePersonList(douglas, charlie, bob, alice);
+        helper.addToAddressBook(addressBook, personsUnsorted);
+
+        addressBook.sort();
+
+        assertCommandBehavior("list",
+                Command.getMessageForPersonListShownSummary(personsSorted),
+                expectedAB,
+                true,
+                personsSorted);
+    }
+
+    @Test
+    public void execute_sort_colexicographical() throws Exception {
+        TestDataHelper helper = new TestDataHelper();
+        Person alice = helper.generatePersonWithName("Alice");
+        Person bob = helper.generatePersonWithName("bob");
+        Person charlie = helper.generatePersonWithName("charlie");
+        Person douglas = helper.generatePersonWithName("douglas");
+
+        List<Person> personsSorted = helper.generatePersonList(alice, bob, charlie, douglas);
+        AddressBook expectedAB = helper.generateAddressBook(personsSorted);
+
+        List<Person> personsUnsorted = helper.generatePersonList(douglas, charlie, bob, alice);
+        helper.addToAddressBook(addressBook, personsUnsorted);
+
+        addressBook.sortReverse();
+
+        assertCommandBehavior("list",
+                Command.getMessageForPersonListShownSummary(personsSorted),
+                expectedAB,
+                true,
+                personsSorted);
+    }
+
+    @Test
     public void execute_find_isCaseSensitive() throws Exception {
         TestDataHelper helper = new TestDataHelper();
         Person pTarget1 = helper.generatePersonWithName("bla bla KEY bla");
