@@ -21,13 +21,13 @@ public class DateTime {
      *
      * @throws IllegalValueException if given email address string is invalid.
      */
-    public DateTime(String email, boolean isPrivate) throws IllegalValueException {
+    public DateTime(String value, boolean isPrivate) throws IllegalValueException {
         this.isPrivate = isPrivate;
-        email = email.trim();
-        if (!isValid(email)) {
+        String dateTime = value.trim();
+        if (!isValid(dateTime)) {
             throw new IllegalValueException(MESSAGE_EMAIL_CONSTRAINTS);
         }
-        this.value = email;
+        this.value = dateTime;
     }
 
     /**

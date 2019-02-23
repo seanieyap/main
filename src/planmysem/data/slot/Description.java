@@ -23,12 +23,12 @@ public class Description {
      *
      * @throws IllegalValueException if given name string is invalid.
      */
-    public Description(String name) throws IllegalValueException {
-        name = name.trim();
-        if (!isValidName(name)) {
+    public Description(String value) throws IllegalValueException {
+        String description = value.trim();
+        if (!isValidName(description)) {
             throw new IllegalValueException(MESSAGE_NAME_CONSTRAINTS);
         }
-        this.fullName = name;
+        this.fullName = description;
     }
 
     /**

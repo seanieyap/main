@@ -22,8 +22,8 @@ public class Name {
      *
      * @throws IllegalValueException if given name string is invalid.
      */
-    public Name(String name) throws IllegalValueException {
-        name = name.trim();
+    public Name(String value) throws IllegalValueException {
+        String name = value.trim();
         if (!isValidName(name)) {
             throw new IllegalValueException(MESSAGE_NAME_CONSTRAINTS);
         }
