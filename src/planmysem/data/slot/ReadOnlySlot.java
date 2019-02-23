@@ -2,10 +2,7 @@ package planmysem.data.slot;
 
 import java.util.Set;
 
-import planmysem.data.person.Address;
-import planmysem.data.person.Email;
 import planmysem.data.person.Name;
-import planmysem.data.person.Phone;
 import planmysem.data.tag.Tag;
 
 /**
