@@ -143,25 +143,25 @@ public class LogicTest {
     public void execute_add_invalidArgsFormat() throws Exception {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
         assertCommandBehavior(
-                "add wrong args wrong args", expectedMessage);
+                "addDay wrong args wrong args", expectedMessage);
         assertCommandBehavior(
-                "add Valid Name 12345 e/valid@email.butNoPhonePrefix a/valid, address", expectedMessage);
+                "addDay Valid Name 12345 e/valid@email.butNoPhonePrefix a/valid, address", expectedMessage);
         assertCommandBehavior(
-                "add Valid Name p/12345 valid@email.butNoPrefix a/valid, address", expectedMessage);
+                "addDay Valid Name p/12345 valid@email.butNoPrefix a/valid, address", expectedMessage);
         assertCommandBehavior(
-                "add Valid Name p/12345 e/valid@email.butNoAddressPrefix valid, address", expectedMessage);
+                "addDay Valid Name p/12345 e/valid@email.butNoAddressPrefix valid, address", expectedMessage);
     }
 
     @Test
     public void execute_add_invalidPersonData() throws Exception {
         assertCommandBehavior(
-                "add []\\[;] p/12345 e/valid@e.mail a/valid, address", Name.MESSAGE_NAME_CONSTRAINTS);
+                "addDay []\\[;] p/12345 e/valid@e.mail a/valid, address", Name.MESSAGE_NAME_CONSTRAINTS);
         assertCommandBehavior(
-                "add Valid Name p/not_numbers e/valid@e.mail a/valid, address", Phone.MESSAGE_PHONE_CONSTRAINTS);
+                "addDay Valid Name p/not_numbers e/valid@e.mail a/valid, address", Phone.MESSAGE_PHONE_CONSTRAINTS);
         assertCommandBehavior(
-                "add Valid Name p/12345 e/notAnEmail a/valid, address", Email.MESSAGE_EMAIL_CONSTRAINTS);
+                "addDay Valid Name p/12345 e/notAnEmail a/valid, address", Email.MESSAGE_EMAIL_CONSTRAINTS);
         assertCommandBehavior(
-                "add Valid Name p/12345 e/valid@e.mail a/valid, address t/invalid_-[.tag", Tag.MESSAGE_TAG_CONSTRAINTS);
+                "addDay Valid Name p/12345 e/valid@e.mail a/valid, address t/invalid_-[.tag", Tag.MESSAGE_TAG_CONSTRAINTS);
 
     }
 
@@ -512,12 +512,12 @@ public class LogicTest {
         }
 
         /**
-         * Generates the correct add command based on the person given
+         * Generates the correct addDay command based on the person given
          */
         String generateAddCommand(Person p) {
             StringJoiner cmd = new StringJoiner(" ");
 
-            cmd.add("add");
+            cmd.add("addDay");
 
             cmd.add(p.getName().toString());
             cmd.add((p.getPhone().isPrivate() ? "pp/" : "p/") + p.getPhone());

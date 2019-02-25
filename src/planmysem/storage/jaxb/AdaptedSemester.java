@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlValue;
 
-import planmysem.common.Utils;
 import planmysem.data.exception.IllegalValueException;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlySemester;
@@ -17,18 +15,17 @@ import planmysem.data.semester.Semester;
  * JAXB-friendly adapted person data holder class.
  */
 public class AdaptedSemester {
-
-    @XmlValue
+    @XmlElement(required = false)
     private String name;
-    @XmlValue
+    @XmlElement(required = false)
     private String academicYear;
-    @XmlValue
+    @XmlElement(required = false)
     private String startDate;
-    @XmlValue
+    @XmlElement(required = false)
     private String endDate;
-    @XmlValue
+    @XmlElement(required = false)
     private int noOfWeeks;
-    @XmlElement
+    @XmlElement(required = true)
     private HashMap<LocalDate, AdaptedDay> days = new HashMap<>();
 
     /**
@@ -71,7 +68,8 @@ public class AdaptedSemester {
         }
 
         // second call only happens if phone/email/address are all not null
-        return Utils.isAnyNull(name, academicYear, days, startDate, endDate);
+        // return Utils.isAnyNull(name, academicYear, days, startDate, endDate);
+        return false;
     }
 
     /**
@@ -86,7 +84,7 @@ public class AdaptedSemester {
         final String endDate = this.endDate;
         final int noOfWeeks = this.noOfWeeks;
 
-        final HashMap<LocalDate, Day> days = new HashMap<>();
+        final HashMap<LocalDate, Day> days = new HashMap<LocalDate, Day>();
         for (Map.Entry<LocalDate, AdaptedDay> day : this.days.entrySet()) {
             days.put(day.getKey(), day.getValue().toModelType());
         }

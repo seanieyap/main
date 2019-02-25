@@ -10,7 +10,6 @@ import planmysem.data.tag.Tag;
  * JAXB-friendly adapted tag data holder class.
  */
 public class AdaptedTag {
-
     @XmlValue
     private String tagName;
 

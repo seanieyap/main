@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import planmysem.logic.Logic;
+import planmysem.logic.LogicP;
 import planmysem.ui.Gui;
 import planmysem.ui.Stoppable;
 
@@ -18,6 +19,7 @@ public class Main extends Application implements Stoppable {
     public static final String VERSION = "PlanMySem - Version 1.0";
 
     private Gui gui;
+    private Gui guiP;
 
     public static void main(String[] args) {
         launch(args);
@@ -25,7 +27,7 @@ public class Main extends Application implements Stoppable {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        gui = new Gui(new Logic(), VERSION);
+        gui = new Gui(new Logic(), new LogicP(), VERSION);
         gui.start(primaryStage, this);
     }
 

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import planmysem.Main;
 import planmysem.logic.Logic;
+import planmysem.logic.LogicP;
 
 /**
  * The GUI of the App
@@ -21,11 +22,14 @@ public class Gui {
     public static final int INITIAL_WINDOW_WIDTH = 800;
     public static final int INITIAL_WINDOW_HEIGHT = 600;
     private final Logic logic;
+    private final LogicP logicP;
 
     private MainWindow mainWindow;
+    private MainWindowP mainWindowP;
     private String version;
 
-    public Gui(Logic logic, String version) {
+    public Gui(Logic logic, LogicP logicP, String version) {
+        this.logicP = logicP;
         this.logic = logic;
         this.version = version;
     }
@@ -35,7 +39,11 @@ public class Gui {
      */
     public void start(Stage stage, Stoppable mainApp) throws IOException {
         mainWindow = createMainWindow(stage, mainApp);
-        mainWindow.displayWelcomeMessage(version, logic.getStorageFilePath());
+        mainWindow.displayWelcomeMessage(version + " old Address Book", logic.getStorageFilePath());
+
+        Stage stage2 = new Stage();
+        mainWindowP = createMainWindowP(stage2, mainApp);
+        mainWindowP.displayWelcomeMessage(version, logicP.getStorageFilePath());
     }
 
     /**
@@ -58,4 +66,20 @@ public class Gui {
         return mainWindow;
     }
 
+    /**
+     * TODO: Add Javadoc comment.
+     */
+    private MainWindowP createMainWindowP(Stage stage, Stoppable mainApp) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("ui/mainwindowP.fxml"));
+
+        stage.setTitle(version);
+        stage.setScene(new Scene(loader.load(), INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT));
+        stage.show();
+        MainWindowP mainWindowP = null;
+        mainWindowP = loader.getController();
+        mainWindowP.setLogic(logicP);
+        mainWindowP.setMainApp(mainApp);
+        return mainWindowP;
+    }
 }

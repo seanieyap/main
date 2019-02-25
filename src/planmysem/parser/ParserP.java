@@ -11,14 +11,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import planmysem.commands.AddCommand;
-import planmysem.commands.ClearCommand;
 import planmysem.commands.Command;
+import planmysem.commands.CommandP;
 import planmysem.commands.DeleteCommand;
-import planmysem.commands.ExitCommand;
 import planmysem.commands.FindCommand;
 import planmysem.commands.HelpCommand;
+import planmysem.commands.HelpCommandP;
 import planmysem.commands.IncorrectCommand;
-import planmysem.commands.ListCommand;
+import planmysem.commands.IncorrectCommandP;
 import planmysem.commands.ViewAllCommand;
 import planmysem.commands.ViewCommand;
 import planmysem.data.exception.IllegalValueException;
@@ -26,7 +26,7 @@ import planmysem.data.exception.IllegalValueException;
 /**
  * Parses user input.
  */
-public class Parser {
+public class ParserP {
 
     public static final Pattern PERSON_INDEX_ARGS_FORMAT = Pattern.compile("(?<targetIndex>.+)");
 
@@ -71,44 +71,13 @@ public class Parser {
      * @param userInput full user input string
      * @return the command based on the user input
      */
-    public Command parseCommand(String userInput) {
+    public CommandP parseCommand(String userInput) {
         final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
         if (!matcher.matches()) {
-            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
+            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
         }
 
-        final String commandWord = matcher.group("commandWord");
-        final String arguments = matcher.group("arguments");
-        switch (commandWord) {
-
-        case AddCommand.COMMAND_WORD:
-            return prepareAdd(arguments);
-
-        case DeleteCommand.COMMAND_WORD:
-            return prepareDelete(arguments);
-
-        case ClearCommand.COMMAND_WORD:
-            return new ClearCommand();
-
-        case FindCommand.COMMAND_WORD:
-            return prepareFind(arguments);
-
-        case ListCommand.COMMAND_WORD:
-            return new ListCommand();
-
-        case ViewCommand.COMMAND_WORD:
-            return prepareView(arguments);
-
-        case ViewAllCommand.COMMAND_WORD:
-            return prepareViewAll(arguments);
-
-        case ExitCommand.COMMAND_WORD:
-            return new ExitCommand();
-
-        case HelpCommand.COMMAND_WORD: // Fallthrough
-        default:
-            return new HelpCommand();
-        }
+        return new HelpCommandP();
     }
 
     /**
@@ -117,30 +86,14 @@ public class Parser {
      * @param args full command args string
      * @return the prepared command
      */
-    private Command prepareAdd(String args) {
+    private CommandP prepareAdd(String args) {
         final Matcher matcher = PERSON_DATA_ARGS_FORMAT.matcher(args.trim());
         // Validate arg string format
         if (!matcher.matches()) {
-            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
-        try {
-            return new AddCommand(
-                    matcher.group("name"),
 
-                    matcher.group("phone"),
-                    isPrivatePrefixPresent(matcher.group("isPhonePrivate")),
-
-                    matcher.group("email"),
-                    isPrivatePrefixPresent(matcher.group("isEmailPrivate")),
-
-                    matcher.group("address"),
-                    isPrivatePrefixPresent(matcher.group("isAddressPrivate")),
-
-                    getTagsFromArgs(matcher.group("tagArguments"))
-            );
-        } catch (IllegalValueException ive) {
-            return new IncorrectCommand(ive.getMessage());
-        }
+        return new HelpCommandP();
     }
 
     /**

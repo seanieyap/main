@@ -1,5 +1,6 @@
 package planmysem.common;
 
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,5 +34,12 @@ public class Utils {
             }
         }
         return true;
+    }
+
+    /**
+     * TODO
+     */
+    public static LocalTime getLocalTime(String date) {
+        return LocalTime.of(1, 1, 1);
     }
 }
