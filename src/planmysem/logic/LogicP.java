@@ -36,11 +36,11 @@ public class LogicP {
         setPlanner(planner);
     }
 
-    void setStorage(StorageFileP storage) {
+    public void setStorage(StorageFileP storage) {
         this.storage = storage;
     }
 
-    void setPlanner(Planner planner) {
+    public void setPlanner(Planner planner) {
         this.planner = planner;
     }
 

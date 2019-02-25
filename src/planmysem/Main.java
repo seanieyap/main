@@ -19,7 +19,6 @@ public class Main extends Application implements Stoppable {
     public static final String VERSION = "PlanMySem - Version 1.0";
 
     private Gui gui;
-    private Gui guiP;
 
     public static void main(String[] args) {
         launch(args);

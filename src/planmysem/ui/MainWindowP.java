@@ -26,9 +26,6 @@ public class MainWindowP {
     @FXML
     private TextField commandInput;
 
-    public MainWindowP() {
-    }
-
     public void setLogic(LogicP logic) {
         this.logic = logic;
     }

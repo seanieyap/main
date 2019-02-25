@@ -49,7 +49,7 @@ public class StorageFileP {
         try {
             jaxbContext = JAXBContext.newInstance(AdaptedPlanner.class);
         } catch (JAXBException ex) {
-            throw new RuntimeException("jaxb initialisation error");
+            throw new RuntimeException("jaxb initialisation error" + ex);
         }
 
         path = Paths.get(filePath);
