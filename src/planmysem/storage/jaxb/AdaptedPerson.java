@@ -23,7 +23,6 @@ import planmysem.data.tag.Tag;
  * JAXB-friendly adapted person data holder class.
  */
 public class AdaptedPerson {
-
     @XmlElement(required = true)
     private String name;
     @XmlElement(required = true)

@@ -4,9 +4,7 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlValue;
 
-import planmysem.common.Utils;
 import planmysem.data.exception.IllegalValueException;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
@@ -16,8 +14,7 @@ import planmysem.data.slot.Slot;
  * JAXB-friendly adapted Day data holder class.
  */
 public class AdaptedDay {
-
-    @XmlValue
+    @XmlElement(required = true)
     private DayOfWeek dayOfWeek;
     @XmlElement(required = true)
     private ArrayList<AdaptedSlot> slots = new ArrayList<>();
@@ -57,7 +54,8 @@ public class AdaptedDay {
             }
         }
         // second call only happens if phone/email/address are all not null
-        return Utils.isAnyNull(dayOfWeek, slots);
+        // return Utils.isAnyNull(dayOfWeek, slots);
+        return false;
     }
 
     /**

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.semester.Semester;
+import planmysem.data.slot.Slot;
 
 /**
  * Represents the entire address book. Contains the data of the address book.
@@ -38,12 +39,20 @@ public class Planner {
     }
 
     /**
-     * Adds a day to the address book.
+     * Adds a day to the Planner.
      *
      * @throws Semester.DuplicateDayException if an equivalent Day already exists.
      */
     public void addDay(LocalDate date, Day day) throws Semester.DuplicateDayException {
-        semester.add(date, day);
+        semester.addDay(date, day);
+    }
+
+    /**
+     * Adds a slot to the Planner.
+     *
+     */
+    public void addSlot(Slot slot) {
+        semester.addSlot(slot);
     }
 
     /**

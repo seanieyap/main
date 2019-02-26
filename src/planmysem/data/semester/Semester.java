@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import planmysem.data.exception.DuplicateDataException;
+import planmysem.data.slot.Slot;
 
 /**
  * A list of days. Does not allow null elements or duplicates.
@@ -53,19 +54,26 @@ public class Semester implements ReadOnlySemester {
         this.startDate = source.startDate;
         this.endDate = source.endDate;
         this.noOfWeeks = source.noOfWeeks;
+    }
 
+    /**
+     * Adds a day to the list.
+     *
+     * @throws DuplicateDayException if the Day to addDay is a duplicate of an existing Day in the list.
+     */
+    public void addDay(LocalDate date, Day day) throws DuplicateDayException {
+        if (contains(day)) {
+            throw new DuplicateDayException();
+        }
+        days.put(date, day);
     }
 
     /**
      * Adds a person to the list.
      *
-     * @throws DuplicateDayException if the Day to add is a duplicate of an existing Day in the list.
      */
-    public void add(LocalDate date, Day day) throws DuplicateDayException {
-        if (contains(day)) {
-            throw new DuplicateDayException();
-        }
-        days.put(date, day);
+    public void addSlot(Slot slot) {
+        //        days.put(date, day);
     }
 
     /**

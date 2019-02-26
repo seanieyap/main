@@ -18,9 +18,9 @@ By: `Team T08-3`      Since: `Jan 2019`      Licence: `MIT`
 
 == Introduction
 
-*PlanMySem* is a CLI (Command Line Interface) scheduling/calendar application that targets NUS students and staff who prefer to use a desktop application for managing their schedule/calendar.
-More importantly, *PlanMySem* is optimized for those who prefer to work with a Command Line Interface (CLI) and/or are learning to work more efficiently with CLI tools.
-Additionally, unlike traditional calendar/scheduling applications, *PlanMySem* utilizes minimal resources on the user’s machine while still allowing the user to view their schedules swiftly and efficiently.
+PlanMySem is a CLI (Command Line Interface) scheduling/calendar application that targets NUS students and staff who prefer to use a desktop application for managing their schedule/calendar. PlanMySem automatically creates a calendar and synchronises it according to the NUS academic calendar for a particular semester.
+
+PlanMySem is optimized for those who prefer to work with a Command Line Interface (CLI) and/or are learning to work more efficiently with CLI tools. Additionally, unlike traditional calendar/scheduling applications, PlanMySem utilizes minimal resources on the user’s machine while still allowing the user to view their schedules swiftly and efficiently.
 
 == Quick Start
 
@@ -59,156 +59,51 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * `n/`: Name specific to the object at hand.
 ** e.g. Add _Category_: `add cat n/NAME [n/MORE_NAMES]...`
 ** The `n/` here refers to the _category_ name.
-* `a/`: _Activity’s_ name.
-** e.g. Add _Slot_: `add slot a/ACTIVITY_NAME d/DAY t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
-** The `a/` here refers to the _activity_ in which to add the _slot_ to.
-* `c/`: _Category_ name
-** e.g. `List Slots: list slot [c/CATEGORY_NAME]... [a/ACTIVITY_NAME]...`
-** The `c/` here refers to the _category_ in which the _slots_ are listed from.
-* `d/`: Day.
-** Format: `Monday | Tuesday | Wednesday | Thursday | Friday`
-** e.g. Add _slot_: `add slot a/ACTIVITY_NAME d/DAY t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
-** The `d/` here refers to the day in which to add the _slot_ to.
+* `d/`: Date.
+** Format: `01-01`, `2019-01-02`
+** e.g. Add _slot_: `add slot d/DATE t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
 * `t/`: Time.
 ** Format: 24-Hour in the form of “hhmm-hhmm” or 12-Hour format in the form of `HOUR+AM|PM-Hour+AM|PM`
-** e.g. Add _slot_: `add slot a/ACTIVITY_NAME d/DAY t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
+** e.g. Add: `add d/DATE t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
 ** The `t/` here refers to the time in which to add the _slot_ to.
 * `tag/`: Tag.
-** e.g. Add _slot_: `add slot a/ACTIVITY_NAME d/DAY t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
+** e.g. Add: `add d/DATE t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
 ** The `tag/` here refers the _tags_ to attach to the _slot_.
 * `r/`: recurrence
 ** Format: `norecess | noreading | nonormal | recess | reading | normal`
-** e.g. Add _slot_: `add slot a/ACTIVITY_NAME d/DAY t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
+** e.g. Add: `add d/DATE t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
 ** The `r/` here refers to the recurrence of the _slot_.
 * `nn/`: New name of the object at hand.
-** e.g. Edit _category_: `edit cat n/NAME nn/NEW_NAME`
-** The `nn/` here refers to the new name for the _category_ specified.
-* `nc/`: New _category_ name.
-** e.g. Edit _Activity_: `edit act n/NAME [nn/NEW_NAME] [nc/NEW_CATEGORY]`
-** The `nc/` here refers to the new _category_ name of which the _activity_ should belong to.
-
+* `nd/`: New Date
+* `nt/`: New Time
 ====
 
 === Viewing help : `help`
 
 Format: `help`
 
-=== Adding a Category : `add cat`
-
-Add a _category_ to the planner. +
-Format: `add cat n/NAME [n/MORE_NAMES]...`
-
-Examples:
-
-* `add cat n/Sports` +
-Add a _category_ called "Sports".
-* `add cat n/Sports n/Interest Groups` +
-Add two _categories_ called "Sports" and "Interest Groups".
-
-=== Editing a Category : `edit cat`
-
-Edit a Category. +
-Format: `edit cat n/NAME nn/NEW_NAME`
-
-Examples:
-
-* `edit cat n/Sports nn/Frisbee`
-Rename the _category_ "Sports" to "Frisbee".
-* `edit cat n/Interest Groups nn/CCA`
-Rename the _category_ "Interest Groups" to "CCA".
-
-=== Deleting a Category : `del cat`
-
-Delete a category +
-Format: `del cat n/NAME [n/MORE_NAMES]...`
-
-****
-* Deleting a _category_ will delete all associated _activities_ as well as _slots_.
-* When multiple _categories_ are selected, a prompt will appear to confirm the action.
-****
-
-Examples:
-
-* `del cat n/Sports n/Frisbee` +
-Delete both the _categories_ 'Sports' and 'Frisbee' and all _activities_ and _slots_ associated with them.
-* `del cat n/Interest Groups` +
-Delete the _category_ 'Sports' and all _activities_ and _slots_ associated with it.
-
-=== Adding an Activity : add act
-
-Add an _activity_ to the planner. +
-Format: `add act n/NAME c/CATEGORY`
-
-[NOTE]
-====
-An _activity_ must belong to a _category_.
-====
-
-Examples:
-
-* `add act n/Frisbee c/Sports` +
-Add an _activity_ named "Frisbee" to the _category_ "Sports".
-
-=== Listing all Activities : `list act`
-
-List all _activities_ in the planner. +
-Format: `list act`
-
-=== Editing an Activity : `edit act`
-
-Edit an Activity. +
-Format: `edit act n/NAME [nn/NEW_NAME] [nc/NEW_CATEGORY]`
-
-****
-* Editing an _activity_ allows the renaming of it's name and or changing the _category_ it belongs to; hence, either and or `nn/` and `nc/` can be specified in one command.
-* Minimum of one option have to be specified.
-****
-
-[NOTE]
-====
-When editing an _activity_ such that a new _category_ is replacing the current _category_, the new _category_ have to been already created.
-====
-
-Examples:
-
-* `edit act n/Frisbee nn/Barefoots nc/Sports` +
-The existing _activity_ `Frisbee` is renamed to `Barefoots` and is moved from some _category_ to the _category_ `Sports`.
-
-=== Deleting an Activity : `del act`
-
-Delete an _activity_ from the planner. +
-Format: `del act n/NAME [n/MORE_NAMES]...`
-
-Examples:
-
-* `del act n/Frisbee` +
-Delete the _activity_ "Frisbee".
-* `del act n/Frisbee n/Basketball` +
-Delete the _activities_ "Frisbee" and "Basketball".
-
-=== Adding a Slot : `add slot`
+=== Adding Slots : `add`
 
 Add a _slot_ to the planner. +
-Format: `add slot a/ACTIVITY_NAME d/DAY t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
+Format: `add slot d/DATE t/TIME d/DURATION [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
 
 Examples:
 
-* `add slot a/Sport d/monday t/0800-0900 tag/Frisbee tag/Tembusu College` +
+* `add d/01-01 t/0800-0900 tag/Frisbee tag/Tembusu College` +
 Add a _slot_ to the _activity_ "Sport" on monday, from 0800hrs to 0900hrs with the tags "Frisbee" and "Tembusu College".
 * `add slot a/Interest Group d/monday t/0800-0900 r/recess r/reading tag/Tembusu College tag/Barefoots` +
 Do the same but additionally, recurse the slot on recess and reading week.
 
 [NOTE]
 ====
-1. The `a/ACTIVITY_NAME` option is mandatory as a _slot_ must belong to an _activity_. +
-2. The default for recurrence is no recess week and no reading week.
+The default for recurrence is no recess week and no reading week. +
 If the recurrence options are not defined, then there the _slot_ will recurse every week except recess week and reading week.
 ====
 
-=== Listing Slots: `list slot`
+=== Listing Slots: `list`
 
-List all _slots_ in the planner belonging to a _category_/_activity_. +
-Format: `list slot [c/CATEGORY_NAME]... [a/ACTIVITY_NAME]...`
+List all _slots_ in the planner. +
+Format: `list`
 
 [NOTE]
 ====
@@ -219,61 +114,52 @@ Examples:
 
 * `list slot` +
 List all _slots_ in the planner.
-* `list slot c/Modules` +
-List all slots in the _category_ "Modules".
-* `list slot c/Sport c/Interest Group` +
-List all slots in either the _category_ "Sport" or the _category_ "Interest Group".
 
-=== Editing a Slot: `edit slot`
+=== Editing Slots: `edit`
 
 Edit a _slot_. +
-Format: `edit slot n/ACTIVITY_NAME d/DAY t/TIME [nd/NEW_DAY] [nt/NEW_TIME] [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal]`
+Format: `edit d/DATE t/TIME [nd/NEW_DATE] [nt/NEW_TIME] [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal]`
+
+[NOTE]
+====
+If the date and time specified does not correspond directly to a slot, the nearest slot will be selected for editing.
+====
 
 Examples:
 
-* `edit slot n/Sport d/monday t/0800-0900 nd/tuesday nt/0900-1000` +
-Select the _slot_ on 0800-0900hrs Monday and change it's day from Monday to Tuesday and it's time from "0800-0900" to "0900-1000".
-* `edit slot n/Sport d/monday t/0800-0900 r/recess r/reading` +
-Select the _slot_ on 0800-0900hrs Monday and set it to recurse on recess and reading week.
-* `edit slot n/Sport d/monday t/0800-0900 nd/tuesday nt/0900-1000 r/recess r/reading` +
-Select the _slot_ on 0800-0900hrs Monday and change it's day from Monday to Tuesday, it's time from "0800-0900" to "0900-1000" and set it to recurse on recess and reading week.
+* `edit d/01-01 t/0800 nd/01-03 nt/0900` +
+Select the _slot_ on the first of January, at 0800hrs and change it's date to the Third of January and it's time to 0900hrs.
 
-=== Delete slots: `del slot`
+=== Delete Slots: `del`
 
 Deleting _slots_. +
-Format: `del slot a/ACTIVITY_NAME d/DAY t/TIME`
-
-Example:
-
-*
-
-=== Locating Categories/Activities/tags: `find`
-
-Find all _categories_/_activities_/_tag_ whose name contains any of the given keywords. +
-Format: `find k/KEYWORD [k/MORE_KEYWORDS]... [c/CATEGORY_NAME] [a/ACTIVITY_NAME] [tag/TAG_NAME]`
+Format: `del [d/DATE]... [t/TIME]... [t/TAG]... `
 
 [NOTE]
 ====
-If the option to find by _category_ or _activity_ or _tag_ is given, then the result will filter by those only.
+All slots that strictly fits all the options given will be deleted. +
+This is useful for deleting a whole "category" of slots, such as an entire module's lab sessions.
 ====
 
 Example:
 
-*
+* `del d/01-03 t/0800` +
+Delete the slot located on the 3th of January, 0800hrs.
+* TODO
 
-=== Deleting a Categories/Activities/tags (shorthand) : `del`
+=== Locating Slots: `find`
 
-Delete a _category_/_activity_/_slot_/_tag_. +
-Format: `del [c/CATEGORY]... [a/ACTIVITY]... [tag/TAG]...`
+Find all _slots_ whose name and or tags contains any of the given keywords. +
+Format: `find [n/SLOT_NAMES]... [tag/TAG]...`
 
 [NOTE]
 ====
-Deleting a _category_ or _activity_ will delete all _slots_ under them as well. Deleting a _tag_ will not delete the _slots_ associated with them.
+TODO
 ====
 
 Example:
 
-*
+* TODO
 
 === View the Planner : `view`
 
@@ -288,7 +174,12 @@ Format: `view day DATE | view week WEEK | view month MONTH | view all`
 
 Example:
 
-*
+* `view day`
+* `view day 1-03` +
+View the first of January.
+* `view all` +
+all the details in the planner.
+
 
 === Listing previous inputted commands : `history`
 

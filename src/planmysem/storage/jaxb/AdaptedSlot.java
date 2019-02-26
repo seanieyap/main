@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlValue;
 
 import planmysem.common.Utils;
 import planmysem.data.exception.IllegalValueException;
@@ -22,18 +21,17 @@ import planmysem.data.tag.Tag;
  * JAXB-friendly adapted person data holder class.
  */
 public class AdaptedSlot {
-
-    @XmlValue
+    @XmlElement(required = true)
     private String name;
-    @XmlValue
+    @XmlElement(required = true)
     private String location;
-    @XmlValue
+    @XmlElement(required = true)
     private String description;
-    @XmlValue
+    @XmlElement(required = true)
     private int duration;
-    @XmlValue
+    @XmlElement(required = true)
     private LocalTime time;
-    @XmlElement
+    @XmlElement(required = true)
     private List<AdaptedTag> tagged = new ArrayList<>();
 
     /**
