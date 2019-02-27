@@ -49,7 +49,7 @@ public class ParserTest {
     }
 
     private static String convertPersonToAddCommandString(ReadOnlyPerson person) {
-        String addCommand = "add "
+        String addCommand = "addDay "
                 + person.getName().fullName
                 + (person.getPhone().isPrivate() ? " pp/" : " p/") + person.getPhone().value
                 + (person.getEmail().isPrivate() ? " pe/" : " e/") + person.getEmail().value
@@ -217,21 +217,21 @@ public class ParserTest {
     }
 
     /**
-     * Test add person command
+     * Test addDay person command
      */
 
     @Test
     public void addCommand_invalidArgs() {
         final String[] inputs = {
-                "add",
-                "add ",
-                "add wrong args format",
+                "addDay",
+                "addDay ",
+                "addDay wrong args format",
                 // no phone prefix
-                String.format("add $s $s e/$s a/$s", Name.EXAMPLE, Phone.EXAMPLE, Email.EXAMPLE, Address.EXAMPLE),
+                String.format("addDay $s $s e/$s a/$s", Name.EXAMPLE, Phone.EXAMPLE, Email.EXAMPLE, Address.EXAMPLE),
                 // no email prefix
-                String.format("add $s p/$s $s a/$s", Name.EXAMPLE, Phone.EXAMPLE, Email.EXAMPLE, Address.EXAMPLE),
+                String.format("addDay $s p/$s $s a/$s", Name.EXAMPLE, Phone.EXAMPLE, Email.EXAMPLE, Address.EXAMPLE),
                 // no address prefix
-                String.format("add $s p/$s e/$s $s", Name.EXAMPLE, Phone.EXAMPLE, Email.EXAMPLE, Address.EXAMPLE)
+                String.format("addDay $s p/$s e/$s $s", Name.EXAMPLE, Phone.EXAMPLE, Email.EXAMPLE, Address.EXAMPLE)
         };
         final String resultMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
         parseAndAssertIncorrectWithMessage(resultMessage, inputs);
@@ -248,7 +248,7 @@ public class ParserTest {
         final String invalidTagArg = "t/invalid_-[.tag";
 
         // address can be any string, so no invalid address
-        final String addCommandFormatString = "add $s $s $s a/" + Address.EXAMPLE;
+        final String addCommandFormatString = "addDay $s $s $s a/" + Address.EXAMPLE;
 
         // test each incorrect person data field argument individually
         final String[] inputs = {
