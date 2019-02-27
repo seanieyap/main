@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlValue;
 
-import planmysem.common.Utils;
 import planmysem.data.exception.IllegalValueException;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlySemester;
@@ -17,18 +15,17 @@ import planmysem.data.semester.Semester;
  * JAXB-friendly adapted person data holder class.
  */
 public class AdaptedSemester {
-
-    @XmlValue
+    @XmlElement(required = false)
     private String name;
-    @XmlValue
+    @XmlElement(required = false)
     private String academicYear;
-    @XmlValue
+    @XmlElement(required = false)
     private String startDate;
-    @XmlValue
+    @XmlElement(required = false)
     private String endDate;
-    @XmlValue
+    @XmlElement(required = false)
     private int noOfWeeks;
-    @XmlElement
+    @XmlElement(required = true)
     private HashMap<LocalDate, AdaptedDay> days = new HashMap<>();
 
     /**
@@ -45,8 +42,14 @@ public class AdaptedSemester {
     public AdaptedSemester(ReadOnlySemester source) {
         name = source.getName();
         academicYear = source.getAcademicYear();
-        startDate = source.getStartDate();
-        endDate = source.getEndDate();
+        // TODO: remove when initialization of semester is complete
+        if (startDate == null || endDate == null) {
+            startDate = null;
+            endDate = null;
+        } else {
+            startDate = source.getStartDate().toString();
+            endDate = source.getEndDate().toString();
+        }
         noOfWeeks = source.getNoOfWeeks();
 
         days = new HashMap<>();
@@ -71,7 +74,8 @@ public class AdaptedSemester {
         }
 
         // second call only happens if phone/email/address are all not null
-        return Utils.isAnyNull(name, academicYear, days, startDate, endDate);
+        // return Utils.isAnyNull(name, academicYear, days, startDate, endDate);
+        return false;
     }
 
     /**
@@ -91,6 +95,13 @@ public class AdaptedSemester {
             days.put(day.getKey(), day.getValue().toModelType());
         }
 
-        return new Semester(name, academicYear, days, startDate, endDate, noOfWeeks);
+        // TODO: remove after initialization of semester is complete.
+        if (startDate == null || endDate == null) {
+            return new Semester(name, academicYear, days, null, null, noOfWeeks);
+        } else {
+            return new Semester(name, academicYear, days,
+                    LocalDate.parse(startDate), LocalDate.parse(endDate), noOfWeeks);
+        }
+
     }
 }

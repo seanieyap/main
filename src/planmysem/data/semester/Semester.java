@@ -4,7 +4,10 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.util.Pair;
 import planmysem.data.exception.DuplicateDataException;
+import planmysem.data.recurrence.Recurrence;
+import planmysem.data.slot.Slot;
 
 /**
  * A list of days. Does not allow null elements or duplicates.
@@ -15,8 +18,8 @@ public class Semester implements ReadOnlySemester {
     private final String name;
     private final String academicYear;
     private final HashMap<LocalDate, Day> days = new HashMap<>();
-    private final String startDate;
-    private final String endDate;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
     private final int noOfWeeks;
 
     /**
@@ -33,8 +36,8 @@ public class Semester implements ReadOnlySemester {
     /**
      * Constructs a semester with the given Days.
      */
-    public Semester(String name, String academicYear, HashMap<LocalDate, Day> days, String startDate,
-                    String endDate, int noOfWeeks) {
+    public Semester(String name, String academicYear, HashMap<LocalDate, Day> days, LocalDate startDate,
+                    LocalDate endDate, int noOfWeeks) {
         this.name = name;
         this.academicYear = academicYear;
         this.days.putAll(days);
@@ -53,20 +56,45 @@ public class Semester implements ReadOnlySemester {
         this.startDate = source.startDate;
         this.endDate = source.endDate;
         this.noOfWeeks = source.noOfWeeks;
-
     }
 
     /**
-     * Adds a person to the list.
+     * Adds a Day to the list.
      *
-     * @throws DuplicateDayException if the Day to add is a duplicate of an existing Day in the list.
+     * @throws DuplicateDayException if the Day to addDay is a duplicate of an existing Day in the list.
      */
-    public void add(LocalDate date, Day day) throws DuplicateDayException {
+    public void addDay(LocalDate date, Day day) throws DuplicateDayException {
         if (contains(day)) {
             throw new DuplicateDayException();
         }
         days.put(date, day);
     }
+
+    /**
+     * Adds a Slot to the Semester.
+     *
+     */
+    public void addSlot(LocalDate date, Slot slot) {
+        days.get(date).setSlot(slot);
+    }
+
+    /**
+     * Adds Slots to the Semester.
+     *
+     */
+    public int addSlots(Pair<Slot, Recurrence> slots) throws DayNotFoundException {
+        int result = 0;
+
+        if (slots.getValue().date.isBefore(startDate) || slots.getValue().date.isAfter(endDate)) {
+            throw new DayNotFoundException();
+        }
+
+        // Generate dates to add
+        // Perform add
+
+        return result;
+    }
+
 
     /**
      * Removes the equivalent Day from the list.
@@ -139,12 +167,12 @@ public class Semester implements ReadOnlySemester {
     }
 
     @Override
-    public String getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
     @Override
-    public String getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
@@ -168,4 +196,5 @@ public class Semester implements ReadOnlySemester {
      */
     public static class DayNotFoundException extends Exception {
     }
+
 }

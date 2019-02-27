@@ -45,14 +45,15 @@ public class Parser {
     public static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
 
     /**
-     * Checks whether the private prefix of a contact detail in the add command's arguments string is present.
+     * Checks whether the private prefix of a contact detail in the
+     * add command's arguments string is present.
      */
     private static boolean isPrivatePrefixPresent(String matchedPrefix) {
         return matchedPrefix.equals("p");
     }
 
     /**
-     * Extracts the new person's tags from the add command's tag arguments string.
+     * Extracts the new person's tags from the addDay command's tag arguments string.
      * Merges duplicate tag strings.
      */
     private static Set<String> getTagsFromArgs(String tagArguments) throws IllegalValueException {
@@ -61,7 +62,9 @@ public class Parser {
             return Collections.emptySet();
         }
         // replace first delimiter prefix, then split
-        final Collection<String> tagStrings = Arrays.asList(tagArguments.replaceFirst(" t/", "").split(" t/"));
+        final Collection<String> tagStrings =
+            Arrays.asList(tagArguments.replaceFirst(
+                                " t/", "").split(" t/"));
         return new HashSet<>(tagStrings);
     }
 
@@ -112,7 +115,7 @@ public class Parser {
     }
 
     /**
-     * Parses arguments in the context of the add person command.
+     * Parses arguments in the context of the addDay person command.
      *
      * @param args full command args string
      * @return the prepared command

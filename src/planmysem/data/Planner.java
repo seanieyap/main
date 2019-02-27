@@ -2,12 +2,15 @@ package planmysem.data;
 
 import java.time.LocalDate;
 
+import javafx.util.Pair;
+import planmysem.data.recurrence.Recurrence;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.semester.Semester;
+import planmysem.data.slot.Slot;
 
 /**
- * Represents the entire address book. Contains the data of the address book.
+ * Represents the entire Planner. Contains the data of the Planner.
  */
 public class Planner {
     private final Semester semester;
@@ -38,12 +41,27 @@ public class Planner {
     }
 
     /**
-     * Adds a day to the address book.
+     * Adds a day to the Planner.
      *
      * @throws Semester.DuplicateDayException if an equivalent Day already exists.
      */
     public void addDay(LocalDate date, Day day) throws Semester.DuplicateDayException {
-        semester.add(date, day);
+        semester.addDay(date, day);
+    }
+
+    /**
+     * Adds a slot to the Planner.
+     *
+     */
+    public void addSlot(LocalDate date, Slot slot) {
+        semester.addSlot(date, slot);
+    }
+
+    /**
+     * Adds slots to the Planner.
+     */
+    public int addSlots(Pair<Slot, Recurrence> slots) throws Semester.DayNotFoundException {
+        return semester.addSlots(slots);
     }
 
     /**
@@ -96,7 +114,7 @@ public class Planner {
      * Defensively copy the Semester in the Planner at the time of the call.
      */
     public Semester getSemester() {
-        return new Semester(semester);
+        return semester;
     }
 
     @Override
