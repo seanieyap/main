@@ -85,7 +85,7 @@ public class LogicTest {
 
     /**
      * Executes the command and confirms that the result message is correct and
-     * also confirms that the following three parts of the Logic object's state are as expected:<br>
+     * also confirms that the following three parts of the Logic object'DATE_FORMAT state are as expected:<br>
      * - the internal address book data are same as those in the {@code expectedAddressBook} <br>
      * - the internal 'last shown list' matches the {@code expectedLastList} <br>
      * - the storage file content matches data in {@code expectedAddressBook} <br>

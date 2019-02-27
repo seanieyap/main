@@ -3,12 +3,13 @@ package planmysem.data.slot;
 import planmysem.data.exception.IllegalValueException;
 
 /**
- * Represents a Slot's location in the address book.
+ * Represents a Slot'DATE_FORMAT location in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValid(String)}
  */
 public class Location {
     public static final String EXAMPLE = "NUS COM2 04-22";
-    public static final String MESSAGE_NAME_CONSTRAINTS = "Slot's location should be spaces or alphanumeric characters";
+    public static final String MESSAGE_NAME_CONSTRAINTS =
+            "Slot'DATE_FORMAT location should be spaces or alphanumeric characters";
     public static final String NAME_VALIDATION_REGEX = "[\\p{Alnum} ]+";
 
     private String value;

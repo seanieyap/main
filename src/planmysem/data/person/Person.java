@@ -61,7 +61,7 @@ public class Person implements ReadOnlyPerson {
     }
 
     /**
-     * Replaces this person's tags with the tags in {@code replacement}.
+     * Replaces this person'DATE_FORMAT tags with the tags in {@code replacement}.
      */
     public void setTags(Set<Tag> replacement) {
         tags.clear();

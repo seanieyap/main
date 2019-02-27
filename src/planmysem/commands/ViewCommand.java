@@ -17,7 +17,7 @@ public class ViewCommand extends Command {
             + "Parameters: INDEX\n\t"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_VIEW_PERSON_DETAILS = "Viewing person: %1$s";
+    public static final String MESSAGE_VIEW_PERSON_DETAILS = "Viewing person: %1$DATE_FORMAT";
 
 
     public ViewCommand(int targetVisibleIndex) {

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import planmysem.common.Utils;
 import planmysem.data.tag.Tag;
 
 /**
@@ -18,6 +19,19 @@ public class Slot implements ReadOnlySlot {
     private Description description;
     private LocalTime startTime;
     private int duration;
+
+    /**
+     * Assumption: Every field must be present and not null.
+     */
+    public Slot(Name name, Location location, Description description,
+                LocalTime startTime, LocalTime endTime, Set<Tag> tags) {
+        this.name = name;
+        this.location = location;
+        this.description = description;
+        this.startTime = startTime;
+        this.duration = Utils.getDuration(startTime, endTime);
+        this.tags.addAll(tags);
+    }
 
     /**
      * Assumption: Every field must be present and not null.
@@ -60,7 +74,6 @@ public class Slot implements ReadOnlySlot {
         return duration;
     }
 
-
     @Override
     public LocalTime getTime() {
         return startTime;
@@ -72,7 +85,7 @@ public class Slot implements ReadOnlySlot {
     }
 
     /**
-     * Replaces this slot's tags with the tags in {@code replacement}.
+     * Replaces this slot'DATE_FORMAT tags with the tags in {@code replacement}.
      */
     public void setTags(Set<Tag> replacement) {
         tags.clear();

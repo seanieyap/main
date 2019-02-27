@@ -3,7 +3,7 @@ package planmysem.data.slot;
 import planmysem.data.exception.IllegalValueException;
 
 /**
- * Represents a Slot's name in the address book.
+ * Represents a Slot'DATE_FORMAT name in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValid(String)}
  */
 public class Name {
@@ -38,7 +38,7 @@ public class Name {
      * Retrieves a listing of every word in the name, in order.
      */
     //    public List<String> getWordsInValue() {
-    //        return Arrays.asList(value.split("\\s+"));
+    //        return Arrays.asList(value.split("\\DATE_FORMAT+"));
     //    }
 
     @Override
