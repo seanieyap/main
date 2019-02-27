@@ -25,7 +25,7 @@ public class Day implements ReadOnlyDay {
         this.slots = slots;
     }
 
-    public void setSlot(Slot slot)  {
+    public void setSlot(Slot slot) {
         slots.add(slot);
     }
 

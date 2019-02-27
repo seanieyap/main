@@ -55,7 +55,8 @@ public class AddCommandP extends CommandP {
                     Utils.parseTime(startTime), Utils.parseTime(endTime), tagSet), new Recurrence(recurrences, day));
         } else {
             toAdd = new Pair<>(new Slot(new Name(name), new Location(location), new Description(description),
-                    Utils.parseTime(startTime), Utils.parseTime(endTime), tagSet), new Recurrence(recurrences, Utils.parseDate(date)));
+                    Utils.parseTime(startTime), Utils.parseTime(endTime), tagSet),
+                        new Recurrence(recurrences, Utils.parseDate(date)));
         }
     }
 
