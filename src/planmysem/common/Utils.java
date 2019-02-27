@@ -95,38 +95,6 @@ public class Utils {
     }
 
     /**
-     * Determine recurrence if recess week.
-     */
-    public static boolean containsRecess(Set<String> recurrences) {
-        if (recurrences.contains("recess")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Determine recurrence if reading week.
-     */
-    public static boolean containsReading(Set<String> recurrences) {
-        if (recurrences.contains("reading")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    /**
-     * Determine recurrence if normal academic weeks.
-     */
-    public static boolean containsNormal(Set<String> recurrences) {
-        if (recurrences.contains("normal")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Parse String LocalDate.
      */
     public static LocalDate parseDate(String date) {
