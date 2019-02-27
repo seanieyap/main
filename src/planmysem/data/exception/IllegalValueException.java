@@ -5,7 +5,7 @@ package planmysem.data.exception;
  */
 public class IllegalValueException extends Exception {
     /**
-     * @param message should contain relevant information on the failed constraint(DATE_FORMAT)
+     * @param message should contain relevant information on the failed constraint(s)
      */
     public IllegalValueException(String message) {
         super(message);

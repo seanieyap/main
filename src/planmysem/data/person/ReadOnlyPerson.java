@@ -20,7 +20,7 @@ public interface ReadOnlyPerson {
 
     /**
      * The returned {@code Set} is a deep copy of the internal {@code Set},
-     * changes on the returned list will not affect the person'DATE_FORMAT internal tags.
+     * changes on the returned list will not affect the person's internal tags.
      */
     Set<Tag> getTags();
 

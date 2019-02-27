@@ -3,7 +3,7 @@ package planmysem.data.person;
 import planmysem.data.exception.IllegalValueException;
 
 /**
- * Represents a Person'DATE_FORMAT phone number in the address book.
+ * Represents a Person's phone number in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidPhone(String)}
  */
 public class Phone {

@@ -59,7 +59,7 @@ public class ParserP {
     public static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
 
     /**
-     * Extracts the new Slot'DATE_FORMAT tags from the add command'DATE_FORMAT tag arguments string.
+     * Extracts the new Slot's tags from the add command's tag arguments string.
      * Merges duplicate tag strings.
      */
     private static Set<String> getTagsFromArgs(String tagArguments) throws IllegalValueException {
@@ -76,7 +76,7 @@ public class ParserP {
     }
 
     /**
-     * Extracts the new Slot'DATE_FORMAT recursive arguments from the add command'DATE_FORMAT recurse arguments string.
+     * Extracts the new Slot's recursive arguments from the add command's recurse arguments string.
      * Merges duplicate recursive strings.
      */
     private static Set<String> getRecurrencesFromArgs(String recursiveArguments) throws IllegalValueException {

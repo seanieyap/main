@@ -6,7 +6,7 @@ import planmysem.data.person.UniquePersonList.PersonNotFoundException;
 
 
 /**
- * Deletes a person identified using it'DATE_FORMAT last displayed index from the address book.
+ * Deletes a person identified using it's last displayed index from the address book.
  */
 public class DeleteCommand extends Command {
 
@@ -17,7 +17,7 @@ public class DeleteCommand extends Command {
             + "Parameters: INDEX\n\t"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$DATE_FORMAT";
+    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
 
 
     public DeleteCommand(int targetVisibleIndex) {

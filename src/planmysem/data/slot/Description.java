@@ -3,13 +3,13 @@ package planmysem.data.slot;
 import planmysem.data.exception.IllegalValueException;
 
 /**
- * Represents a Slot'DATE_FORMAT description in the address book.
+ * Represents a Slot's description in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValid(String)}
  */
 public class Description {
     public static final String EXAMPLE = "Meeting with John Doe regarding CS2113T project.";
     public static final String MESSAGE_NAME_CONSTRAINTS =
-            "Slot'DATE_FORMAT description should be spaces or alphanumeric characters";
+            "Slot's description should be spaces or alphanumeric characters";
     public static final String NAME_VALIDATION_REGEX = "[\\p{Alnum} ]+";
 
     public final String value;

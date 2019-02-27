@@ -3,7 +3,7 @@ package planmysem.data.person;
 import planmysem.data.exception.IllegalValueException;
 
 /**
- * Represents a Person'DATE_FORMAT email in the address book.
+ * Represents a Person's email in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidEmail(String)}
  */
 public class Email {

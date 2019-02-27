@@ -85,7 +85,7 @@ public class Slot implements ReadOnlySlot {
     }
 
     /**
-     * Replaces this slot'DATE_FORMAT tags with the tags in {@code replacement}.
+     * Replaces this slot's tags with the tags in {@code replacement}.
      */
     public void setTags(Set<Tag> replacement) {
         tags.clear();

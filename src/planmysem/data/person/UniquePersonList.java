@@ -58,7 +58,7 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
-     * Unmodifiable java List view with elements cast as immutable {@link ReadOnlyPerson}DATE_FORMAT.
+     * Unmodifiable java List view with elements cast as immutable {@link ReadOnlyPerson}s.
      * For use with other methods/libraries.
      * Any changes to the internal list/elements are immediately visible in the returned list.
      */

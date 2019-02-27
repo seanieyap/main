@@ -6,7 +6,7 @@ import java.util.List;
 import planmysem.data.exception.IllegalValueException;
 
 /**
- * Represents a Person'DATE_FORMAT name in the address book.
+ * Represents a Person's name in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidName(String)}
  */
 public class Name {

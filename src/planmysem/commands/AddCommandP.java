@@ -29,7 +29,7 @@ public class AddCommandP extends CommandP {
             + " CS2113T Tutorial st/0800 et/0900 date/tuesday l/COM2 r/norecess r/noreading "
             + " t/tutorial t/cs2113t t/module";
 
-    public static final String MESSAGE_SUCCESS = "New slot(s) added: %1$DATE_FORMAT";
+    public static final String MESSAGE_SUCCESS = "New slot(s) added: %1$s";
     public static final String MESSAGE_SUCCESS_NO_CHANGE = "No slots were added.";
     public static final String MESSAGE_FAIL_OUT_OF_BOUNCE = "Date specified is out of bounce.";
 

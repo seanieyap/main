@@ -46,14 +46,14 @@ public class Parser {
 
     /**
      * Checks whether the private prefix of a contact detail in the
-     * add command 'DATE_FORMAT arguments string is present.
+     * add command's arguments string is present.
      */
     private static boolean isPrivatePrefixPresent(String matchedPrefix) {
         return matchedPrefix.equals("p");
     }
 
     /**
-     * Extracts the new person'DATE_FORMAT tags from the addDay command'DATE_FORMAT tag arguments string.
+     * Extracts the new person's tags from the addDay command's tag arguments string.
      * Merges duplicate tag strings.
      */
     private static Set<String> getTagsFromArgs(String tagArguments) throws IllegalValueException {
