@@ -184,12 +184,12 @@ all the details in the planner.
 
 === Listing previous inputted commands : `history`
 
-View the history of commands previously inputted. +
+Lists all the commands that you have entered in reverse chronological order. +
 Format: history
 
 === Undoing previous command : `undo`
 
-Restories the planner to the state before the previous command was executed. +
+Restores the planner to the state before the previous command was executed. +
 Format: `undo`
 
 [NOTE]
