@@ -70,9 +70,9 @@ public class ParserP {
         }
         // replace first delimiter prefix, then split
         final Collection<String> tagStrings =
-            Arrays.asList(
-                tagArguments.replaceFirst(" t/", "")
-                    .split(" t/"));
+                Arrays.asList(
+                        tagArguments.replaceFirst(" t/", "")
+                                .split(" t/"));
         return new HashSet<>(tagStrings);
     }
 
@@ -142,7 +142,8 @@ public class ParserP {
         final Matcher recurseMatcher = SLOT_RECURRENCE_ARGS_FORMAT.matcher(arguments);
 
         // Validate arg string format
-        if (args.isEmpty() || !nameMatcher.find() || !startTimeMatcher.find() || !(endTimeMatcher.find() || durationMatcher.find())) {
+        if (args.isEmpty() || !nameMatcher.find() || !startTimeMatcher.find() || !(endTimeMatcher.find()
+                || durationMatcher.find())) {
             return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
         }
 
@@ -231,7 +232,7 @@ public class ParserP {
 
         // Validate arg string format
         if (args.isEmpty() || !tagsMatcher.find()) {
-            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
+            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommandP.MESSAGE_USAGE));
         }
 
         // TODO: prepare list
