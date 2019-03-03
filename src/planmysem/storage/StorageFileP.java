@@ -29,7 +29,7 @@ public class StorageFileP {
      * Default file path used if the user doesn't provide the file name.
      */
     public static final String DEFAULT_STORAGE_FILEPATH = "PlanMySem.txt";
-    private final boolean isEncrypted = true; //set to true to encrypt data
+    private final boolean isEncrypted = false; //set to true to encrypt data
 
 
     /* Note: Note the use of nested classes below.
