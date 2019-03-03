@@ -31,7 +31,7 @@ public class AddCommandP extends CommandP {
 
     public static final String MESSAGE_SUCCESS = "New slot(s) added: %1$s";
     public static final String MESSAGE_SUCCESS_NO_CHANGE = "No slots were added.";
-    public static final String MESSAGE_FAIL_OUT_OF_BOUNCE = "Date specified is out of bounce.";
+    public static final String MESSAGE_FAIL_OUT_OF_BOUNDS = "Date specified is out of bounds.";
 
     private final Pair<Slot, Recurrence> toAdd;
 
@@ -65,8 +65,8 @@ public class AddCommandP extends CommandP {
      *
      * @throws IllegalValueException if any of the raw values are invalid
      */
-    public AddCommandP(String date, String name, String location, String description, String startTime,
-                       int duration, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
+    public AddCommandP(String date, String name, String location, String description, String startTime, int duration,
+                       Set<String> tags, Set<String> recurrences) throws IllegalValueException {
         final Set<Tag> tagSet = new HashSet<>();
 
         for (String tagName : tags) {
@@ -103,9 +103,7 @@ public class AddCommandP extends CommandP {
                 return new CommandResultP(String.format(MESSAGE_SUCCESS, toAdd));
             }
         } catch (Semester.DayNotFoundException dnfe) {
-            return new CommandResultP(MESSAGE_FAIL_OUT_OF_BOUNCE);
+            return new CommandResultP(MESSAGE_FAIL_OUT_OF_BOUNDS);
         }
-
     }
-
 }

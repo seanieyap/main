@@ -11,13 +11,15 @@ import planmysem.data.slot.Slot;
  */
 public class Day implements ReadOnlyDay {
     private DayOfWeek dayOfWeek;
-    private ArrayList<Slot> slots;
+    private ArrayList<Slot> slots = new ArrayList<>();
 
     /**
      * Assumption: Every field must be present and not null.
      */
     public Day(DayOfWeek dayOfWeek) {
+
         this.dayOfWeek = dayOfWeek;
+
     }
 
     public Day(DayOfWeek dayOfWeek, ArrayList<Slot> slots) {

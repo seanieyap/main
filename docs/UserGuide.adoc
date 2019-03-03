@@ -184,12 +184,12 @@ all the details in the planner.
 
 === Listing previous inputted commands : `history`
 
-View the history of commands previously inputted. +
+Lists all the commands that you have entered in reverse chronological order. +
 Format: history
 
 === Undoing previous command : `undo`
 
-Restories the planner to the state before the previous command was executed. +
+Restores the planner to the state before the previous command was executed. +
 Format: `undo`
 
 [NOTE]
@@ -220,7 +220,7 @@ Format: `exit`
 
 === Saving the data
 
-Planner data are saved in the hard disk automatically after any command that changes the data is executed. + There is no need to save manually.
+Planner data is saved in the hard disk automatically after any command that changes the data is executed. + There is no need to save manually.
 
 // tag::dataencryption[]
 === Encrypting data files `[coming in v2.0]`
@@ -232,14 +232,14 @@ _{explain how the user can enable/disable data encryption}_
 === Importing .ics formated files `[coming in v2.0]`
 
 
-_{explain how the user can enable/disable data encryption}_
+_{explain how the user can import .ics formatted files}_
 // end::importICS[]
 
 // tag::exportICS[]
 === Exporting .ics formated files `[coming in v2.0]`
 
 
-_{explain how the user can enable/disable data encryption}_
+_{explain how the user can export .ics formatted files}_
 // end::exportICS[]
 
 == FAQ

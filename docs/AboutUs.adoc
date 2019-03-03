@@ -10,8 +10,8 @@ PlanMySem - A CLI (Command Line Interface) scheduling/calendar application that 
 == Project Team
 
 === Sean Yap
-image::seanyap.jpg[width="150", align="left"]
-{empty}[https://github.com/seanieyap[Github]] [<<seanyap#, Portfolio>>] [https://seanieyap.com[Personal Website]]
+image::seanieyap.png[width="150", align="left"]
+{empty}[https://github.com/seanieyap[Github]] [<<seanieyap#, Portfolio>>] [https://seanieyap.com[Personal Website]]
 
 Role: Team Lead, Developer +
 Responsibilities: Add, Edit, list, Delete Slots
@@ -19,8 +19,8 @@ Responsibilities: Add, Edit, list, Delete Slots
 '''
 
 === Marcus Phua
-image::marcusphua.jpeg[width="150", align="left"]
-{empty}[https://github.com/marcus-pzj[Github]] [<<marcusphua#, Portfolio>>]
+image::marcus-pzj.png[width="150", align="left"]
+{empty}[https://github.com/marcus-pzj[Github]] [<<marcus-pzj#, Portfolio>>]
 
 Role: Developer +
 Responsibilities: View, Find, Auto-Complete
@@ -28,8 +28,8 @@ Responsibilities: View, Find, Auto-Complete
 '''
 
 === Julian Lim
-image::julianlim.jpg[width="150", align="left"]
-{empty}[https://github.com/macchazuki[Github]] [<<julianlim#, Portfolio>>]
+image::julianlim.png[width="150", align="left"]
+{empty}[https://github.com/macchazuki[Github]] [<<macchazuki#, Portfolio>>]
 
 Role: Developer +
 Responsibilities: Encryption, Import, Export, Generate Summary
@@ -37,8 +37,8 @@ Responsibilities: Encryption, Import, Export, Generate Summary
 '''
 
 === Lim Ding Heng
-image::limdingheng.jpg[width="150", align="left"]
-{empty}[https://github.com/dingheng4448[Github]] [<<limdingheng#, Portfolio>>]
+image::limdingheng.png[width="150", align="left"]
+{empty}[https://github.com/dingheng4448[Github]] [<<dingheng4448#, Portfolio>>]
 
 Role: Developer +
 Responsibilities: Generate Day, Week, Month Views

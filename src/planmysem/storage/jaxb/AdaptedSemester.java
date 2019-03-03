@@ -15,18 +15,18 @@ import planmysem.data.semester.Semester;
  * JAXB-friendly adapted person data holder class.
  */
 public class AdaptedSemester {
-    @XmlElement(required = false)
-    private String name;
-    @XmlElement(required = false)
-    private String academicYear;
-    @XmlElement(required = false)
-    private String startDate;
-    @XmlElement(required = false)
-    private String endDate;
-    @XmlElement(required = false)
-    private int noOfWeeks;
     @XmlElement(required = true)
-    private HashMap<LocalDate, AdaptedDay> days = new HashMap<>();
+    private String name;
+    @XmlElement(required = true)
+    private String academicYear;
+    @XmlElement(required = true)
+    private String startDate;
+    @XmlElement(required = true)
+    private String endDate;
+    @XmlElement(required = true)
+    private int noOfWeeks;
+    @XmlElement
+    private HashMap<String, AdaptedDay> days = new HashMap<>();
 
     /**
      * No-arg constructor for JAXB use.
@@ -42,19 +42,13 @@ public class AdaptedSemester {
     public AdaptedSemester(ReadOnlySemester source) {
         name = source.getName();
         academicYear = source.getAcademicYear();
-        // TODO: remove when initialization of semester is complete
-        if (startDate == null || endDate == null) {
-            startDate = null;
-            endDate = null;
-        } else {
-            startDate = source.getStartDate().toString();
-            endDate = source.getEndDate().toString();
-        }
+        startDate = source.getStartDate().toString();
+        endDate = source.getEndDate().toString();
         noOfWeeks = source.getNoOfWeeks();
 
-        days = new HashMap<>();
+        //        days = new HashMap<>();
         for (Map.Entry<LocalDate, Day> day : source.getDays().entrySet()) {
-            days.put(day.getKey(), new AdaptedDay(day.getValue()));
+            days.put(day.getKey().toString(), new AdaptedDay(day.getValue()));
         }
     }
 
@@ -67,7 +61,7 @@ public class AdaptedSemester {
      * so we check for that.
      */
     public boolean isAnyRequiredFieldMissing() {
-        for (Map.Entry<LocalDate, AdaptedDay> day : days.entrySet()) {
+        for (Map.Entry<String, AdaptedDay> day : days.entrySet()) {
             if (day.getValue().isAnyRequiredFieldMissing()) {
                 return true;
             }
@@ -91,17 +85,17 @@ public class AdaptedSemester {
         final int noOfWeeks = this.noOfWeeks;
 
         final HashMap<LocalDate, Day> days = new HashMap<>();
-        for (Map.Entry<LocalDate, AdaptedDay> day : this.days.entrySet()) {
-            days.put(day.getKey(), day.getValue().toModelType());
+        for (Map.Entry<String, AdaptedDay> day : this.days.entrySet()) {
+            days.put(LocalDate.parse(day.getKey()), day.getValue().toModelType());
         }
 
         // TODO: remove after initialization of semester is complete.
-        if (startDate == null || endDate == null) {
-            return new Semester(name, academicYear, days, null, null, noOfWeeks);
-        } else {
-            return new Semester(name, academicYear, days,
-                    LocalDate.parse(startDate), LocalDate.parse(endDate), noOfWeeks);
-        }
+        //        if (startDate == null || endDate == null) {
+        //            return new Semester(name, academicYear, days, null, null, noOfWeeks);
+        //        } else {
+        return new Semester(name, academicYear, days,
+                LocalDate.parse(startDate), LocalDate.parse(endDate), noOfWeeks);
+        //        }
 
     }
 }
