@@ -29,14 +29,13 @@ public class StorageFileP {
      * Default file path used if the user doesn't provide the file name.
      */
     public static final String DEFAULT_STORAGE_FILEPATH = "PlanMySem.txt";
-    private final boolean isEncrypted = false; //set to true to encrypt data
-
 
     /* Note: Note the use of nested classes below.
      * More info https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html
      */
     public final Path path;
     private final JAXBContext jaxbContext;
+    private final boolean isEncrypted = false; //set to true to encrypt data
 
     /**
      * @throws InvalidStorageFilePathException if the default path is invalid
@@ -84,7 +83,7 @@ public class StorageFileP {
             final AdaptedPlanner toSave = new AdaptedPlanner(planner);
             final Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            if(isEncrypted) {
+            if (isEncrypted) {
                 StringWriter sw = new StringWriter();
                 marshaller.marshal(toSave, sw);
                 fileWriter.write(Encryptor.encrypt(sw.toString()));
@@ -111,7 +110,7 @@ public class StorageFileP {
             final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             final AdaptedPlanner loaded;
             //decrypts
-            if(isEncrypted) {
+            if (isEncrypted) {
                 StringReader decryptedData = new StringReader(Encryptor.decrypt(fileReader.readLine()));
                 loaded = (AdaptedPlanner) unmarshaller.unmarshal(decryptedData);
             } else {
