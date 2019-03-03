@@ -45,6 +45,7 @@ public class Planner {
                     .collect(Collectors.toMap(key -> key.split(":")[0], val -> val.split(":")[1]));
             acadWeek = acadCalMap.get(Integer.toString(currentWeekOfYear));
         } catch (IOException ioe) {
+            // TODO: remove displaying of errors
             ioe.getMessage();
         }
 

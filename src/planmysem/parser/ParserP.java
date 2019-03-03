@@ -20,6 +20,7 @@ import planmysem.commands.HelpCommand;
 import planmysem.commands.HelpCommandP;
 import planmysem.commands.IncorrectCommand;
 import planmysem.commands.IncorrectCommandP;
+import planmysem.commands.ListCommandP;
 import planmysem.commands.ViewAllCommand;
 import planmysem.commands.ViewCommand;
 import planmysem.data.exception.IllegalValueException;
@@ -43,13 +44,13 @@ public class ParserP {
                     + " duration/(?<duration>[^/]+)"
                     + "(?<tags>(?: t/[^/]+)*)"); // variable number of tags
 
-    public static final Pattern SLOT_NAME_ARGS_FORMAT = Pattern.compile("(?<name>[^/]+)");
-    public static final Pattern SLOT_LOCATION_ARGS_FORMAT = Pattern.compile(" l/(?<location>[^/]+)");
-    public static final Pattern SLOT_DESCRIPTION_ARGS_FORMAT = Pattern.compile(" d/(?<description>[^/]+)");
-    public static final Pattern SLOT_DATE_ARGS_FORMAT = Pattern.compile(" date/(?<date>[^/]+)");
-    public static final Pattern SLOT_START_TIME_ARGS_FORMAT = Pattern.compile(" st/(?<startTime>[^/]+)");
-    public static final Pattern SLOT_END_TIME_ARGS_FORMAT = Pattern.compile(" et/(?<endTime>[^/]+)");
-    public static final Pattern SLOT_DURATION_ARGS_FORMAT = Pattern.compile(" et/(?<duration>[0-9]+)");
+    public static final Pattern SLOT_NAME_ARGS_FORMAT = Pattern.compile("(?<name>[^/]+) ");
+    public static final Pattern SLOT_LOCATION_ARGS_FORMAT = Pattern.compile("l/(?<location>[^/]+)");
+    public static final Pattern SLOT_DESCRIPTION_ARGS_FORMAT = Pattern.compile("d/(?<description>[^/]+)");
+    public static final Pattern SLOT_DATE_ARGS_FORMAT = Pattern.compile("date/(?<date>[^/]+)");
+    public static final Pattern SLOT_START_TIME_ARGS_FORMAT = Pattern.compile("st/(?<startTime>[^/]+)");
+    public static final Pattern SLOT_END_TIME_ARGS_FORMAT = Pattern.compile("et/(?<endTime>[^/]+)");
+    public static final Pattern SLOT_DURATION_ARGS_FORMAT = Pattern.compile("et/(?<duration>[0-9]+)");
     public static final Pattern SLOT_TAG_ARGS_FORMAT = Pattern.compile("(?<tag>(?: t/[^/]+)*)");
     public static final Pattern SLOT_RECURRENCE_ARGS_FORMAT = Pattern.compile("(?<recurrence>(?: r/[^/]+)*)");
 
@@ -103,15 +104,20 @@ public class ParserP {
 
         final String commandWord = matcher.group("commandWord");
         final String arguments = matcher.group("arguments");
+
         switch (commandWord) {
 
         case AddCommandP.COMMAND_WORD:
             return prepareAdd(arguments);
 
+        case ListCommandP.COMMAND_WORD:
+            return prepareList(arguments);
+
         case ExitCommandP.COMMAND_WORD:
             return new ExitCommandP();
 
         case HelpCommandP.COMMAND_WORD: // Fallthrough
+
         default:
             return new HelpCommandP();
         }
@@ -136,7 +142,7 @@ public class ParserP {
         final Matcher recurseMatcher = SLOT_RECURRENCE_ARGS_FORMAT.matcher(arguments);
 
         // Validate arg string format
-        if (nameMatcher.find() && startTimeMatcher.find() && (endTimeMatcher.find() || durationMatcher.find())) {
+        if (args.isEmpty() || !nameMatcher.find() || !startTimeMatcher.find() || !(endTimeMatcher.find() || durationMatcher.find())) {
             return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
         }
 
@@ -155,25 +161,30 @@ public class ParserP {
         // Location is not mandatory and can be null
         String location = null;
         if (locationMatcher.find()) {
-            location = descriptionMatcher.group("location");
+            location = locationMatcher.group("location");
         }
 
-        if (endTimeMatcher.find()) {
+        // Retrieve tags
+        Set<String> tags = Collections.emptySet();
+        if (tagsMatcher.find()) {
             try {
-                return new AddCommandP(
-                        date,
-                        nameMatcher.group("name"),
-                        location,
-                        description,
-                        startTimeMatcher.group("startTime"),
-                        endTimeMatcher.group("endTime"),
-                        getTagsFromArgs(tagsMatcher.group("tag")),
-                        getRecurrencesFromArgs(recurseMatcher.group("recurrence"))
-                );
+                tags = getTagsFromArgs(tagsMatcher.group("tag"));
             } catch (IllegalValueException ive) {
                 return new IncorrectCommandP(ive.getMessage());
             }
-        } else {
+        }
+
+        // Retrieve recurrence
+        Set<String> recurrences = Collections.emptySet();
+        if (recurseMatcher.find()) {
+            try {
+                recurrences = getRecurrencesFromArgs(recurseMatcher.group("recurrence"));
+            } catch (IllegalValueException ive) {
+                return new IncorrectCommandP(ive.getMessage());
+            }
+        }
+
+        if (durationMatcher.find()) {
             // parse duration string into int
             try {
                 return new AddCommandP(
@@ -183,14 +194,54 @@ public class ParserP {
                         description,
                         startTimeMatcher.group("startTime"),
                         Integer.parseInt(durationMatcher.group("duration")),
-                        getTagsFromArgs(tagsMatcher.group("tag")),
-                        getRecurrencesFromArgs(recurseMatcher.group("recurrence"))
+                        tags,
+                        recurrences
+                );
+            } catch (IllegalValueException ive) {
+                return new IncorrectCommandP(ive.getMessage());
+            }
+        } else {
+            try {
+                return new AddCommandP(
+                        date,
+                        nameMatcher.group("name"),
+                        location,
+                        description,
+                        startTimeMatcher.group("startTime"),
+                        endTimeMatcher.group("endTime"),
+                        tags,
+                        recurrences
                 );
             } catch (IllegalValueException ive) {
                 return new IncorrectCommandP(ive.getMessage());
             }
         }
     }
+
+    /**
+     * Parses arguments in the context of the add Slot command.
+     *
+     * @param args full command args string
+     * @return the prepared command
+     */
+    private CommandP prepareList(String args) {
+        String arguments = args.trim();
+
+        final Matcher tagsMatcher = SLOT_TAG_ARGS_FORMAT.matcher(arguments);
+
+        // Validate arg string format
+        if (args.isEmpty() || !tagsMatcher.find()) {
+            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
+        }
+
+        // TODO: prepare list
+        try {
+            return new ListCommandP(getTagsFromArgs(tagsMatcher.group("tag")));
+        } catch (IllegalValueException ive) {
+            return new IncorrectCommandP(ive.getMessage());
+        }
+    }
+
 
     /**
      * Parses arguments in the context of the delete person command.

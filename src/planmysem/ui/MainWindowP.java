@@ -34,7 +34,6 @@ public class MainWindowP {
         this.mainApp = mainApp;
     }
 
-
     /**
      * TODO: Add Javadoc comment.
      */

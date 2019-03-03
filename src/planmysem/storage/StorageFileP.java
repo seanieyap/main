@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.Path;
@@ -108,14 +107,14 @@ public class StorageFileP {
                      new BufferedReader(new FileReader(path.toFile()))) {
 
             final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            final AdaptedPlanner loaded;
+            final AdaptedPlanner loaded = (AdaptedPlanner) unmarshaller.unmarshal(fileReader);
             //decrypts
-            if (isEncrypted) {
-                StringReader decryptedData = new StringReader(Encryptor.decrypt(fileReader.readLine()));
-                loaded = (AdaptedPlanner) unmarshaller.unmarshal(decryptedData);
-            } else {
-                loaded = (AdaptedPlanner) unmarshaller.unmarshal(fileReader);
-            }
+//            if (isEncrypted) {
+//                StringReader decryptedData = new StringReader(Encryptor.decrypt(fileReader.readLine()));
+//                loaded = (AdaptedPlanner) unmarshaller.unmarshal(decryptedData);
+//            } else {
+//                loaded = (AdaptedPlanner) unmarshaller.unmarshal(fileReader);
+//            }
 
             // manual check for missing elements
             if (loaded.isAnyRequiredFieldMissing()) {
