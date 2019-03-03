@@ -65,8 +65,8 @@ public class AddCommandP extends CommandP {
      *
      * @throws IllegalValueException if any of the raw values are invalid
      */
-    public AddCommandP(String date, String name, String location, String description, String startTime,
-                       int duration, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
+    public AddCommandP(String date, String name, String location, String description, String startTime, int duration,
+                       Set<String> tags, Set<String> recurrences) throws IllegalValueException {
         final Set<Tag> tagSet = new HashSet<>();
 
         for (String tagName : tags) {

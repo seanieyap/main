@@ -16,7 +16,7 @@ import planmysem.data.slot.Slot;
 public class AdaptedDay {
     @XmlElement(required = true)
     private DayOfWeek dayOfWeek;
-    @XmlElement(required = true)
+    @XmlElement
     private ArrayList<AdaptedSlot> slots = new ArrayList<>();
 
     /**

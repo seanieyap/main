@@ -11,7 +11,7 @@ import planmysem.data.exception.IllegalValueException;
  */
 @XmlRootElement(name = "Planner")
 public class AdaptedPlanner {
-    @XmlElement(required = true)
+    @XmlElement
     private AdaptedSemester semester = new AdaptedSemester();
 
     /**
