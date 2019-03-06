@@ -11,21 +11,21 @@ import planmysem.data.slot.Slot;
  */
 public class Day implements ReadOnlyDay {
     private final DayOfWeek dayOfWeek;
-    private final String weekType;
+    private final String type;
     private final ArrayList<Slot> slots = new ArrayList<>();
 
     /**
      * Assumption: Every field must be present and not null.
-     * TODO: Ding Heng, please init weekType
+     * TODO: Ding Heng, please init type
      */
     public Day(DayOfWeek dayOfWeek, String weekType) {
         this.dayOfWeek = dayOfWeek;
-        this.weekType = null;
+        this.type = null;
     }
 
     public Day(DayOfWeek dayOfWeek, String weekType, ArrayList<Slot> slots) {
         this.dayOfWeek = dayOfWeek;
-        this.weekType = null;
+        this.type = null;
 
         for (Slot slot : slots) {
             this.slots.add(slot);
@@ -51,8 +51,8 @@ public class Day implements ReadOnlyDay {
     }
 
     @Override
-    public String getWeekType() {
-        return weekType;
+    public String getType() {
+        return type;
     }
 
     @Override

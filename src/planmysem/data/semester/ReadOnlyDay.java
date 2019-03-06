@@ -14,7 +14,7 @@ public interface ReadOnlyDay {
 
     String getDay();
 
-    String getWeekType();
+    String getType();
 
     ArrayList<Slot> getSlots();
 }

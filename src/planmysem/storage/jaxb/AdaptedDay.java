@@ -34,7 +34,7 @@ public class AdaptedDay {
      */
     public AdaptedDay(ReadOnlyDay source) {
         dayOfWeek = source.getDayOfWeek();
-        //        weekType = source.getWeekType();
+        //        weekType = source.getType();
         weekType = null;
 
         slots = new ArrayList<>();

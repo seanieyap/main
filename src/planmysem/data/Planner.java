@@ -114,7 +114,7 @@ public class Planner {
         List<LocalDate> datesList = startDate.datesUntil(endDate).collect(Collectors.toList());
         for (LocalDate date: datesList) {
             days.put(date, new Day(date.getDayOfWeek(), ""));
-            // TODO: Add weektype here
+            // TODO: Add type of the day here, recess/reading or normal
         }
         semester = new Semester(acadSem, acadYear, days, startDate, endDate, noOfWeeks,
                 recessDays, readingDays, normalDays);
