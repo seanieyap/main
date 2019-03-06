@@ -1,17 +1,18 @@
 package planmysem.ui;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.util.Pair;
 import planmysem.commands.CommandResultP;
 import planmysem.commands.ExitCommand;
 import planmysem.common.Messages;
-import planmysem.data.semester.ReadOnlyDay;
+import planmysem.data.slot.ReadOnlySlot;
 import planmysem.logic.LogicP;
 
 /**
@@ -84,7 +85,7 @@ public class MainWindowP {
      */
     public void displayResult(CommandResultP result) {
         clearOutputConsole();
-        final Optional<HashMap<LocalDate, ? extends ReadOnlyDay>> resultDays = result.getRelevantDays();
+        final Optional<List<Pair<LocalDate, ? extends ReadOnlySlot>>> resultDays = result.getRelevantSlots();
         if (resultDays.isPresent()) {
             display(resultDays.get());
         }
@@ -100,11 +101,12 @@ public class MainWindowP {
     }
 
     /**
-     * Displays the list of persons in the output display area, formatted as an indexed list.
+     * Displays the list of slots in the output display area, formatted as an indexed list.
      * Private contact details are hidden.
      */
-    private void display(HashMap<LocalDate, ? extends ReadOnlyDay> days) {
-        display(new Formatter().format(days));
+    private void display(List<Pair<LocalDate, ? extends ReadOnlySlot>> slots) {
+        // TODO: rename function call when AddressBook is fully removed from project
+        display(new Formatter().formatSlots(slots));
     }
 
     /**

@@ -1,62 +1,68 @@
 package planmysem.data.recurrence;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+
+import planmysem.data.semester.Semester;
 
 /**
  * Represents a Recurrence Value of a slot in the Planner.
  */
 public class Recurrence {
-    public final boolean recess; // Represents recess week
-    public final boolean reading; // Represents reading week
-    public final boolean normal; // Represents normal academic weeks
-    public final int day;
-    public final LocalDate date;
+    private final boolean recess; // Represents recess week
+    private final boolean reading; // Represents reading week
+    private final boolean normal; // Represents normal academic weeks
+    private final int day;
+    private final LocalDate date;
 
     /**
-     * Generate Recurrence values from a set and recurse over a given day.
+     * Generate Recurrence values from a set that recurse over a day.
      */
     public Recurrence(Set<String> recurrences, int day) {
-        if (recurrences.contains("recess")) {
-            recess = true;
-        } else {
-            recess = false;
-        }
-        if (recurrences.contains("reading")) {
-            reading = true;
-        } else {
-            reading = false;
-        }
-        if (recurrences.contains("normal")) {
-            normal = true;
-        } else {
-            normal = false;
-        }
         this.day = day;
-        date = null;
+        this.date = null;
+
+        if (recurrences == null) {
+            this.recess = false;
+            this.reading = false;
+            this.normal = false;
+            return;
+        }
+        this.recess = recurrences.contains("recess");
+        this.reading = recurrences.contains("reading");
+        this.normal = recurrences.contains("normal");
     }
 
     /**
-     * Generate Recurrence values from a set and recurse over a given date.
+     * Generate Recurrence values from a set that recurse over a date.
      */
     public Recurrence(Set<String> recurrences, LocalDate date) {
-        if (recurrences.contains("recess")) {
-            recess = true;
-        } else {
-            recess = false;
-        }
-        if (recurrences.contains("reading")) {
-            reading = true;
-        } else {
-            reading = false;
-        }
-        if (recurrences.contains("normal")) {
-            normal = true;
-        } else {
-            normal = false;
-        }
         this.day = 0;
         this.date = date;
+
+        if (recurrences == null) {
+            this.recess = false;
+            this.reading = false;
+            this.normal = false;
+
+            return;
+        }
+        this.recess = recurrences.contains("recess");
+        this.reading = recurrences.contains("reading");
+        this.normal = recurrences.contains("normal");
+    }
+
+    /**
+     * Generate dates to place slots in the semester.
+     */
+    public List<LocalDate> generateDates(Semester semester) {
+        List<LocalDate> dates = new ArrayList<>();
+
+        //TODO: generate dates
+
+        return dates;
     }
 
     @Override

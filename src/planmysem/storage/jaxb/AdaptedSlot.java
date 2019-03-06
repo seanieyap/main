@@ -15,7 +15,7 @@ import planmysem.data.slot.Location;
 import planmysem.data.slot.Name;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
-import planmysem.data.tag.Tag;
+import planmysem.data.tag.TagP;
 
 /**
  * JAXB-friendly adapted person data holder class.
@@ -32,7 +32,7 @@ public class AdaptedSlot {
     @XmlElement(required = true)
     private LocalTime time;
     @XmlElement(required = true)
-    private List<AdaptedTag> tagged = new ArrayList<>();
+    private List<AdaptedTagP> tags = new ArrayList<>();
 
     /**
      * No-arg constructor for JAXB use.
@@ -52,9 +52,9 @@ public class AdaptedSlot {
         duration = source.getDuration();
         time = source.getTime();
 
-        tagged = new ArrayList<>();
-        for (Tag tag : source.getTags()) {
-            tagged.add(new AdaptedTag(tag));
+        tags = new ArrayList<>();
+        for (TagP tag : source.getTags()) {
+            tags.add(new AdaptedTagP(tag));
         }
     }
 
@@ -62,7 +62,7 @@ public class AdaptedSlot {
      * Returns true if any required field is missing.
      */
     public boolean isAnyRequiredFieldMissing() {
-        for (AdaptedTag tag : tagged) {
+        for (AdaptedTagP tag : tags) {
             if (tag.isAnyRequiredFieldMissing()) {
                 return true;
             }
@@ -83,8 +83,8 @@ public class AdaptedSlot {
         final LocalTime time = this.time;
         final int duration = this.duration;
 
-        final Set<Tag> tags = new HashSet<>();
-        for (AdaptedTag tag : tagged) {
+        final Set<TagP> tags = new HashSet<>();
+        for (AdaptedTagP tag : this.tags) {
             tags.add(tag.toModelType());
         }
 

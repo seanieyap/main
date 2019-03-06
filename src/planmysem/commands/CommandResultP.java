@@ -1,10 +1,11 @@
 package planmysem.commands;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
-import planmysem.data.semester.ReadOnlyDay;
+import javafx.util.Pair;
+import planmysem.data.slot.ReadOnlySlot;
 
 /**
  * Represents the result of a command execution.
@@ -17,25 +18,25 @@ public class CommandResultP {
     public final String feedbackToUser;
 
     /**
-     * The list of days that was produced by the command
+     * The list of Slots that was produced by the command
      */
-    private final HashMap<LocalDate, ? extends ReadOnlyDay> days;
+    private final List<Pair<LocalDate, ? extends ReadOnlySlot>> slots;
 
     public CommandResultP(String feedbackToUser) {
         this.feedbackToUser = feedbackToUser;
-        days = null;
+        slots = null;
     }
 
-    public CommandResultP(String feedbackToUser, HashMap<LocalDate, ? extends ReadOnlyDay> days) {
+    public CommandResultP(String feedbackToUser, List<Pair<LocalDate, ? extends ReadOnlySlot>> slots) {
         this.feedbackToUser = feedbackToUser;
-        this.days = days;
+        this.slots = slots;
     }
 
     /**
-     * Returns list of Days relevant to the command command result, if any.
+     * Returns list of Slots relevant to the command command result, if any.
      */
-    public Optional<HashMap<LocalDate, ? extends ReadOnlyDay>> getRelevantDays() {
-        return Optional.ofNullable(days);
+    public Optional<List<Pair<LocalDate, ? extends ReadOnlySlot>>> getRelevantSlots() {
+        return Optional.ofNullable(slots);
     }
 
 }

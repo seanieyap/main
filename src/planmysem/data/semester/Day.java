@@ -10,24 +10,29 @@ import planmysem.data.slot.Slot;
  * Guarantees: details are present and not null, field values are validated.
  */
 public class Day implements ReadOnlyDay {
-    private DayOfWeek dayOfWeek;
-    private ArrayList<Slot> slots = new ArrayList<>();
+    private final DayOfWeek dayOfWeek;
+    private final String type;
+    private final ArrayList<Slot> slots = new ArrayList<>();
 
     /**
      * Assumption: Every field must be present and not null.
+     * TODO: Ding Heng, please init type
      */
-    public Day(DayOfWeek dayOfWeek) {
-
+    public Day(DayOfWeek dayOfWeek, String weekType) {
         this.dayOfWeek = dayOfWeek;
-
+        this.type = null;
     }
 
-    public Day(DayOfWeek dayOfWeek, ArrayList<Slot> slots) {
+    public Day(DayOfWeek dayOfWeek, String weekType, ArrayList<Slot> slots) {
         this.dayOfWeek = dayOfWeek;
-        this.slots = slots;
+        this.type = null;
+
+        for (Slot slot : slots) {
+            this.slots.add(slot);
+        }
     }
 
-    public void setSlot(Slot slot) {
+    public void addSlot(Slot slot) {
         slots.add(slot);
     }
 
@@ -43,6 +48,11 @@ public class Day implements ReadOnlyDay {
     @Override
     public String getDay() {
         return dayOfWeek.toString();
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     @Override
