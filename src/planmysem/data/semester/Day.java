@@ -18,7 +18,7 @@ public class Day implements ReadOnlyDay {
      * Assumption: Every field must be present and not null.
      * TODO: Ding Heng, please init weekType
      */
-    public Day(DayOfWeek dayOfWeek) {
+    public Day(DayOfWeek dayOfWeek, String weekType) {
         this.dayOfWeek = dayOfWeek;
         this.weekType = null;
     }

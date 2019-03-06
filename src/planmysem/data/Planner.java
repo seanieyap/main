@@ -113,7 +113,8 @@ public class Planner {
         HashMap<LocalDate, Day> days = new HashMap<>();
         List<LocalDate> datesList = startDate.datesUntil(endDate).collect(Collectors.toList());
         for (LocalDate date: datesList) {
-            days.put(date, new Day(date.getDayOfWeek()));
+            days.put(date, new Day(date.getDayOfWeek(), ""));
+            // TODO: Add weektype here
         }
         semester = new Semester(acadSem, acadYear, days, startDate, endDate, noOfWeeks,
                 recessDays, readingDays, normalDays);
