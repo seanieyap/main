@@ -6,13 +6,13 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javafx.util.Pair;
-import planmysem.data.recurrence.Recurrence;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.semester.Semester;
@@ -38,6 +38,11 @@ public class Planner {
         int currentYear = cal.get(Calendar.YEAR);
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now();
+        // TODO: add recess days, reading days, normal days
+        Set<LocalDate> recessDays = new HashSet<>();
+        Set<LocalDate> readingDays = new HashSet<>();
+        Set<LocalDate> normalDays = new HashSet<>();
+
         // Read AcademicCalendar.txt to get current academic week
         try {
             Stream<String> lines = Files.lines(Paths.get(filePath));
@@ -110,7 +115,8 @@ public class Planner {
         for (LocalDate date: datesList) {
             days.put(date, new Day(date.getDayOfWeek()));
         }
-        semester = new Semester(acadSem, acadYear, days, startDate, endDate, noOfWeeks);
+        semester = new Semester(acadSem, acadYear, days, startDate, endDate, noOfWeeks,
+                recessDays, readingDays, normalDays);
         // TODO: set constants for fixed numbers, simplify/optimise code, handle ioe exception
     }
 
@@ -130,7 +136,7 @@ public class Planner {
     /**
      * Adds a day to the Planner.
      *
-     * @throws Semester.DuplicateDayException if an equivalent Day already exists.
+     * @throws Semester.DuplicateDayException if a date is not found in the semester.
      */
     public void addDay(LocalDate date, Day day) throws Semester.DuplicateDayException {
         semester.addDay(date, day);
@@ -140,15 +146,8 @@ public class Planner {
      * Adds a slot to the Planner.
      *
      */
-    public void addSlot(LocalDate date, Slot slot) {
+    public void addSlot(LocalDate date, Slot slot) throws Semester.DateNotFoundException {
         semester.addSlot(date, slot);
-    }
-
-    /**
-     * Adds slots to the Planner.
-     */
-    public int addSlots(Pair<Slot, Recurrence> slots) throws Semester.DayNotFoundException {
-        return semester.addSlots(slots);
     }
 
     /**
@@ -168,18 +167,18 @@ public class Planner {
     /**
      * Removes the equivalent day from the Planner.
      *
-     * @throws Semester.DayNotFoundException if no such Day could be found.
+     * @throws Semester.DateNotFoundException if no such Day could be found.
      */
-    public void removeDay(ReadOnlyDay day) throws Semester.DayNotFoundException {
+    public void removeDay(ReadOnlyDay day) throws Semester.DateNotFoundException {
         semester.remove(day);
     }
 
     /**
      * Removes the equivalent day from the Planner.
      *
-     * @throws Semester.DayNotFoundException if no such Day could be found.
+     * @throws Semester.DateNotFoundException if no such Day could be found.
      */
-    public void removeDay(LocalDate date) throws Semester.DayNotFoundException {
+    public void removeDay(LocalDate date) throws Semester.DateNotFoundException {
         semester.remove(date);
     }
 

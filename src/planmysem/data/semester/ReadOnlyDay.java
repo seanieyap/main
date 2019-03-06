@@ -10,9 +10,11 @@ import planmysem.data.slot.Slot;
  * Guarantees: details are present and not null, field values are validated.
  */
 public interface ReadOnlyDay {
-    public DayOfWeek getDayOfWeek();
+    DayOfWeek getDayOfWeek();
 
-    public String getDay();
+    String getDay();
 
-    public ArrayList<Slot> getSlots();
+    String getWeekType();
+
+    ArrayList<Slot> getSlots();
 }
