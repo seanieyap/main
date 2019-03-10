@@ -45,37 +45,81 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 [[Features]]
 == Features
 
+This section displays the current implemented features as well as features that will be implemented in the future.
+
 ====
 *Command Format*
 
-* Words in UPPER_CASE are the parameters to be supplied by the user e.g. in `add act NAME`, `NAME` is a parameter which can be used as the name of the activity.
-* Items in square brackets are optional e.g add act NAME `[c/NAME]` can be used as add act frisbee c/sports or as add act frisbee.
-* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/important`, `t/tough` etc.
-* Parameters can be in any order e.g. if the command specifies `c/NAME`, `t/TAG`, `t/TAG`, `c/NAME` is also acceptable.
-====
-====
-*Option Format*
+* Words in UPPER_CASE are the parameters to be supplied by the user e.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
+* Items in square brackets are optional. e.g add act NAME `[c/NAME]`.
+* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
+* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
 
-* `n/`: Name specific to the object at hand.
-** e.g. Add _Category_: `add cat n/NAME [n/MORE_NAMES]...`
-** The `n/` here refers to the _category_ name.
-* `d/`: Date.
-** Format: `01-01`, `2019-01-02`
-** e.g. Add _slot_: `add slot d/DATE t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
-* `t/`: Time.
-** Format: 24-Hour in the form of “hhmm-hhmm” or 12-Hour format in the form of `HOUR+AM|PM-Hour+AM|PM`
-** e.g. Add: `add d/DATE t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
-** The `t/` here refers to the time in which to add the _slot_ to.
-* `tag/`: Tag.
-** e.g. Add: `add d/DATE t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
-** The `tag/` here refers the _tags_ to attach to the _slot_.
-* `r/`: recurrence
-** Format: `norecess | noreading | nonormal | recess | reading | normal`
-** e.g. Add: `add d/DATE t/TIME [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal] [tag/TAG]...`
-** The `r/` here refers to the recurrence of the _slot_.
-* `nn/`: New name of the object at hand.
-* `nd/`: New Date
-* `nt/`: New Time
+*Paramters*
+
+Parameters in PlanMySem were designed to be, short and easy to memorise. Once familarised with, they should be intuitive to use.
+Below is the list of parameters for users such as yourself to jump right into grasping the system.
+
+[horizontal]
+*Parameter*:: *Description*
+`n/`:: Name specific to the object at hand
+`d/`:: Date / Day of week +
+    Format: +
+    * Dates: `01-01`, `2019-01-02`
+    * Day of Week: `Monday`, `mon`, `1`
+`st/`:: Start Time
+    Format: +
+    * 24-Hour: `hh:mm-hh:mm`
+    * 12-Hour: `HOUR+AM|PM-Hour+AM|PM`
+`et/`:: End Time / duration +
+    Format:
+    * 24-Hour in the form of “hh:mm-hh:mm”. e.g. `23:00`
+    * 12-Hour format in the form of `HOUR+AM|PM-Hour+AM|PM`. e.g. `12:30am`
+    * Duration of the event in minutes. e.g. `60` represents 60 minutes
+`r/`:: recurrence
+    Format:
+    * Select/deselect recess week: `recess`, 'norecess'
+    * Select/deselect reading week: `reading`, `noreading`
+    * Select/deselect normal weeks: `normal`, `nonormal`
+`l/`:: Location
+`des/`:: Description
+`t/`:: Tag
+`nn/`:: New name of the object at hand.
+`nd/`:: New Date
+`nst/`:: New Start Time
+`net/`:: New End Time
+`nl/`:: New Location
+`ndes/`:: New Description
+
+
+
+//[vertical]
+//* `n/`: Name specific to the object at hand
+//* `d/`: Date / Day of week
+//** Format:
+//*** Dates: `01-01`, `2019-01-02`
+//*** Day of Week: `Monday`, `mon`, `1`
+//* `st/`: Start Time
+//** Format:
+//*** 24-Hour: `hh:mm-hh:mm`
+//*** 12-Hour: `HOUR+AM|PM-Hour+AM|PM`
+//* `et/`: End Time / duration
+//** Format:
+//*** 24-Hour in the form of “hh:mm-hh:mm”. e.g. `23:00`
+//*** 12-Hour format in the form of `HOUR+AM|PM-Hour+AM|PM`. e.g. `12:30am`
+//*** Duration of the event in minutes. e.g. `60` represents 60 minutes
+//* `r/`: recurrence
+//** Format:
+//*** Recurse over recess week: `norecess | noreading | nonormal | recess | reading | normal`
+//* `l/`: Location
+//* `des/`: Description
+//* `t/`: Tag
+//* `nn/`: New name of the object at hand.
+//* `nd/`: New Date
+//* `nst/`: New Start Time
+//* `net/`: New End Time
+//* `nl/`: New Location
+//* `ndes/`: New Description
 ====
 
 === Viewing help : `help`
@@ -85,12 +129,12 @@ Format: `help`
 === Adding Slots : `add`
 
 Add a _slot_ to the planner. +
-Format: `add NAME st/START_TIME et/END_TIME|DURATION [date/DATE|DAY_OF_WEEK] +
-[l/LOCATION] [d/DESCRIPTION] [r/recess|norecess] [r/reading|noreading] [r/normal|nonormal] [t/TAG]...`
+Format: `add NAME d/DATE|DAY_OF_WEEK st/START_TIME et/END_TIME|DURATION +
+[l/LOCATION] [des/DESCRIPTION] [r/recess|norecess] [r/reading|noreading] [r/normal|nonormal] [t/TAG]...`
 
 Examples:
 
-* `add d/01-01 t/0800-0900 tag/Frisbee tag/Tembusu College` +
+* `add CS2113T Tutorial d/mon st/08:00 et/09:00 des/Attending: John, Tan, Lee t/Frisbee t/Tembusu College` +
 Add a _slot_ to the _activity_ "Sport" on monday, from 0800hrs to 0900hrs with the tags "Frisbee" and "Tembusu College".
 * `add slot a/Interest Group d/monday t/0800-0900 r/recess r/reading tag/Tembusu College tag/Barefoots` +
 Do the same but additionally, recurse the slot on recess and reading week.

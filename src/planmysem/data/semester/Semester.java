@@ -2,11 +2,11 @@ package planmysem.data.semester;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import javafx.util.Pair;
 import planmysem.data.exception.DuplicateDataException;
-import planmysem.data.recurrence.Recurrence;
 import planmysem.data.slot.Slot;
 
 /**
@@ -21,6 +21,11 @@ public class Semester implements ReadOnlySemester {
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final int noOfWeeks;
+
+    // These variables aid in making searches more effective
+    private final Set<LocalDate> recessDays = new HashSet<>();
+    private final Set<LocalDate> readingDays = new HashSet<>();
+    private final Set<LocalDate> normalDays = new HashSet<>();
 
     /**
      * Constructs empty semester.
@@ -37,13 +42,18 @@ public class Semester implements ReadOnlySemester {
      * Constructs a semester with the given Days.
      */
     public Semester(String name, String academicYear, HashMap<LocalDate, Day> days, LocalDate startDate,
-                    LocalDate endDate, int noOfWeeks) {
+                    LocalDate endDate, int noOfWeeks, Set<LocalDate> recessDays, Set<LocalDate> readingDays,
+                    Set<LocalDate> normalDays) {
         this.name = name;
         this.academicYear = academicYear;
         this.days.putAll(days);
         this.startDate = startDate;
         this.endDate = endDate;
         this.noOfWeeks = noOfWeeks;
+
+        this.recessDays.addAll(recessDays);
+        this.recessDays.addAll(readingDays);
+        this.recessDays.addAll(normalDays);
     }
 
     /**
@@ -73,37 +83,47 @@ public class Semester implements ReadOnlySemester {
     /**
      * Adds a Slot to the Semester.
      *
+     * @throws DateNotFoundException if a date is not found in the semester.
      */
-    public void addSlot(LocalDate date, Slot slot) {
-        days.get(date).setSlot(slot);
+    public void addSlot(LocalDate date, Slot slot) throws DateNotFoundException {
+        if (date == null || (date.isBefore(startDate) || date.isAfter(endDate))) {
+            throw new DateNotFoundException();
+        }
+        days.get(date).addSlot(slot);
     }
 
     /**
      * Adds Slots to the Semester.
      *
+     * @throws DateNotFoundException if an equivalent Day already exists.
      */
-    public int addSlots(Pair<Slot, Recurrence> slots) throws DayNotFoundException {
-        int result = 0;
-
-        if (slots.getValue().date.isBefore(startDate) || slots.getValue().date.isAfter(endDate)) {
-            throw new DayNotFoundException();
-        }
-
-        // Generate dates to add
-        // Perform add
-
-        return result;
-    }
+    //    public List<Slot> addSlots(Pair<Slot, Recurrence> slots) throws DateNotFoundException {
+    //        Recurrence recurrence = slots.getValue();
+    //
+    //        if (recurrence.date != null && (recurrence.date.isBefore(startDate)
+    //                || recurrence.date.isAfter(endDate))) {
+    //            throw new DateNotFoundException();
+    //        }
+    //
+    //        Slot slot = slots.getKey();
+    //
+    //        List<Slot> toAdd = new ArrayList<>();
+    //
+    //        // Generate dates to add
+    //        // Perform add
+    //
+    //        return toAdd;
+    //    }
 
 
     /**
      * Removes the equivalent Day from the list.
      *
-     * @throws DayNotFoundException if no such Day could be found in the list.
+     * @throws DateNotFoundException if no such Day could be found in the list.
      */
-    public void remove(ReadOnlyDay day) throws DayNotFoundException {
+    public void remove(ReadOnlyDay day) throws DateNotFoundException {
         if (!contains(day)) {
-            throw new DayNotFoundException();
+            throw new DateNotFoundException();
         }
         days.remove(day);
     }
@@ -111,11 +131,11 @@ public class Semester implements ReadOnlySemester {
     /**
      * Removes the equivalent Day from the list.
      *
-     * @throws DayNotFoundException if no such Day could be found in the list.
+     * @throws DateNotFoundException if no such Day could be found in the list.
      */
-    public void remove(LocalDate date) throws DayNotFoundException {
+    public void remove(LocalDate date) throws DateNotFoundException {
         if (!contains(date)) {
-            throw new DayNotFoundException();
+            throw new DateNotFoundException();
         }
         days.remove(date);
     }
@@ -135,7 +155,6 @@ public class Semester implements ReadOnlySemester {
             day.getValue().clear();
         }
     }
-
 
     /**
      * Checks if the list contains an equivalent Day as the given argument.
@@ -181,6 +200,21 @@ public class Semester implements ReadOnlySemester {
         return noOfWeeks;
     }
 
+    @Override
+    public Set<LocalDate> getRecessDays() {
+        return recessDays;
+    }
+
+    @Override
+    public Set<LocalDate> getReadingDays() {
+        return readingDays;
+    }
+
+    @Override
+    public Set<LocalDate> getNormalDays() {
+        return normalDays;
+    }
+
     /**
      * Signals that an operation would have violated the 'no duplicates' property.
      */
@@ -194,7 +228,7 @@ public class Semester implements ReadOnlySemester {
      * Signals that an operation targeting a specified Day in the list would fail because
      * there is no such matching Day in the list.
      */
-    public static class DayNotFoundException extends Exception {
+    public static class DateNotFoundException extends Exception {
     }
 
 }

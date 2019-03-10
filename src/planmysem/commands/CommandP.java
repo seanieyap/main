@@ -1,24 +1,35 @@
 package planmysem.commands;
 
-import java.time.LocalDate;
-import java.util.HashMap;
+import static planmysem.ui.Gui.DISPLAYED_INDEX_OFFSET;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import javafx.util.Pair;
+import planmysem.common.Messages;
 import planmysem.data.Planner;
-import planmysem.data.semester.ReadOnlyDay;
+import planmysem.data.slot.ReadOnlySlot;
 
 /**
  * Represents an executable command.
  */
 public abstract class CommandP {
     protected Planner planner;
-    private HashMap<LocalDate, ? extends ReadOnlyDay> relevantDays;
-    private LocalDate targetDate = null;
+    protected List<Pair<LocalDate, ? extends ReadOnlySlot>> relevantSlots;
+    private int targetIndex = -1;
 
     /**
-     * @param targetDate last visible listing index of the target person
+     * @param slots last visible listing index of the target person
      */
-    public CommandP(LocalDate targetDate) {
-        this.setTargetDate(targetDate);
+    //    public CommandP(List<Pair<LocalDate, ? extends ReadOnlySlot>> slots) {
+    //        this.relevantSlots = slots;
+    //    }
+
+    /**
+     * @param targetIndex last visible listing index of the target person
+     */
+    public CommandP(int targetIndex) {
+        this.targetIndex = targetIndex;
     }
 
     protected CommandP() {
@@ -29,15 +40,22 @@ public abstract class CommandP {
      */
     public abstract CommandResultP execute();
 
-    //Note: it is better to make the execute() method abstract, by replacing the above method with the line below:
-    //public abstract CommandResult execute();
+    /**
+     * Constructs a feedback message to summarise an operation that displayed a listing of persons.
+     *
+     * @param slots used to generate summary
+     * @return summary message for persons displayed
+     */
+    public static String getMessageForSlotsListShownSummary(List<Pair<LocalDate, ? extends ReadOnlySlot>> slots) {
+        return String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, slots.size());
+    }
 
     /**
      * Supplies the data the command will operate on.
      */
-    public void setData(Planner planner, HashMap<LocalDate, ? extends ReadOnlyDay> relevantDays) {
+    public void setData(Planner planner, List<Pair<LocalDate, ? extends ReadOnlySlot>> slots) {
         this.planner = planner;
-        this.relevantDays = relevantDays;
+        this.relevantSlots = slots;
     }
 
     /**
@@ -45,15 +63,23 @@ public abstract class CommandP {
      *
      * @throws IndexOutOfBoundsException if the target index is out of bounds of the last viewed listing
      */
-    protected ReadOnlyDay getTargetDay() throws IndexOutOfBoundsException {
-        return relevantDays.get(getTargetDate());
+    protected List<Pair<LocalDate, ? extends ReadOnlySlot>> getTargetSlots() throws IndexOutOfBoundsException {
+        return relevantSlots;
     }
 
-    public LocalDate getTargetDate() {
-        return targetDate;
+    protected Pair<LocalDate, ? extends ReadOnlySlot> getTargetSlot(int index) throws IndexOutOfBoundsException {
+        return relevantSlots.get(index);
     }
 
-    public void setTargetDate(LocalDate targetDate) {
-        this.targetDate = targetDate;
+    protected Pair<LocalDate, ? extends ReadOnlySlot> getTargetSlot() throws IndexOutOfBoundsException {
+        return relevantSlots.get(targetIndex - DISPLAYED_INDEX_OFFSET);
+    }
+
+    public int getTargetIndex() {
+        return targetIndex;
+    }
+
+    public void setTargetIndex(int targetIndex) {
+        this.targetIndex = targetIndex;
     }
 }
