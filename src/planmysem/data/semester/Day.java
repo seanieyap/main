@@ -16,16 +16,15 @@ public class Day implements ReadOnlyDay {
 
     /**
      * Assumption: Every field must be present and not null.
-     * TODO: Ding Heng, please init type
      */
     public Day(DayOfWeek dayOfWeek, String weekType) {
         this.dayOfWeek = dayOfWeek;
-        this.type = null;
+        this.type = weekType;
     }
 
     public Day(DayOfWeek dayOfWeek, String weekType, ArrayList<Slot> slots) {
         this.dayOfWeek = dayOfWeek;
-        this.type = null;
+        this.type = weekType;
 
         for (Slot slot : slots) {
             this.slots.add(slot);
