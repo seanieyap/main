@@ -3,7 +3,6 @@ package planmysem.commands;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import planmysem.data.exception.IllegalValueException;
@@ -88,7 +87,7 @@ public class EditCommandP extends CommandP {
     @Override
     public CommandResultP execute() {
         try {
-            List<LocalDate> dates = recurrence.generateDates(planner.getSemester());
+            Set<LocalDate> dates = recurrence.generateDates(planner.getSemester());
 
             for (LocalDate date : dates) {
                 planner.addSlot(date, slot);

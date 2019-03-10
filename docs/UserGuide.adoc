@@ -62,64 +62,34 @@ Below is the list of parameters for users such as yourself to jump right into gr
 
 [horizontal]
 *Parameter*:: *Description*
-`n/`:: Name specific to the object at hand
-`d/`:: Date / Day of week +
+`n/`:: *Name specific to the object at hand.*
+`d/`:: *Date / Day of week.* +
     Format: +
     * Dates: `01-01`, `2019-01-02`
     * Day of Week: `Monday`, `mon`, `1`
-`st/`:: Start Time
+`st/`:: *Start Time.*
     Format: +
-    * 24-Hour: `hh:mm-hh:mm`
-    * 12-Hour: `HOUR+AM|PM-Hour+AM|PM`
-`et/`:: End Time / duration +
+    * 24-Hour: `hh:mm`
+    * 12-Hour: `hh:mm+AM|PM`
+`et/`:: *End Time / duration.* +
     Format:
-    * 24-Hour in the form of “hh:mm-hh:mm”. e.g. `23:00`
-    * 12-Hour format in the form of `HOUR+AM|PM-Hour+AM|PM`. e.g. `12:30am`
+    * 24-Hour in the form of “hh:mm”. e.g. `23:00`
+    * 12-Hour format in the form of `hh:mm+AM|PM`. e.g. `12:30am`
     * Duration of the event in minutes. e.g. `60` represents 60 minutes
-`r/`:: recurrence
+`r/`:: *recurrence.* +
     Format:
-    * Select/deselect recess week: `recess`, 'norecess'
-    * Select/deselect reading week: `reading`, `noreading`
-    * Select/deselect normal weeks: `normal`, `nonormal`
-`l/`:: Location
-`des/`:: Description
-`t/`:: Tag
-`nn/`:: New name of the object at hand.
-`nd/`:: New Date
-`nst/`:: New Start Time
-`net/`:: New End Time
-`nl/`:: New Location
-`ndes/`:: New Description
-
-
-
-//[vertical]
-//* `n/`: Name specific to the object at hand
-//* `d/`: Date / Day of week
-//** Format:
-//*** Dates: `01-01`, `2019-01-02`
-//*** Day of Week: `Monday`, `mon`, `1`
-//* `st/`: Start Time
-//** Format:
-//*** 24-Hour: `hh:mm-hh:mm`
-//*** 12-Hour: `HOUR+AM|PM-Hour+AM|PM`
-//* `et/`: End Time / duration
-//** Format:
-//*** 24-Hour in the form of “hh:mm-hh:mm”. e.g. `23:00`
-//*** 12-Hour format in the form of `HOUR+AM|PM-Hour+AM|PM`. e.g. `12:30am`
-//*** Duration of the event in minutes. e.g. `60` represents 60 minutes
-//* `r/`: recurrence
-//** Format:
-//*** Recurse over recess week: `norecess | noreading | nonormal | recess | reading | normal`
-//* `l/`: Location
-//* `des/`: Description
-//* `t/`: Tag
-//* `nn/`: New name of the object at hand.
-//* `nd/`: New Date
-//* `nst/`: New Start Time
-//* `net/`: New End Time
-//* `nl/`: New Location
-//* `ndes/`: New Description
+    * Select/deselect recess week: `recess`
+    * Select/deselect reading week: `reading`
+    * Select/deselect past dates: `past`
+`l/`:: *Location.*
+`des/`:: *Description.*
+`t/`:: *Tag.*
+`nn/`:: *New name of the object at hand.*
+`nd/`:: *New Date.*
+`nst/`:: *New Start Time.*
+`net/`:: *New End Time.*
+`nl/`:: *New Location.*
+`ndes/`:: *New Description.*
 ====
 
 === Viewing help : `help`
@@ -130,7 +100,7 @@ Format: `help`
 
 Add a _slot_ to the planner. +
 Format: `add NAME d/DATE|DAY_OF_WEEK st/START_TIME et/END_TIME|DURATION +
-[l/LOCATION] [des/DESCRIPTION] [r/recess|norecess] [r/reading|noreading] [r/normal|nonormal] [t/TAG]...`
+[l/LOCATION] [des/DESCRIPTION] [r/recess] [r/reading] [r/past] [t/TAG]...`
 
 Examples:
 
@@ -141,8 +111,7 @@ Do the same but additionally, recurse the slot on recess and reading week.
 
 [NOTE]
 ====
-The default for recurrence is no recess week and no reading week. +
-If the recurrence options are not defined, then there the _slot_ will recurse every week except recess week and reading week.
+If no recurrence parameters are specified then only the nearest day or the specified date is selected.
 ====
 
 === Listing Slots: `list`
