@@ -75,30 +75,13 @@ public class Recurrence {
         }
 
         // recurse over normal days
-        for (LocalDate d : semester.getNormalDays()) {
-            if (d.getDayOfWeek() == day && (d.isAfter(dateStart) || d.isEqual(dateStart))) {
-                result.add(date);
-            }
-        }
+        result.addAll(getDates(semester.getNormalDays(), dateStart));
 
         // recurse over recess days
-        if (recess) {
-            for (LocalDate d : semester.getRecessDays()) {
-                if (d.getDayOfWeek() == day && (d.isAfter(dateStart) || d.isEqual(dateStart))) {
-                    result.add(date);
-                }
-            }
-        }
+        result.addAll(getDates(semester.getRecessDays(), dateStart));
 
         // recurse over reading days
-        if (reading) {
-            for (LocalDate d : semester.getReadingDays()) {
-                if (d.getDayOfWeek() == day && (d.isAfter(dateStart) || d.isEqual(dateStart))) {
-                    result.add(date);
-                }
-            }
-        }
-
+        result.addAll(getDates(semester.getReadingDays(), dateStart));
 
         return result;
     }
@@ -125,5 +108,19 @@ public class Recurrence {
             hashCode += 4; // 0100
         }
         return hashCode;
+    }
+
+    /**
+     * get set of dates where it is a specific dayofweek and is after a start date.
+     */
+    private Set<LocalDate> getDates(Set<LocalDate> dates, LocalDate dateStart) {
+        final Set<LocalDate> result = new HashSet<>();
+        for (LocalDate d : dates) {
+            if (d.getDayOfWeek() == day && (d.isAfter(dateStart) || d.isEqual(dateStart))) {
+                result.add(date);
+            }
+        }
+
+        return result;
     }
 }
