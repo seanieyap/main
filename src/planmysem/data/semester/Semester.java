@@ -52,8 +52,8 @@ public class Semester implements ReadOnlySemester {
         this.noOfWeeks = noOfWeeks;
 
         this.recessDays.addAll(recessDays);
-        this.recessDays.addAll(readingDays);
-        this.recessDays.addAll(normalDays);
+        this.readingDays.addAll(readingDays);
+        this.normalDays.addAll(normalDays);
     }
 
     /**
@@ -66,6 +66,10 @@ public class Semester implements ReadOnlySemester {
         this.startDate = source.startDate;
         this.endDate = source.endDate;
         this.noOfWeeks = source.noOfWeeks;
+
+        this.recessDays.addAll(source.recessDays);
+        this.readingDays.addAll(source.readingDays);
+        this.normalDays.addAll(source.normalDays);
     }
 
     /**

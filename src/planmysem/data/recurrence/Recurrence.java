@@ -1,8 +1,10 @@
 package planmysem.data.recurrence;
 
+import static planmysem.common.Utils.getNearestDayOfWeek;
+
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import planmysem.data.semester.Semester;
@@ -13,56 +15,92 @@ import planmysem.data.semester.Semester;
 public class Recurrence {
     private final boolean recess; // Represents recess week
     private final boolean reading; // Represents reading week
-    private final boolean normal; // Represents normal academic weeks
-    private final int day;
+    private final boolean past; // Represents past academic weeks
+    private final DayOfWeek day;
     private final LocalDate date;
 
     /**
      * Generate Recurrence values from a set that recurse over a day.
      */
     public Recurrence(Set<String> recurrences, int day) {
-        this.day = day;
-        this.date = null;
+        this.day = DayOfWeek.of(day);
+        this.date = getNearestDayOfWeek(LocalDate.now(), day);
 
         if (recurrences == null) {
             this.recess = false;
             this.reading = false;
-            this.normal = false;
+            this.past = false;
             return;
         }
         this.recess = recurrences.contains("recess");
         this.reading = recurrences.contains("reading");
-        this.normal = recurrences.contains("normal");
+        this.past = recurrences.contains("past");
     }
 
     /**
      * Generate Recurrence values from a set that recurse over a date.
      */
     public Recurrence(Set<String> recurrences, LocalDate date) {
-        this.day = 0;
+        this.day = date.getDayOfWeek();
         this.date = date;
 
         if (recurrences == null) {
             this.recess = false;
             this.reading = false;
-            this.normal = false;
+            this.past = false;
 
             return;
         }
         this.recess = recurrences.contains("recess");
         this.reading = recurrences.contains("reading");
-        this.normal = recurrences.contains("normal");
+        this.past = recurrences.contains("past");
     }
 
     /**
      * Generate dates to place slots in the semester.
      */
-    public List<LocalDate> generateDates(Semester semester) {
-        List<LocalDate> dates = new ArrayList<>();
+    public Set<LocalDate> generateDates(Semester semester) {
+        Set<LocalDate> result = new HashSet<>();
 
-        //TODO: generate dates
+        LocalDate dateStart;
+        if (past) {
+            dateStart = semester.getStartDate();
+        } else {
+            dateStart = LocalDate.now();
+        }
 
-        return dates;
+        if (!recess && !reading && !past) {
+            result.add(date);
+            return result;
+        }
+
+        // recurse over normal days
+        for (LocalDate d : semester.getNormalDays()) {
+            if (d.getDayOfWeek() == day && (d.isAfter(dateStart) || d.isEqual(dateStart))) {
+                result.add(date);
+            }
+        }
+
+        // recurse over recess days
+        if (recess) {
+            for (LocalDate d : semester.getRecessDays()) {
+                if (d.getDayOfWeek() == day && (d.isAfter(dateStart) || d.isEqual(dateStart))) {
+                    result.add(date);
+                }
+            }
+        }
+
+        // recurse over reading days
+        if (reading) {
+            for (LocalDate d : semester.getReadingDays()) {
+                if (d.getDayOfWeek() == day && (d.isAfter(dateStart) || d.isEqual(dateStart))) {
+                    result.add(date);
+                }
+            }
+        }
+
+
+        return result;
     }
 
     @Override
@@ -71,7 +109,7 @@ public class Recurrence {
                 || (other instanceof Recurrence // instanceof handles nulls
                 && this.recess == ((Recurrence) other).recess
                 && this.reading == ((Recurrence) other).reading
-                && this.normal == ((Recurrence) other).normal); // state check
+                && this.past == ((Recurrence) other).past); // state check
     }
 
     @Override
@@ -83,7 +121,7 @@ public class Recurrence {
         if (reading) {
             hashCode += 2; // 0010
         }
-        if (normal) {
+        if (past) {
             hashCode += 4; // 0100
         }
         return hashCode;

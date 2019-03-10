@@ -2,10 +2,12 @@ package planmysem.common;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -56,7 +58,7 @@ public class Utils {
      * Check if String represents an actual date or day.
      * Returns 0 if string does not represent a DayOfWeek, else returns int corresponding to the day.
      */
-    public static int getDay(String unknown) {
+    public static int parseDay(String unknown) {
         if (unknown.trim().isEmpty()) {
             return 0;
         }
@@ -133,13 +135,10 @@ public class Utils {
     }
 
     /**
-     * Get number of matches
+     * Get the nearest date to a type of day from today
      */
-    //    public static int countMatches(Matcher matcher) {
-    //        int counter = 0;
-    //        while (matcher.find()) {
-    //            counter++;
-    //        }
-    //        return counter;
-    //    }
+    public static LocalDate getNearestDayOfWeek(LocalDate date, int day) {
+        return date.with(TemporalAdjusters.next(DayOfWeek.of(day)));
+    }
+
 }

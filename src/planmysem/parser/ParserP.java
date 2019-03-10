@@ -138,7 +138,7 @@ public class ParserP {
 
         // Either date or day must be present
         String dateOrDay = getFirstInSet(arguments.get("d"));
-        int day = Utils.getDay(dateOrDay);
+        int day = Utils.parseDay(dateOrDay);
         LocalDate date = null;
         if (day == 0) {
             date = Utils.parseDate(dateOrDay);
@@ -263,7 +263,7 @@ public class ParserP {
 
         // Either date or day must be present
         String dateOrDay = getFirstInSet(arguments.get("d"));
-        int day = Utils.getDay(dateOrDay);
+        int day = Utils.parseDay(dateOrDay);
         LocalDate date = null;
         if (day == 0) {
             date = Utils.parseDate(dateOrDay);
