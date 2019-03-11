@@ -6,7 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +21,7 @@ import planmysem.data.AddressBook;
 import planmysem.data.exception.IllegalValueException;
 import planmysem.storage.jaxb.AdaptedAddressBook;
 
+
 /**
  * Represents the file used to store address book data.
  */
@@ -29,12 +31,12 @@ public class StorageFile {
      * Default file path used if the user doesn't provide the file name.
      */
     public static final String DEFAULT_STORAGE_FILEPATH = "addressbook.txt";
-
     /* Note: Note the use of nested classes below.
      * More info https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html
      */
     public final Path path;
     private final JAXBContext jaxbContext;
+    private final boolean isEncrypted = false; //set to true to encrypt data
 
     /**
      * @throws InvalidStorageFilePathException if the default path is invalid
@@ -74,6 +76,7 @@ public class StorageFile {
      */
     public void save(AddressBook addressBook) throws StorageOperationException {
 
+
         /* Note: Note the 'try with resource' statement below.
          * More info: https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
          */
@@ -83,7 +86,13 @@ public class StorageFile {
             final AdaptedAddressBook toSave = new AdaptedAddressBook(addressBook);
             final Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(toSave, fileWriter);
+            if (isEncrypted) {
+                StringWriter sw = new StringWriter();
+                marshaller.marshal(toSave, sw);
+                fileWriter.write(Encryptor.encrypt(sw.toString()));
+            } else {
+                marshaller.marshal(toSave, fileWriter);
+            }
 
         } catch (IOException ioe) {
             throw new StorageOperationException("Error writing to file: " + path + " error: " + ioe.getMessage());
@@ -98,11 +107,19 @@ public class StorageFile {
      * @throws StorageOperationException if there were errors reading and/or converting data from file.
      */
     public AddressBook load() throws StorageOperationException {
-        try (final Reader fileReader =
+        try (final BufferedReader fileReader =
                      new BufferedReader(new FileReader(path.toFile()))) {
 
             final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            final AdaptedAddressBook loaded = (AdaptedAddressBook) unmarshaller.unmarshal(fileReader);
+            final AdaptedAddressBook loaded;
+            //decrypts
+            if (isEncrypted) {
+                StringReader decryptedData = new StringReader(Encryptor.decrypt(fileReader.readLine()));
+                loaded = (AdaptedAddressBook) unmarshaller.unmarshal(decryptedData);
+            } else {
+                loaded = (AdaptedAddressBook) unmarshaller.unmarshal(fileReader);
+            }
+
             // manual check for missing elements
             if (loaded.isAnyRequiredFieldMissing()) {
                 throw new StorageOperationException("File data missing some elements");

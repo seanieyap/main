@@ -3,10 +3,10 @@ package planmysem.data.slot;
 import java.time.LocalTime;
 import java.util.Set;
 
-import planmysem.data.tag.Tag;
+import planmysem.data.tag.TagP;
 
 /**
- * A read-only immutable interface for a Person in the planmysem.
+ * A read-only immutable interface for a Slot in the Planner.
  * Implementations should guarantee: details are present and not null, field values are validated.
  */
 public interface ReadOnlySlot {
@@ -20,7 +20,7 @@ public interface ReadOnlySlot {
      * The returned {@code Set} is a deep copy of the internal {@code Set},
      * changes on the returned list will not affect the person's internal tags.
      */
-    Set<Tag> getTags();
+    Set<TagP> getTags();
 
     /**
      * Returns true if the values inside this object is same as
@@ -55,7 +55,7 @@ public interface ReadOnlySlot {
         builder.append(getDuration());
 
         builder.append(" Tags: ");
-        for (Tag tag : getTags()) {
+        for (TagP tag : getTags()) {
             builder.append(tag);
         }
         return builder.toString();

@@ -17,6 +17,8 @@ public class AdaptedDay {
     @XmlElement(required = true)
     private DayOfWeek dayOfWeek;
     @XmlElement(required = true)
+    private String weekType;
+    @XmlElement
     private ArrayList<AdaptedSlot> slots = new ArrayList<>();
 
     /**
@@ -32,6 +34,7 @@ public class AdaptedDay {
      */
     public AdaptedDay(ReadOnlyDay source) {
         dayOfWeek = source.getDayOfWeek();
+        weekType = source.getType();
 
         slots = new ArrayList<>();
         for (Slot slot : source.getSlots()) {
@@ -64,13 +67,11 @@ public class AdaptedDay {
      * @throws IllegalValueException if there were any data constraints violated in the adapted Day
      */
     public Day toModelType() throws IllegalValueException {
-        final DayOfWeek dayOfWeek = this.dayOfWeek;
-
         final ArrayList<Slot> slots = new ArrayList<>();
         for (AdaptedSlot slot : this.slots) {
             slots.add(slot.toModelType());
         }
 
-        return new Day(dayOfWeek, slots);
+        return new Day(this.dayOfWeek, this.weekType, slots);
     }
 }

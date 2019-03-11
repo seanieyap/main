@@ -2,11 +2,11 @@ package planmysem.ui;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import javafx.util.Pair;
 import planmysem.data.person.ReadOnlyPerson;
-import planmysem.data.semester.ReadOnlyDay;
+import planmysem.data.slot.ReadOnlySlot;
 
 /**
  * Used for formatting text for display. e.g. for adding text decorations.
@@ -80,16 +80,16 @@ public class Formatter {
     }
 
     /**
-     * Formats the given list of days for displaying to the user.
+     * Formats the given list of slots for displaying to the user.
      */
-    public String format(HashMap<LocalDate, ? extends ReadOnlyDay> days) {
-        final List<String> formattedDays = new ArrayList<>();
+    public String formatSlots(List<Pair<LocalDate, ? extends ReadOnlySlot>> slots) {
+        final List<String> formattedSlots = new ArrayList<>();
 
-        for (LocalDate date : days.keySet()) {
-            formattedDays.add(date + " " + days.get(date).toString());
+        for (Pair<LocalDate, ? extends ReadOnlySlot> pair : slots) {
+            formattedSlots.add(pair.getKey().toString() + ": " + pair.getValue().toString());
         }
 
-        return format(asIndexedList(formattedDays));
+        return format(asIndexedList(formattedSlots));
     }
 
 }

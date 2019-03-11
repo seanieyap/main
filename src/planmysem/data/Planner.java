@@ -3,16 +3,19 @@ package planmysem.data;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Calendar;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javafx.util.Pair;
-import planmysem.data.recurrence.Recurrence;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.semester.Semester;
@@ -28,89 +31,54 @@ public class Planner {
      * Creates an empty planner.
      */
     public Planner() {
-        String filePath = "AcademicCalendar.txt";
-        String acadWeek = null;
-        String acadYear = null;
-        String acadSem = null;
-        int noOfWeeks = 0;
-        Calendar cal = Calendar.getInstance();
-        int currentWeekOfYear = cal.get(Calendar.WEEK_OF_YEAR);
-        int currentYear = cal.get(Calendar.YEAR);
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now();
-        // Read AcademicCalendar.txt to get current academic week
-        try {
-            Stream<String> lines = Files.lines(Paths.get(filePath));
-            Map<String, String> acadCalMap = lines
-                    .collect(Collectors.toMap(key -> key.split(":")[0], val -> val.split(":")[1]));
-            acadWeek = acadCalMap.get(Integer.toString(currentWeekOfYear));
-        } catch (IOException ioe) {
-            ioe.getMessage();
-        }
-
-        // Set variables if it is currently vacation
-        if (acadWeek != null && acadWeek.equals("Vacation")) {
-            acadSem = "Vacation";
-            if (currentWeekOfYear < 3 || currentWeekOfYear > 49) {
-                noOfWeeks = 5;
-
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                cal.set(Calendar.WEEK_OF_YEAR, 50);
-                startDate = LocalDate.of(currentYear, 12, cal.get(Calendar.DATE));
-
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                cal.set(Calendar.WEEK_OF_YEAR, 2);
-                endDate = LocalDate.of(currentYear, 1, cal.get(Calendar.DATE));
-            }
-            if (currentWeekOfYear > 19 && currentWeekOfYear < 32) {
-                noOfWeeks = 12;
-
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                cal.set(Calendar.WEEK_OF_YEAR, 20);
-                startDate = LocalDate.of(currentYear, 5, cal.get(Calendar.DATE));
-
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                cal.set(Calendar.WEEK_OF_YEAR, 31);
-                endDate = LocalDate.of(currentYear, 8, cal.get(Calendar.DATE));
-            }
-        }
-
-        // Set variables if it is currently not vacation
-        if (currentWeekOfYear > 31 && currentWeekOfYear < 50) {
-            acadYear = "AY" + currentYear + "/" + (currentYear + 1);
-            acadSem = "Sem 1";
-            noOfWeeks = 18;
-
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            cal.set(Calendar.WEEK_OF_YEAR, 32);
-            startDate = LocalDate.of(currentYear, 8, cal.get(Calendar.DATE));
-
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-            cal.set(Calendar.WEEK_OF_YEAR, 49);
-            endDate = LocalDate.of(currentYear, 12, cal.get(Calendar.DATE));
-        }
-        if (currentWeekOfYear > 2 && currentWeekOfYear < 20) {
-            acadYear = "AY" + (currentYear - 1) + "/" + currentYear;
-            acadSem = "Sem 2";
-            noOfWeeks = 17;
-
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            cal.set(Calendar.WEEK_OF_YEAR, 3);
-            startDate = LocalDate.of(currentYear, 1, cal.get(Calendar.DATE));
-
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-            cal.set(Calendar.WEEK_OF_YEAR, 19);
-            endDate = LocalDate.of(currentYear, 5, cal.get(Calendar.DATE));
-        }
-
-        // Initialise hashmap of all days in current semester
+        String acadSem;
+        String acadYear;
+        String[] semesterDetails;
+        int noOfWeeks;
+        LocalDate startDate;
+        LocalDate endDate;
+        List<LocalDate> datesList;
+        Map<String, String> acadCalMap;
         HashMap<LocalDate, Day> days = new HashMap<>();
-        List<LocalDate> datesList = startDate.datesUntil(endDate).collect(Collectors.toList());
+        Set<LocalDate> recessDays = new HashSet<>();
+        Set<LocalDate> readingDays = new HashSet<>();
+        Set<LocalDate> normalDays = new HashSet<>();
+
+        acadCalMap = getAcadCalMap();
+        TemporalField weekField = WeekFields.ISO.weekOfWeekBasedYear();
+        int currentWeekOfYear = LocalDate.now().get(weekField);
+        semesterDetails = getSemesterDetails(currentWeekOfYear, acadCalMap);
+        acadSem = semesterDetails[1];
+        acadYear = semesterDetails[2];
+        noOfWeeks = Integer.parseInt(semesterDetails[3]);
+        startDate = LocalDate.parse(semesterDetails[4]);
+        endDate = LocalDate.parse(semesterDetails[5]);
+
+        // Initialises HashMap and Sets of all days in current semester
+        datesList = startDate.datesUntil(endDate).collect(Collectors.toList());
         for (LocalDate date: datesList) {
-            days.put(date, new Day(date.getDayOfWeek()));
+            int weekOfYear = date.get(weekField);
+            int firstMonOfYear = date.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY)).getDayOfMonth();
+            if (firstMonOfYear == 1) {
+                weekOfYear += 1;
+            }
+            String weekType = acadCalMap.get(Integer.toString(weekOfYear)).split("_")[0];
+            days.put(date, new Day(date.getDayOfWeek(), weekType));
+            switch (weekType) {
+            case "Recess Week":
+                recessDays.add(date);
+                break;
+            case "Reading Week":
+                readingDays.add(date);
+                break;
+            default:
+                normalDays.add(date);
+                break;
+            }
         }
-        semester = new Semester(acadSem, acadYear, days, startDate, endDate, noOfWeeks);
-        // TODO: set constants for fixed numbers, simplify/optimise code, handle ioe exception
+
+        semester = new Semester(acadSem, acadYear, days, startDate, endDate, noOfWeeks,
+                recessDays, readingDays, normalDays);
     }
 
     /**
@@ -127,9 +95,110 @@ public class Planner {
     }
 
     /**
+     * Reads a file containing academic calendar details.
+     *
+     * @return a map of week of year to academic week
+     * throws some exception if a AcademicCalendar.txt is unable to be read.
+     */
+    private Map<String, String> getAcadCalMap() {
+        String filePath = "AcademicCalendar.txt";
+        Map<String, String> acadCalMap = null;
+        try {
+            Stream<String> lines = Files.lines(Paths.get(filePath));
+            acadCalMap = lines
+                    .collect(Collectors.toMap(key -> key.split(":")[0], val -> val.split(":")[1]));
+        } catch (IOException ioe) {
+            // TODO: remove displaying of errors
+            // What if file is unable to be read?
+            ioe.getMessage();
+        }
+        return acadCalMap;
+    }
+
+    /**
+     * Initialises current semester's details.
+     *
+     * @param currentWeekOfYear current week of the year
+     * @param acadCalMap used to determine current academic week
+     * @return an array of Strings of the current semester's details
+     */
+    private String[] getSemesterDetails(int currentWeekOfYear, Map<String, String> acadCalMap) {
+        String acadWeek = null;
+        String acadSem = null;
+        String acadYear = null;
+        String noOfWeeks = null;
+        String[] acadWeekDetails;
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now();
+        int currentYear = LocalDate.now().getYear();
+        int weekOfYear = currentWeekOfYear;
+
+        // Initialise week numbers for certain weeks.
+        int firstWeekSemOne = 32;
+        int lastWeekSemOne = 49;
+        int firstWeekSemOneHol = 50;
+        int lastWeekSemOneHol = 2;
+        int firstWeekSemTwo = 3;
+        int lastWeekSemTwo = 19;
+        int firstWeekSemTwoHol = 20;
+        int lastWeekSemTwoHol = 31;
+        int firstMonOfYear = LocalDate.of(currentYear, 1, 1)
+                .with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY)).getDayOfMonth();
+
+        // Readjust weeks if first Monday of the year falls on the 1st.
+        if (firstMonOfYear == 1) {
+            weekOfYear += 1;
+            firstWeekSemOne -= 1;
+            lastWeekSemOne -= 1;
+            firstWeekSemOneHol -= 1;
+            lastWeekSemOneHol -= 1;
+            firstWeekSemTwo -= 1;
+            lastWeekSemTwo -= 1;
+            firstWeekSemTwoHol -= 1;
+            lastWeekSemTwoHol -= 1;
+        }
+
+        // Set semester details.
+        acadWeekDetails = acadCalMap.get(Integer.toString(weekOfYear)).split("_");
+        acadWeek = acadWeekDetails[0];
+        acadSem = acadWeekDetails[1];
+        if ("Vacation".equals(acadWeek) && "Sem 1".equals(acadSem)) {
+            noOfWeeks = "5";
+            acadYear = "AY" + currentYear + "/" + (currentYear + 1);
+            startDate = startDate.with(WeekFields.ISO.weekOfWeekBasedYear(), firstWeekSemOneHol);
+            startDate = startDate.with(WeekFields.ISO.dayOfWeek(), 1);
+            endDate = LocalDate.of(currentYear + 1, 1, 1);
+            endDate = endDate.with(WeekFields.ISO.weekOfWeekBasedYear(), lastWeekSemOneHol);
+            endDate = endDate.with(WeekFields.ISO.dayOfWeek(), 7);
+        } else if ("Vacation".equals(acadWeek) && "Sem 2".equals(acadSem)) {
+            noOfWeeks = "12";
+            acadYear = "AY" + (currentYear - 1) + "/" + currentYear;
+            startDate = startDate.with(WeekFields.ISO.weekOfWeekBasedYear(), firstWeekSemTwoHol);
+            startDate = startDate.with(WeekFields.ISO.dayOfWeek(), 1);
+            endDate = endDate.with(WeekFields.ISO.weekOfWeekBasedYear(), lastWeekSemTwoHol);
+            endDate = endDate.with(WeekFields.ISO.dayOfWeek(), 7);
+        } else if ("Sem 1".equals(acadSem)) {
+            noOfWeeks = "18";
+            acadYear = "AY" + currentYear + "/" + (currentYear + 1);
+            startDate = startDate.with(WeekFields.ISO.weekOfWeekBasedYear(), firstWeekSemOne);
+            startDate = startDate.with(WeekFields.ISO.dayOfWeek(), 1);
+            endDate = endDate.with(WeekFields.ISO.weekOfWeekBasedYear(), lastWeekSemOne);
+            endDate = endDate.with(WeekFields.ISO.dayOfWeek(), 7);
+        } else if ("Sem 2".equals(acadSem)) {
+            noOfWeeks = "17";
+            acadYear = "AY" + (currentYear - 1) + "/" + currentYear;
+            startDate = startDate.with(WeekFields.ISO.weekOfWeekBasedYear(), firstWeekSemTwo);
+            startDate = startDate.with(WeekFields.ISO.dayOfWeek(), 1);
+            endDate = endDate.with(WeekFields.ISO.weekOfWeekBasedYear(), lastWeekSemTwo);
+            endDate = endDate.with(WeekFields.ISO.dayOfWeek(), 7);
+        }
+        return new String[] {acadWeek, acadSem, acadYear, noOfWeeks, startDate.toString(), endDate.toString()};
+    }
+
+    /**
      * Adds a day to the Planner.
      *
-     * @throws Semester.DuplicateDayException if an equivalent Day already exists.
+     * @throws Semester.DuplicateDayException if a date is not found in the semester.
      */
     public void addDay(LocalDate date, Day day) throws Semester.DuplicateDayException {
         semester.addDay(date, day);
@@ -139,15 +208,8 @@ public class Planner {
      * Adds a slot to the Planner.
      *
      */
-    public void addSlot(LocalDate date, Slot slot) {
+    public void addSlot(LocalDate date, Slot slot) throws Semester.DateNotFoundException {
         semester.addSlot(date, slot);
-    }
-
-    /**
-     * Adds slots to the Planner.
-     */
-    public int addSlots(Pair<Slot, Recurrence> slots) throws Semester.DayNotFoundException {
-        return semester.addSlots(slots);
     }
 
     /**
@@ -167,18 +229,18 @@ public class Planner {
     /**
      * Removes the equivalent day from the Planner.
      *
-     * @throws Semester.DayNotFoundException if no such Day could be found.
+     * @throws Semester.DateNotFoundException if no such Day could be found.
      */
-    public void removeDay(ReadOnlyDay day) throws Semester.DayNotFoundException {
+    public void removeDay(ReadOnlyDay day) throws Semester.DateNotFoundException {
         semester.remove(day);
     }
 
     /**
      * Removes the equivalent day from the Planner.
      *
-     * @throws Semester.DayNotFoundException if no such Day could be found.
+     * @throws Semester.DateNotFoundException if no such Day could be found.
      */
-    public void removeDay(LocalDate date) throws Semester.DayNotFoundException {
+    public void removeDay(LocalDate date) throws Semester.DateNotFoundException {
         semester.remove(date);
     }
 

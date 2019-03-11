@@ -6,7 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,6 +35,7 @@ public class StorageFileP {
      */
     public final Path path;
     private final JAXBContext jaxbContext;
+    private final boolean isEncrypted = false; //set to true to encrypt data
 
     /**
      * @throws InvalidStorageFilePathException if the default path is invalid
@@ -81,7 +83,13 @@ public class StorageFileP {
             final AdaptedPlanner toSave = new AdaptedPlanner(planner);
             final Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(toSave, fileWriter);
+            if (isEncrypted) {
+                StringWriter sw = new StringWriter();
+                marshaller.marshal(toSave, sw);
+                fileWriter.write(Encryptor.encrypt(sw.toString()));
+            } else {
+                marshaller.marshal(toSave, fileWriter);
+            }
 
         } catch (IOException ioe) {
             throw new StorageOperationException("Error writing to file: " + path + " error: " + ioe.getMessage());
@@ -96,11 +104,19 @@ public class StorageFileP {
      * @throws StorageOperationException if there were errors reading and/or converting data from file.
      */
     public Planner load() throws StorageOperationException {
-        try (final Reader fileReader =
-                new BufferedReader(new FileReader(path.toFile()))) {
+        try (final BufferedReader fileReader =
+                     new BufferedReader(new FileReader(path.toFile()))) {
 
             final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            final AdaptedPlanner loaded = (AdaptedPlanner) unmarshaller.unmarshal(fileReader);
+            final AdaptedPlanner loaded;
+            //decrypts
+            if (isEncrypted) {
+                StringReader decryptedData = new StringReader(Encryptor.decrypt(fileReader.readLine()));
+                loaded = (AdaptedPlanner) unmarshaller.unmarshal(decryptedData);
+            } else {
+                loaded = (AdaptedPlanner) unmarshaller.unmarshal(fileReader);
+            }
+
             // manual check for missing elements
             if (loaded.isAnyRequiredFieldMissing()) {
                 throw new StorageOperationException("File data missing some elements");
