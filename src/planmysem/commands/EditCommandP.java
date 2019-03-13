@@ -17,9 +17,9 @@ import planmysem.data.tag.TagP;
 /**
  * Adds a person to the address book.
  */
-public class AddCommandP extends CommandP {
+public class EditCommandP extends CommandP {
 
-    public static final String COMMAND_WORD = "add";
+    public static final String COMMAND_WORD = "edit";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ":\n" + "Adds a single or multiple slot to the Planner."
             + "\n\tParameters: NAME st/START_TIME et/END_TIME|DURATION [date/DATE|DAY_OF_WEEK] "
@@ -40,8 +40,8 @@ public class AddCommandP extends CommandP {
      *
      * @throws IllegalValueException if any of the raw values are invalid
      */
-    public AddCommandP(LocalDate date, String name, String location, String description, LocalTime startTime,
-                       int duration, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
+    public EditCommandP(LocalDate date, String name, String location, String description, LocalTime startTime,
+                        int duration, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
         slot = new Slot(new Name(name), new Location(location), new Description(description),
                 startTime, duration, parseTags(tags));
         recurrence = new Recurrence(recurrences, date);
@@ -52,8 +52,8 @@ public class AddCommandP extends CommandP {
      *
      * @throws IllegalValueException if any of the raw values are invalid
      */
-    public AddCommandP(int day, String name, String location, String description, LocalTime startTime,
-                       int duration, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
+    public EditCommandP(int day, String name, String location, String description, LocalTime startTime,
+                        int duration, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
         slot = new Slot(new Name(name), new Location(location), new Description(description),
                 startTime, duration, parseTags(tags));
         recurrence = new Recurrence(recurrences, day);
@@ -64,8 +64,8 @@ public class AddCommandP extends CommandP {
      *
      * @throws IllegalValueException if any of the raw values are invalid
      */
-    public AddCommandP(LocalDate date, String name, String location, String description, LocalTime startTime,
-                       LocalTime endTime, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
+    public EditCommandP(LocalDate date, String name, String location, String description, LocalTime startTime,
+                        LocalTime endTime, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
         slot = new Slot(new Name(name), new Location(location), new Description(description),
                 startTime, endTime, parseTags(tags));
         recurrence = new Recurrence(recurrences, date);
@@ -76,16 +76,13 @@ public class AddCommandP extends CommandP {
      *
      * @throws IllegalValueException if any of the raw values are invalid
      */
-    public AddCommandP(int day, String name, String location, String description, LocalTime startTime,
-                       LocalTime endTime, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
+    public EditCommandP(int day, String name, String location, String description, LocalTime startTime,
+                        LocalTime endTime, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
         slot = new Slot(new Name(name), new Location(location), new Description(description),
                 startTime, endTime, parseTags(tags));
         recurrence = new Recurrence(recurrences, day);
     }
 
-    //    public AddCommandP(Pair<Slot, Recurrence> toAdd) {
-    //        this.toAdd = toAdd;
-    //    }
 
     @Override
     public CommandResultP execute() {
@@ -112,10 +109,10 @@ public class AddCommandP extends CommandP {
      * @throws IllegalValueException if any of the raw values are invalid
      */
     private Set<TagP> parseTags(Set<String> tags) throws IllegalValueException {
-        Set<TagP> tagSet = new HashSet<>();
+        Set<TagP> tagset = new HashSet<>();
         for (String tag : tags) {
-            tagSet.add(new TagP(tag));
+            tagset.add(new TagP(tag));
         }
-        return tagSet;
+        return tagset;
     }
 }

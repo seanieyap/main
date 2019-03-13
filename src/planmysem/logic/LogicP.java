@@ -1,15 +1,14 @@
 package planmysem.logic;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
+import javafx.util.Pair;
 import planmysem.commands.CommandP;
 import planmysem.commands.CommandResultP;
 import planmysem.data.Planner;
-import planmysem.data.semester.ReadOnlyDay;
-import planmysem.data.slot.Slot;
+import planmysem.data.slot.ReadOnlySlot;
 import planmysem.parser.ParserP;
 import planmysem.storage.StorageFileP;
 
@@ -21,10 +20,9 @@ public class LogicP {
     private Planner planner;
 
     /**
-     * The list of person shown to the user most recently.
+     * The list of Slots shown to the user most recently.
      */
-    private HashMap<LocalDate, ? extends ReadOnlyDay> lastShownDays = null;
-    private ArrayList<Slot> lastShownSlots = null;
+    private List<Pair<LocalDate, ? extends ReadOnlySlot>> lastShownSlots;
 
     public LogicP() throws Exception {
         setStorage(initializeStorage());
@@ -60,15 +58,11 @@ public class LogicP {
     /**
      * Unmodifiable view of the current last shown list.
      */
-    public HashMap<LocalDate, ? extends ReadOnlyDay> getLastShownDays() {
-        return lastShownDays;
+    public List<Pair<LocalDate, ? extends ReadOnlySlot>> getLastShownSlots() {
+        return lastShownSlots;
     }
 
-    protected void setLastShownDays(HashMap<LocalDate, ? extends ReadOnlyDay> days) {
-        lastShownDays = days;
-    }
-
-    protected void setLastShownSlots(ArrayList<Slot> slots) {
+    protected void setLastShownSlots(List<Pair<LocalDate, ? extends ReadOnlySlot>> slots) {
         lastShownSlots = slots;
     }
 
@@ -92,19 +86,20 @@ public class LogicP {
      * @throws Exception if there was any problem during command execution.
      */
     private CommandResultP execute(CommandP command) throws Exception {
-        command.setData(planner, lastShownDays);
+        command.setData(planner, lastShownSlots);
         CommandResultP result = command.execute();
         storage.save(planner);
         return result;
     }
 
     /**
-     * Updates the {@link #lastShownDays} if the result contains a list of Days.
+     * Updates the {@link #lastShownSlots} if the result contains a list of Days.
+     * TODO:
      */
     private void recordResult(CommandResultP result) {
-        final Optional<HashMap<LocalDate, ? extends ReadOnlyDay>> days = result.getRelevantDays();
-        if (days.isPresent()) {
-            lastShownDays = days.get();
+        final Optional<List<Pair<LocalDate, ? extends ReadOnlySlot>>> slots = result.getRelevantSlots();
+        if (slots.isPresent()) {
+            lastShownSlots = slots.get();
         }
     }
 }

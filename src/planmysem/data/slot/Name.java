@@ -3,35 +3,33 @@ package planmysem.data.slot;
 import planmysem.data.exception.IllegalValueException;
 
 /**
- * Represents a Slot's name in the address book.
+ * Represents a Slot's name in the Planner.
  * Guarantees: immutable; is valid as declared in {@link #isValid(String)}
  */
 public class Name {
-
-    public static final String EXAMPLE = "CS2113T Meeting";
-    public static final String MESSAGE_NAME_CONSTRAINTS = "Slot names should be spaces or alphanumeric characters";
-    public static final String NAME_VALIDATION_REGEX = "[\\p{Alnum} ]+";
+    private static final String EXAMPLE = "CS2113T Meeting";
+    private static final String MESSAGE_CONSTRAINTS = "Slot names should be spaces or alphanumeric characters";
+    private static final String VALIDATION_REGEX = ".+";
 
     public final String value;
 
     /**
-     * Validates given name.
+     * Validates given value.
      *
      * @throws IllegalValueException if given name string is invalid.
      */
     public Name(String value) throws IllegalValueException {
-        String name = value.trim();
-        if (!isValid(name)) {
-            throw new IllegalValueException(MESSAGE_NAME_CONSTRAINTS);
+        if (!isValid(value)) {
+            throw new IllegalValueException(MESSAGE_CONSTRAINTS);
         }
-        this.value = name;
+        this.value = value;
     }
 
     /**
      * Returns true if a given string is a valid slot name.
      */
     public static boolean isValid(String test) {
-        return test.matches(NAME_VALIDATION_REGEX);
+        return test.matches(VALIDATION_REGEX);
     }
 
     /**

@@ -2,6 +2,7 @@ package planmysem.data.semester;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Represents a Semester in the planner.
@@ -14,4 +15,9 @@ public interface ReadOnlySemester {
     LocalDate getStartDate();
     LocalDate getEndDate();
     int getNoOfWeeks();
+
+    // These variables aid in making searches more effective
+    Set<LocalDate> getRecessDays();
+    Set<LocalDate> getReadingDays();
+    Set<LocalDate> getNormalDays();
 }

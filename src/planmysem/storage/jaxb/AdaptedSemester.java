@@ -2,7 +2,9 @@ package planmysem.storage.jaxb;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElement;
 
@@ -15,18 +17,24 @@ import planmysem.data.semester.Semester;
  * JAXB-friendly adapted person data holder class.
  */
 public class AdaptedSemester {
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     private String name;
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     private String academicYear;
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     private String startDate;
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     private String endDate;
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     private int noOfWeeks;
     @XmlElement(required = true)
-    private HashMap<LocalDate, AdaptedDay> days = new HashMap<>();
+    private HashMap<String, AdaptedDay> days = new HashMap<>();
+    @XmlElement(required = true)
+    private Set<String> recessDays = new HashSet<>();
+    @XmlElement(required = true)
+    private Set<String> readingDays = new HashSet<>();
+    @XmlElement(required = true)
+    private Set<String> normalDays = new HashSet<>();
 
     /**
      * No-arg constructor for JAXB use.
@@ -42,19 +50,24 @@ public class AdaptedSemester {
     public AdaptedSemester(ReadOnlySemester source) {
         name = source.getName();
         academicYear = source.getAcademicYear();
-        // TODO: remove when initialization of semester is complete
-        if (startDate == null || endDate == null) {
-            startDate = null;
-            endDate = null;
-        } else {
-            startDate = source.getStartDate().toString();
-            endDate = source.getEndDate().toString();
-        }
+        startDate = source.getStartDate().toString();
+        endDate = source.getEndDate().toString();
         noOfWeeks = source.getNoOfWeeks();
 
-        days = new HashMap<>();
         for (Map.Entry<LocalDate, Day> day : source.getDays().entrySet()) {
-            days.put(day.getKey(), new AdaptedDay(day.getValue()));
+            days.put(day.getKey().toString(), new AdaptedDay(day.getValue()));
+        }
+
+        for (LocalDate date : source.getRecessDays()) {
+            recessDays.add(date.toString());
+        }
+
+        for (LocalDate date : source.getReadingDays()) {
+            readingDays.add(date.toString());
+        }
+
+        for (LocalDate date : source.getNormalDays()) {
+            normalDays.add(date.toString());
         }
     }
 
@@ -67,12 +80,13 @@ public class AdaptedSemester {
      * so we check for that.
      */
     public boolean isAnyRequiredFieldMissing() {
-        for (Map.Entry<LocalDate, AdaptedDay> day : days.entrySet()) {
+        for (Map.Entry<String, AdaptedDay> day : days.entrySet()) {
             if (day.getValue().isAnyRequiredFieldMissing()) {
                 return true;
             }
         }
 
+        // TODO: removed for testing
         // second call only happens if phone/email/address are all not null
         // return Utils.isAnyNull(name, academicYear, days, startDate, endDate);
         return false;
@@ -91,17 +105,27 @@ public class AdaptedSemester {
         final int noOfWeeks = this.noOfWeeks;
 
         final HashMap<LocalDate, Day> days = new HashMap<>();
-        for (Map.Entry<LocalDate, AdaptedDay> day : this.days.entrySet()) {
-            days.put(day.getKey(), day.getValue().toModelType());
+        for (Map.Entry<String, AdaptedDay> day : this.days.entrySet()) {
+            days.put(LocalDate.parse(day.getKey()), day.getValue().toModelType());
         }
 
-        // TODO: remove after initialization of semester is complete.
-        if (startDate == null || endDate == null) {
-            return new Semester(name, academicYear, days, null, null, noOfWeeks);
-        } else {
-            return new Semester(name, academicYear, days,
-                    LocalDate.parse(startDate), LocalDate.parse(endDate), noOfWeeks);
+        final Set<LocalDate> recessDays = new HashSet<>();
+        for (String date : this.recessDays) {
+            recessDays.add(LocalDate.parse(date));
         }
 
+        final Set<LocalDate> readingDays = new HashSet<>();
+        for (String date : this.readingDays) {
+            readingDays.add(LocalDate.parse(date));
+        }
+
+        final Set<LocalDate> normalDays = new HashSet<>();
+        for (String date : this.normalDays) {
+            normalDays.add(LocalDate.parse(date));
+        }
+
+        return new Semester(name, academicYear, days,
+                LocalDate.parse(startDate), LocalDate.parse(endDate), noOfWeeks,
+                recessDays, readingDays, normalDays);
     }
 }

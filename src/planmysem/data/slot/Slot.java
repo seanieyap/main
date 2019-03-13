@@ -6,14 +6,14 @@ import java.util.Objects;
 import java.util.Set;
 
 import planmysem.common.Utils;
-import planmysem.data.tag.Tag;
+import planmysem.data.tag.TagP;
 
 /**
  * Represents a Person in the address book.
  * Guarantees: details are present and not null, field values are validated.
  */
 public class Slot implements ReadOnlySlot {
-    private final Set<Tag> tags = new HashSet<>();
+    private final Set<TagP> tags = new HashSet<>();
     private Name name;
     private Location location;
     private Description description;
@@ -24,7 +24,7 @@ public class Slot implements ReadOnlySlot {
      * Assumption: Every field must be present and not null.
      */
     public Slot(Name name, Location location, Description description,
-                LocalTime startTime, LocalTime endTime, Set<Tag> tags) {
+                LocalTime startTime, LocalTime endTime, Set<TagP> tags) {
         this.name = name;
         this.location = location;
         this.description = description;
@@ -37,7 +37,7 @@ public class Slot implements ReadOnlySlot {
      * Assumption: Every field must be present and not null.
      */
     public Slot(Name name, Location location, Description description,
-                LocalTime startTime, int duration, Set<Tag> tags) {
+                LocalTime startTime, int duration, Set<TagP> tags) {
         this.name = name;
         this.location = location;
         this.description = description;
@@ -80,16 +80,16 @@ public class Slot implements ReadOnlySlot {
     }
 
     @Override
-    public Set<Tag> getTags() {
+    public Set<TagP> getTags() {
         return new HashSet<>(tags);
     }
 
     /**
      * Replaces this slot's tags with the tags in {@code replacement}.
      */
-    public void setTags(Set<Tag> replacement) {
+    public void setTags(Set<String> tags) {
         tags.clear();
-        tags.addAll(replacement);
+        tags.addAll(tags);
     }
 
     @Override
