@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.semester.Semester;
+import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
 
 /**
@@ -43,6 +44,7 @@ public class Planner {
         Set<LocalDate> recessDays = new HashSet<>();
         Set<LocalDate> readingDays = new HashSet<>();
         Set<LocalDate> normalDays = new HashSet<>();
+        Set<LocalDate> examDays = new HashSet<>();
 
         acadCalMap = getAcadCalMap();
         TemporalField weekField = WeekFields.ISO.weekOfWeekBasedYear();
@@ -58,7 +60,8 @@ public class Planner {
         datesList = startDate.datesUntil(endDate).collect(Collectors.toList());
         for (LocalDate date: datesList) {
             int weekOfYear = date.get(weekField);
-            int firstMonOfYear = date.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY)).getDayOfMonth();
+            LocalDate firstDayOfYear = date.with(TemporalAdjusters.firstDayOfYear());
+            int firstMonOfYear = firstDayOfYear.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY)).getDayOfMonth();
             if (firstMonOfYear == 1) {
                 weekOfYear += 1;
             }
@@ -71,6 +74,9 @@ public class Planner {
             case "Reading Week":
                 readingDays.add(date);
                 break;
+            case "Examination Week":
+                examDays.add(date);
+                break;
             default:
                 normalDays.add(date);
                 break;
@@ -78,7 +84,7 @@ public class Planner {
         }
 
         semester = new Semester(acadSem, acadYear, days, startDate, endDate, noOfWeeks,
-                recessDays, readingDays, normalDays);
+                recessDays, readingDays, normalDays, examDays);
     }
 
     /**
@@ -213,7 +219,14 @@ public class Planner {
     }
 
     /**
-     * Checks if an equivalent Day exists in the address book.
+     * Checks if an slot exists in planner.
+     */
+    public boolean containsSlot(LocalDate date, ReadOnlySlot slot) {
+        return semester.contains(date, slot);
+    }
+
+    /**
+     * Checks if an equivalent Day exists in the Planner.
      */
     public boolean containsDay(ReadOnlyDay day) {
         return semester.contains(day);
@@ -252,7 +265,7 @@ public class Planner {
     }
 
     /**
-     * Clears all days from the Planner.
+     * Clears all slots from the Planner.
      */
     public void clearSlots() {
         semester.clearSlots();

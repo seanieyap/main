@@ -11,15 +11,16 @@ public class HelpCommandP extends CommandP {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ":\n" + "Shows program usage instructions.\n\t"
             + "Example: " + COMMAND_WORD;
 
-    public static final String MESSAGE_ALL_USAGES = AddCommand.MESSAGE_USAGE
-            + "\n" + DeleteCommand.MESSAGE_USAGE
-            + "\n" + ClearCommand.MESSAGE_USAGE
-            + "\n" + FindCommand.MESSAGE_USAGE
-            + "\n" + ListCommand.MESSAGE_USAGE
-            + "\n" + ViewCommand.MESSAGE_USAGE
-            + "\n" + ViewAllCommand.MESSAGE_USAGE
-            + "\n" + HelpCommandP.MESSAGE_USAGE
-            + "\n" + ExitCommand.MESSAGE_USAGE;
+    public static final String MESSAGE_ALL_USAGES = AddCommandP.MESSAGE_USAGE
+            + "\n\n" + EditCommandP.MESSAGE_USAGE
+            //            + "\n\n" + DeleteCommand.MESSAGE_USAGE
+            + "\n\n" + ClearCommandP.MESSAGE_USAGE
+            + "\n\n" + FindCommand.MESSAGE_USAGE
+            + "\n\n" + ListCommandP.MESSAGE_USAGE
+            //            + "\n\n" + ViewCommand.MESSAGE_USAGE
+            //            + "\n\n" + ViewAllCommand.MESSAGE_USAGE
+            + "\n\n" + HelpCommandP.MESSAGE_USAGE
+            + "\n\n" + ExitCommandP.MESSAGE_USAGE;
 
     @Override
     public CommandResultP execute() {

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import javax.xml.bind.JAXBException;
+
 import javafx.util.Pair;
 import planmysem.commands.CommandP;
 import planmysem.commands.CommandResultP;
@@ -47,7 +49,7 @@ public class LogicP {
      *
      * @throws StorageFileP.InvalidStorageFilePathException if the target file path is incorrect.
      */
-    private StorageFileP initializeStorage() throws StorageFileP.InvalidStorageFilePathException {
+    private StorageFileP initializeStorage() throws JAXBException, StorageFileP.InvalidStorageFilePathException {
         return new StorageFileP();
     }
 

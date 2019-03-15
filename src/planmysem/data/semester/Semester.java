@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import planmysem.data.exception.DuplicateDataException;
+import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
 
 /**
@@ -26,6 +27,7 @@ public class Semester implements ReadOnlySemester {
     private final Set<LocalDate> recessDays = new HashSet<>();
     private final Set<LocalDate> readingDays = new HashSet<>();
     private final Set<LocalDate> normalDays = new HashSet<>();
+    private final Set<LocalDate> examDays = new HashSet<>();
 
     /**
      * Constructs empty semester.
@@ -43,7 +45,7 @@ public class Semester implements ReadOnlySemester {
      */
     public Semester(String name, String academicYear, HashMap<LocalDate, Day> days, LocalDate startDate,
                     LocalDate endDate, int noOfWeeks, Set<LocalDate> recessDays, Set<LocalDate> readingDays,
-                    Set<LocalDate> normalDays) {
+                    Set<LocalDate> normalDays, Set<LocalDate> examDays) {
         this.name = name;
         this.academicYear = academicYear;
         this.days.putAll(days);
@@ -54,6 +56,7 @@ public class Semester implements ReadOnlySemester {
         this.recessDays.addAll(recessDays);
         this.readingDays.addAll(readingDays);
         this.normalDays.addAll(normalDays);
+        this.examDays.addAll(examDays);
     }
 
     /**
@@ -70,6 +73,7 @@ public class Semester implements ReadOnlySemester {
         this.recessDays.addAll(source.recessDays);
         this.readingDays.addAll(source.readingDays);
         this.normalDays.addAll(source.normalDays);
+        this.examDays.addAll(source.examDays);
     }
 
     /**
@@ -95,29 +99,6 @@ public class Semester implements ReadOnlySemester {
         }
         days.get(date).addSlot(slot);
     }
-
-    /**
-     * Adds Slots to the Semester.
-     *
-     * @throws DateNotFoundException if an equivalent Day already exists.
-     */
-    //    public List<Slot> addSlots(Pair<Slot, Recurrence> slots) throws DateNotFoundException {
-    //        Recurrence recurrence = slots.getValue();
-    //
-    //        if (recurrence.date != null && (recurrence.date.isBefore(startDate)
-    //                || recurrence.date.isAfter(endDate))) {
-    //            throw new DateNotFoundException();
-    //        }
-    //
-    //        Slot slot = slots.getKey();
-    //
-    //        List<Slot> toAdd = new ArrayList<>();
-    //
-    //        // Generate dates to add
-    //        // Perform add
-    //
-    //        return toAdd;
-    //    }
 
 
     /**
@@ -158,6 +139,13 @@ public class Semester implements ReadOnlySemester {
         for (Map.Entry<LocalDate, Day> day : days.entrySet()) {
             day.getValue().clear();
         }
+    }
+
+    /**
+     * Checks if the list contains an equivalent slot as the given argument.
+     */
+    public boolean contains(LocalDate date, ReadOnlySlot slot) {
+        return days.get(date).contains(slot);
     }
 
     /**
@@ -217,6 +205,11 @@ public class Semester implements ReadOnlySemester {
     @Override
     public Set<LocalDate> getNormalDays() {
         return normalDays;
+    }
+
+    @Override
+    public Set<LocalDate> getExamDays() {
+        return examDays;
     }
 
     /**

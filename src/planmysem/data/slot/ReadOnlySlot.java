@@ -3,6 +3,7 @@ package planmysem.data.slot;
 import java.time.LocalTime;
 import java.util.Set;
 
+import planmysem.common.Utils;
 import planmysem.data.tag.TagP;
 
 /**
@@ -14,7 +15,7 @@ public interface ReadOnlySlot {
     Location getLocation();
     Description getDescription();
     int getDuration();
-    LocalTime getTime();
+    LocalTime getStartTime();
 
     /**
      * The returned {@code Set} is a deep copy of the internal {@code Set},
@@ -32,54 +33,40 @@ public interface ReadOnlySlot {
                 && other.getName().equals(this.getName()) // state checks here onwards
                 && other.getLocation().equals(this.getLocation())
                 && other.getDescription().equals(this.getDescription())
-                && other.getTime().equals(this.getTime()));
+                && other.getStartTime().equals(this.getStartTime()));
     }
 
     /**
      * Formats the slot as text, showing all contact details.
      */
     default String getAsTextShowAll() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append(getName());
+        final StringBuilder sb = new StringBuilder();
 
-        builder.append(" Location: ");
-        builder.append(getLocation());
+        sb.append("Slot Details:");
 
-        builder.append(" Description: ");
-        builder.append(getDescription());
+        sb.append("\n\tName: ");
+        sb.append(getName());
 
-        builder.append(" Start Time: ");
-        builder.append(getTime());
+        sb.append("\n\tLocation: ");
+        sb.append(getLocation());
 
-        builder.append(" Duration: ");
-        builder.append(getDuration());
+        sb.append("\n\tDescription: ");
+        sb.append(getDescription());
 
-        builder.append(" Tags: ");
+        sb.append("\n\tTime: ");
+        sb.append(getStartTime());
+
+        sb.append(" to ");
+        sb.append(Utils.getEndTime(getStartTime(), getDuration()));
+
+        sb.append("\n\tDuration: ");
+        sb.append(getDuration());
+
+        sb.append("\n\tTags: ");
         for (TagP tag : getTags()) {
-            builder.append(tag);
+            sb.append("\n\t\t");
+            sb.append(tag.toString());
         }
-        return builder.toString();
+        return sb.toString();
     }
-
-    //    /**
-    //     * Formats a person as text, showing only non-private contact details.
-    //     */
-    //    default String getAsTextHidePrivate() {
-    //        final StringBuilder builder = new StringBuilder();
-    //        builder.append(getName());
-    //        if (!getLocation().isPrivate()) {
-    //            builder.append(" Phone: ").append(getPhone());
-    //        }
-    //        if (!getDescription().isPrivate()) {
-    //            builder.append(" Email: ").append(getEmail());
-    //        }
-    //        if (!getTime().isPrivate()) {
-    //            builder.append(" Address: ").append(getAddress());
-    //        }
-    //        builder.append(" Tags: ");
-    //        for (Tag tag : getTags()) {
-    //            builder.append(tag);
-    //        }
-    //        return builder.toString();
-    //    }
 }
