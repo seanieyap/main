@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import planmysem.common.Utils;
+import planmysem.data.exception.IllegalValueException;
 import planmysem.data.tag.TagP;
 
 /**
@@ -48,10 +49,66 @@ public class Slot implements ReadOnlySlot {
 
     /**
      * Copy constructor.
+     * @throws IllegalValueException if value is invalid
      */
     public Slot(ReadOnlySlot source) {
         this(source.getName(), source.getLocation(), source.getDescription(),
-                source.getTime(), source.getDuration(), source.getTags());
+                source.getStartTime(), source.getDuration(), source.getTags());
+    }
+
+    /**
+     * Set name.
+     * @throws IllegalValueException if value is invalid
+     */
+    public void setName(String value) throws IllegalValueException {
+        if (value == null) {
+            return;
+        }
+        name = new Name(value);
+    }
+
+    /**
+     * Set location.
+     * @throws IllegalValueException if value is invalid
+     */
+    public void setLocation(String value) throws IllegalValueException {
+        if (value == null) {
+            return;
+        }
+        if (value.equals("")) {
+            location = new Location(null);
+        } else {
+            location = new Location(value);
+        }
+    }
+
+    /**
+     * Set description.
+     * @throws IllegalValueException if value is invalid
+     */
+    public void setDescription(String value) throws IllegalValueException {
+        if (value == null) {
+            return;
+        }
+        if ("".equals(value)) {
+            description = new Description(null);
+        } else {
+            description = new Description(value);
+        }
+    }
+
+    /**
+     * Set start time.
+     */
+    public void setStartTime(LocalTime value) {
+        startTime = value;
+    }
+
+    /**
+     * Set duration.
+     */
+    public void setDuration(int value) {
+        duration = value;
     }
 
     @Override
@@ -75,21 +132,21 @@ public class Slot implements ReadOnlySlot {
     }
 
     @Override
-    public LocalTime getTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
     @Override
     public Set<TagP> getTags() {
-        return new HashSet<>(tags);
+        return tags;
     }
 
     /**
      * Replaces this slot's tags with the tags in {@code replacement}.
      */
-    public void setTags(Set<String> tags) {
-        tags.clear();
-        tags.addAll(tags);
+    public void setTags(Set<TagP> tags) {
+        this.tags.clear();
+        this.tags.addAll(tags);
     }
 
     @Override

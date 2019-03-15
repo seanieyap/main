@@ -20,4 +20,5 @@ public interface ReadOnlySemester {
     Set<LocalDate> getRecessDays();
     Set<LocalDate> getReadingDays();
     Set<LocalDate> getNormalDays();
+    Set<LocalDate> getExamDays();
 }

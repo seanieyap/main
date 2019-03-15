@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
@@ -16,10 +17,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import planmysem.data.exception.IllegalValueException;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.semester.Semester;
+import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
+import planmysem.data.tag.TagP;
 
 /**
  * Represents the entire Planner. Contains the data of the Planner.
@@ -43,6 +47,7 @@ public class Planner {
         Set<LocalDate> recessDays = new HashSet<>();
         Set<LocalDate> readingDays = new HashSet<>();
         Set<LocalDate> normalDays = new HashSet<>();
+        Set<LocalDate> examDays = new HashSet<>();
 
         acadCalMap = getAcadCalMap();
         TemporalField weekField = WeekFields.ISO.weekOfWeekBasedYear();
@@ -58,7 +63,8 @@ public class Planner {
         datesList = startDate.datesUntil(endDate).collect(Collectors.toList());
         for (LocalDate date: datesList) {
             int weekOfYear = date.get(weekField);
-            int firstMonOfYear = date.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY)).getDayOfMonth();
+            LocalDate firstDayOfYear = date.with(TemporalAdjusters.firstDayOfYear());
+            int firstMonOfYear = firstDayOfYear.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY)).getDayOfMonth();
             if (firstMonOfYear == 1) {
                 weekOfYear += 1;
             }
@@ -71,6 +77,9 @@ public class Planner {
             case "Reading Week":
                 readingDays.add(date);
                 break;
+            case "Examination Week":
+                examDays.add(date);
+                break;
             default:
                 normalDays.add(date);
                 break;
@@ -78,7 +87,7 @@ public class Planner {
         }
 
         semester = new Semester(acadSem, acadYear, days, startDate, endDate, noOfWeeks,
-                recessDays, readingDays, normalDays);
+                recessDays, readingDays, normalDays, examDays);
     }
 
     /**
@@ -213,7 +222,27 @@ public class Planner {
     }
 
     /**
-     * Checks if an equivalent Day exists in the address book.
+     * Edit specific slot within the planner.
+     *
+     * @throws Semester.DateNotFoundException if a targetDate is not found in the semester.
+     * @throws IllegalValueException if a targetDate is not found in the semester.
+     */
+    public void editSlot(LocalDate targetDate, ReadOnlySlot targetSlot, LocalDate date,
+                         LocalTime startTime, int duration, String name, String location,
+                         String description, Set<TagP> tags)
+            throws Semester.DateNotFoundException, IllegalValueException {
+        semester.editSlot(targetDate, targetSlot, date, startTime, duration, name, location, description, tags);
+    }
+
+    /**
+     * Checks if an slot exists in planner.
+     */
+    public boolean containsSlot(LocalDate date, ReadOnlySlot slot) {
+        return semester.contains(date, slot);
+    }
+
+    /**
+     * Checks if an equivalent Day exists in the Planner.
      */
     public boolean containsDay(ReadOnlyDay day) {
         return semester.contains(day);
@@ -252,7 +281,7 @@ public class Planner {
     }
 
     /**
-     * Clears all days from the Planner.
+     * Clears all slots from the Planner.
      */
     public void clearSlots() {
         semester.clearSlots();
