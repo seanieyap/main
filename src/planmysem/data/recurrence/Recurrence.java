@@ -72,7 +72,7 @@ public class Recurrence {
     public Set<LocalDate> generateDates(Semester semester) {
         final Set<LocalDate> result = new TreeSet<>();
 
-        if (!normal && !recess && !reading) {
+        if (!normal && !recess && !reading && !exam) {
             result.add(date);
             return result;
         }
@@ -116,7 +116,7 @@ public class Recurrence {
             }
 
             // recurse over examination days
-            if (reading) {
+            if (exam) {
                 result.addAll(getDates(semester.getExamDays(), dateStart));
             }
         }

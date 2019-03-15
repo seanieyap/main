@@ -59,27 +59,23 @@ public class AddCommandP extends CommandP {
         recurrence = new Recurrence(recurrences, day);
     }
 
-    //    public AddCommandP(Pair<Slot, Recurrence> toAdd) {
-    //        this.toAdd = toAdd;
-    //    }
-
     @Override
     public CommandResultP execute() {
-        try {
-            Set<LocalDate> dates = recurrence.generateDates(planner.getSemester());
+        Set<LocalDate> dates = recurrence.generateDates(planner.getSemester());
 
-            for (LocalDate date : dates) {
+        for (LocalDate date : dates) {
+            try {
                 planner.addSlot(date, slot);
+            } catch (Semester.DateNotFoundException dnfe) {
+                return new CommandResultP(MESSAGE_FAIL_OUT_OF_BOUNDS);
             }
+        }
 
-            if (dates.size() == 0) {
-                return new CommandResultP(MESSAGE_SUCCESS_NO_CHANGE);
-            } else {
-                return new CommandResultP(String.format(MESSAGE_SUCCESS, dates.size(),
-                        craftSuccessMessage(dates, slot)));
-            }
-        } catch (Semester.DateNotFoundException dnfe) {
-            return new CommandResultP(MESSAGE_FAIL_OUT_OF_BOUNDS);
+        if (dates.size() == 0) {
+            return new CommandResultP(MESSAGE_SUCCESS_NO_CHANGE);
+        } else {
+            return new CommandResultP(String.format(MESSAGE_SUCCESS, dates.size(),
+                    craftSuccessMessage(dates, slot)));
         }
     }
 

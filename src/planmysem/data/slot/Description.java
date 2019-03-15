@@ -29,7 +29,7 @@ public class Description {
      * Returns true if a given string is a valid Slot description.
      */
     public static boolean isValid(String value) {
-        return value == "" || value.matches(VALIDATION_REGEX);
+        return "".equals(value) || value.matches(VALIDATION_REGEX);
     }
 
     @Override

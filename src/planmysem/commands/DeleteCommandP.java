@@ -88,7 +88,7 @@ public class DeleteCommandP extends CommandP {
 
         // perform deletion of slots from the planner
         for (Map.Entry<LocalDateTime, ? extends ReadOnlySlot> slot: selectedSlots.entrySet()) {
-            planner.getSemester().getDays().get(slot.getKey().toLocalDate()).deleteSlot(slot.getValue());
+            planner.getSemester().getDays().get(slot.getKey().toLocalDate()).removeSlot(slot.getValue());
         }
 
         return new CommandResultP(String.format(MESSAGE_SUCCESS, selectedSlots.size(),

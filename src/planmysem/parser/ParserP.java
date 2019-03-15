@@ -53,6 +53,7 @@ public class ParserP {
     private static final String PARAMETER_NEW_END_TIME = "net";
     private static final String PARAMETER_NEW_LOCATION = "nl";
     private static final String PARAMETER_NEW_DESCRIPTION = "ndes";
+    private static final String PARAMETER_NEW_TAG = "nt";
 
 
     /**
@@ -240,17 +241,29 @@ public class ParserP {
             }
         }
 
+        String name = getFirstInSet(arguments.get(PARAMETER_NEW_NAME));
         String location = getFirstInSet(arguments.get(PARAMETER_NEW_LOCATION));
         String description = getFirstInSet(arguments.get(PARAMETER_NEW_DESCRIPTION));
+        Set<String> newTags = arguments.get(PARAMETER_NEW_TAG);
 
         if (index == -1) {
             try {
-                return new EditCommandP(startTime, duration, location, description, tags);
+                return new EditCommandP(name, startTime, duration, location, description, tags, newTags);
             } catch (IllegalValueException ive) {
                 return new IncorrectCommandP(ive.getMessage());
             }
         } else {
-            return new EditCommandP(startTime, duration, location, description, index);
+            String nd = getFirstInSet(arguments.get(PARAMETER_NEW_DATE));
+            LocalDate date = Utils.parseDate(nd);
+            if (date == null) {
+                return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommandP.MESSAGE_USAGE));
+            }
+
+            try {
+                return new EditCommandP(index, name, date, startTime, duration, location, description, newTags);
+            } catch (IllegalValueException ive) {
+                return new IncorrectCommandP(ive.getMessage());
+            }
         }
     }
 
@@ -380,11 +393,13 @@ public class ParserP {
                 continue;
             }
 
-            parameters = parameters.substring(buf + 1).trim();
+            parameters = parameters.substring(buf + 1);
 
             if (parameters.indexOf('/') != -1) {
                 parameter = parameters.substring(0, parameters.indexOf('/'));
-                parameter = parameter.substring(0, parameter.lastIndexOf(" "));
+                if (parameter.indexOf(' ') != -1) {
+                    parameter = parameter.substring(0, parameter.lastIndexOf(" "));
+                }
             } else {
                 parameter = parameters;
             }

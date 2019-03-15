@@ -13,6 +13,7 @@ import planmysem.common.Messages;
 import planmysem.common.Utils;
 import planmysem.data.exception.IllegalValueException;
 import planmysem.data.semester.Day;
+import planmysem.data.semester.Semester;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
 import planmysem.data.tag.TagP;
@@ -41,36 +42,50 @@ public class EditCommandP extends CommandP {
     public static final String MESSAGE_FAIL_ILLEGAL_VALUE = MESSAGE_SUCCESS
         + " Illegal characters were detected.";
 
+    private final LocalDate date;
     private final LocalTime startTime;
     private final int duration;
+    private final String name;
     private final String location;
     private final String description;
     private final Set<TagP> tags = new HashSet<>();
+    private final Set<TagP> newTags = new HashSet<>();
 
     /**
      * Convenience constructor using raw values.
      *
      * @throws IllegalValueException if any of the raw values are invalid
      */
-    public EditCommandP(LocalTime startTime, int duration, String location, String description,
-                        Set<String> tags) throws IllegalValueException {
+    public EditCommandP(String name, LocalTime startTime, int duration, String location, String description,
+                        Set<String> tags, Set<String> newTags) throws IllegalValueException {
+        this.date = null;
         this.startTime = startTime;
         this.duration = duration;
+        this.name = name;
         this.location = location;
         this.description = description;
         this.tags.addAll(Utils.parseTags(tags));
+        if (newTags != null) {
+            this.newTags.addAll(Utils.parseTags(newTags));
+        }
     }
 
     /**
      * Convenience constructor using raw values.
      */
-    public EditCommandP(LocalTime startTime, int duration, String location, String description,
-                        int index) {
+    public EditCommandP(int index, String name, LocalDate date, LocalTime startTime, int duration,
+                        String location, String description, Set<String> newTags)
+            throws IllegalValueException {
         super(index);
+        this.date = date;
         this.startTime = startTime;
         this.duration = duration;
+        this.name = name;
         this.location = location;
         this.description = description;
+        if (newTags != null) {
+            this.newTags.addAll(Utils.parseTags(newTags));
+        }
     }
 
     @Override
@@ -78,27 +93,12 @@ public class EditCommandP extends CommandP {
         Map<LocalDateTime, ReadOnlySlot> selectedSlots = new TreeMap<>();
 
         if (getTargetIndex() == -1) {
-            try {
-                for (Map.Entry<LocalDate, Day> day : planner.getSemester().getDays().entrySet()) {
-                    for (Slot slot : day.getValue().getSlots()) {
-                        if (slot.getTags().containsAll(tags)) {
-                            if (startTime != null) {
-                                slot.setStartTime(startTime);
-                            }
-                            if (duration != -1) {
-                                slot.setDuration(duration);
-                            }
-
-                            slot.setLocation(location);
-
-                            slot.setDescription(description);
-
-                            selectedSlots.put(LocalDateTime.of(day.getKey(), slot.getStartTime()), slot);
-                        }
+            for (Map.Entry<LocalDate, Day> day : planner.getSemester().getDays().entrySet()) {
+                for (Slot slot : day.getValue().getSlots()) {
+                    if (slot.getTags().containsAll(tags)) {
+                        selectedSlots.put(LocalDateTime.of(day.getKey(), slot.getStartTime()), slot);
                     }
                 }
-            } catch (IllegalValueException ive) {
-                return new CommandResultP(MESSAGE_FAIL_ILLEGAL_VALUE);
             }
             if (selectedSlots.size() == 0) {
                 return new CommandResultP(String.format(MESSAGE_SUCCESS_NO_CHANGE, craftSelectedMessage()));
@@ -108,12 +108,22 @@ public class EditCommandP extends CommandP {
                 final Pair<LocalDate, ? extends ReadOnlySlot> target = getTargetSlot();
                 selectedSlots.put(LocalDateTime.of(target.getKey(),
                         target.getValue().getStartTime()), target.getValue());
-
                 if (!planner.containsSlot(target.getKey(), target.getValue())) {
                     return new CommandResultP(Messages.MESSAGE_SLOT_NOT_IN_PLANNER);
                 }
             } catch (IndexOutOfBoundsException ie) {
                 return new CommandResultP(Messages.MESSAGE_INVALID_SLOT_DISPLAYED_INDEX);
+            }
+        }
+
+        for (Map.Entry<LocalDateTime, ReadOnlySlot> entry : selectedSlots.entrySet()) {
+            try {
+                planner.editSlot(entry.getKey().toLocalDate(), entry.getValue(), date,
+                        startTime, duration, name, location, description, newTags);
+            } catch (IllegalValueException ive) {
+                return new CommandResultP(MESSAGE_FAIL_ILLEGAL_VALUE);
+            } catch (Semester.DateNotFoundException dnfe) {
+                return new CommandResultP(Messages.MESSAGE_SLOT_NOT_IN_PLANNER);
             }
         }
 
@@ -144,7 +154,7 @@ public class EditCommandP extends CommandP {
         if (location != null) {
             sb.append("\n\tLocation: ");
             sb.append("\"");
-            if (location.equals("")) {
+            if ("".equals(location)) {
                 sb.append("null");
             } else {
                 sb.append(location);
@@ -154,7 +164,7 @@ public class EditCommandP extends CommandP {
         if (description != null) {
             sb.append("\n\tDescription: ");
             sb.append("\"");
-            if (description.equals("")) {
+            if ("".equals(description)) {
                 sb.append("null");
             } else {
                 sb.append(description);

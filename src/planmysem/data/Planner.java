@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
@@ -16,11 +17,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import planmysem.data.exception.IllegalValueException;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.semester.Semester;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
+import planmysem.data.tag.TagP;
 
 /**
  * Represents the entire Planner. Contains the data of the Planner.
@@ -216,6 +219,19 @@ public class Planner {
      */
     public void addSlot(LocalDate date, Slot slot) throws Semester.DateNotFoundException {
         semester.addSlot(date, slot);
+    }
+
+    /**
+     * Edit specific slot within the planner.
+     *
+     * @throws Semester.DateNotFoundException if a targetDate is not found in the semester.
+     * @throws IllegalValueException if a targetDate is not found in the semester.
+     */
+    public void editSlot(LocalDate targetDate, ReadOnlySlot targetSlot, LocalDate date,
+                         LocalTime startTime, int duration, String name, String location,
+                         String description, Set<TagP> tags)
+            throws Semester.DateNotFoundException, IllegalValueException {
+        semester.editSlot(targetDate, targetSlot, date, startTime, duration, name, location, description, tags);
     }
 
     /**

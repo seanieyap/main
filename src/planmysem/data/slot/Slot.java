@@ -61,6 +61,9 @@ public class Slot implements ReadOnlySlot {
      * @throws IllegalValueException if value is invalid
      */
     public void setName(String value) throws IllegalValueException {
+        if (value == null) {
+            return;
+        }
         name = new Name(value);
     }
 
@@ -87,7 +90,7 @@ public class Slot implements ReadOnlySlot {
         if (value == null) {
             return;
         }
-        if (value.equals("")) {
+        if ("".equals(value)) {
             description = new Description(null);
         } else {
             description = new Description(value);
@@ -141,9 +144,9 @@ public class Slot implements ReadOnlySlot {
     /**
      * Replaces this slot's tags with the tags in {@code replacement}.
      */
-    public void setTags(Set<String> tags) {
-        tags.clear();
-        tags.addAll(tags);
+    public void setTags(Set<TagP> tags) {
+        this.tags.clear();
+        this.tags.addAll(tags);
     }
 
     @Override

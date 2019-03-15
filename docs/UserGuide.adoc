@@ -125,13 +125,13 @@ You may add single slots by neglecting the recurrence parameters.
 Edit _slots_.
 
 1. Edit _slot(s)_ which contains certain _tag_(s). +
-Format: `edit t/TAG... [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION]`
+Format: `edit t/TAG... [nn/NEW_NAME] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...`
 2. Edit specific _slot_ via the `list` command. +
-Format: `edit INDEX [nd/NEW_DATE] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION]`
+Format: `edit INDEX [nn/NEW_NAME] [nd/NEW_DATE] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...`
 
 [NOTE]
 ====
-You are not able to edit a slot's start time and end time when selecting via _tags_.
+You are not able to edit a slot's date when selecting via _tags_.
 To edit a _slot_'s date, you may use the `list` or `find` command and select specific _slots_ via index.
 ====
 
