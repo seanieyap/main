@@ -40,18 +40,18 @@ public class StorageFileP {
     /**
      * @throws InvalidStorageFilePathException if the default path is invalid
      */
-    public StorageFileP() throws InvalidStorageFilePathException {
+    public StorageFileP() throws JAXBException, InvalidStorageFilePathException {
         this(DEFAULT_STORAGE_FILEPATH);
     }
 
     /**
      * @throws InvalidStorageFilePathException if the given file path is invalid
      */
-    public StorageFileP(String filePath) throws InvalidStorageFilePathException {
+    public StorageFileP(String filePath) throws JAXBException, InvalidStorageFilePathException {
         try {
             jaxbContext = JAXBContext.newInstance(AdaptedPlanner.class);
         } catch (JAXBException ex) {
-            throw new RuntimeException("jaxb initialisation error" + ex);
+            throw new JAXBException(ex);
         }
 
         path = Paths.get(filePath);

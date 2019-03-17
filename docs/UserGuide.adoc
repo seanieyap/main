@@ -18,7 +18,10 @@ By: `Team T08-3`      Since: `Jan 2019`      Licence: `MIT`
 
 == Introduction
 
-PlanMySem is a CLI (Command Line Interface) scheduling/calendar application that targets NUS students and staff who prefer to use a desktop application for managing their schedule/calendar. PlanMySem automatically creates a calendar and synchronises it according to the NUS academic calendar for a particular semester.
+PlanMySem is a CLI (Command Line Interface) scheduling/calendar application that targets NUS students and staff who prefer to use a desktop application for managing their schedule/calendar.
+PlanMySem automatically creates a planner that is synchronised according to the NUS academic calendar for the current semester and enables easy creation, editing and deleting of items.
+Special weeks such as recess week and reading week are taken into account within our unique recursion system.
+Items can then be efficiently managed via the intuitive tagging system.
 
 PlanMySem is optimized for those who prefer to work with a Command Line Interface (CLI) and/or are learning to work more efficiently with CLI tools. Additionally, unlike traditional calendar/scheduling applications, PlanMySem utilizes minimal resources on the user’s machine while still allowing the user to view their schedules swiftly and efficiently.
 
@@ -50,7 +53,7 @@ This section displays the current implemented features as well as features that 
 ====
 *Command Format*
 
-* Words in UPPER_CASE are the parameters to be supplied by the user e.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
+* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
 * Items in square brackets are optional. e.g add act NAME `[c/NAME]`.
 * Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
 * Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
@@ -78,9 +81,11 @@ Below is the list of parameters for users such as yourself to jump right into gr
     * Duration of the event in minutes. e.g. `60` represents 60 minutes
 `r/`:: *recurrence.* +
     Format:
-    * Select/deselect recess week: `recess`
-    * Select/deselect reading week: `reading`
-    * Select/deselect past dates: `past`
+    * Select normal weeks: `normal`
+    * Select recess week: `recess`
+    * Select reading week: `reading`
+    * Select examination weeks: `exam`
+    * Select past dates: `past`
 `l/`:: *Location.*
 `des/`:: *Description.*
 `t/`:: *Tag.*
@@ -96,75 +101,85 @@ Below is the list of parameters for users such as yourself to jump right into gr
 
 Format: `help`
 
-=== Adding Slots : `add`
+=== Adding Slots : `add` / `a`
 
-Add a _slot_ to the planner. +
-Format: `add NAME d/DATE|DAY_OF_WEEK st/START_TIME et/END_TIME|DURATION +
-[l/LOCATION] [des/DESCRIPTION] [r/recess] [r/reading] [r/past] [t/TAG]...`
+Add _slots_ to the planner. +
+Format: `add n/NAME d/DATE_OR_DAY_OF_WEEK st/START_TIME et/END_TIME_OR_DURATION +
+[l/LOCATION] [des/DESCRIPTION] [r/normal] [r/recess] [r/reading] [r/exam] [r/past] [t/TAG]...`
 
 Examples:
-
-* `add CS2113T Tutorial d/mon st/08:00 et/09:00 des/Attending: John, Tan, Lee t/Frisbee t/Tembusu College` +
-Add a _slot_ to the _activity_ "Sport" on monday, from 0800hrs to 0900hrs with the tags "Frisbee" and "Tembusu College".
-* `add slot a/Interest Group d/monday t/0800-0900 r/recess r/reading tag/Tembusu College tag/Barefoots` +
+* `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial` +
+Add a _slot_, named "CS2113T Tutorial" on the coming monday, from 0800hrs to 0900hrs with the tags "CS2113T" and "Tutorial".
+* `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial r/recess r/reading` +
 Do the same but additionally, recurse the slot on recess and reading week.
+* `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial r/normal` +
+Do the same but recurse the slot on "normal", instructional, weeks.
 
 [NOTE]
 ====
-If no recurrence parameters are specified then only the nearest day or the specified date is selected.
+You may add single slots by neglecting the recurrence parameters.
 ====
 
-=== Listing Slots: `list`
+=== Editing Slots: `edit` / `e`
 
-List all _slots_ in the planner. +
-Format: `list`
+Edit _slots_.
+
+1. Edit _slot(s)_ which contains certain _tag_(s). +
+Format: `edit t/TAG... [nn/NEW_NAME] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...`
+2. Edit specific _slot_ via the `list` command. +
+Format: `edit INDEX [nn/NEW_NAME] [nd/NEW_DATE] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...`
 
 [NOTE]
 ====
-If no _categories_ or _activities_ are specified, then all _slots_ will be listed.
+You are not able to edit a slot's date when selecting via _tags_.
+To edit a _slot_'s date, you may use the `list` or `find` command and select specific _slots_ via index.
 ====
 
 Examples:
 
-* `list slot` +
-List all _slots_ in the planner.
+* `edit t/CS2113T t/Tutorial nl/COM2 04-01` +
+Edit slots that contain tags "CS2113T" and "Tutorial", set these _slot's_ location to "COM2 04-01".
+* `edit 1 des/Topic: Sequence Diagram` +
+Edit the first item from the previous result of the `list` or `find` command.
 
-=== Editing Slots: `edit`
+=== Delete Slots: `delete` / `del` / `d`
 
-Edit a _slot_. +
-Format: `edit d/DATE t/TIME [nd/NEW_DATE] [nt/NEW_TIME] [r/norecess] [r/noreading] [r/nonormal] [r/recess] [r/reading] [r/normal]`
+1. Delete _slot(s)_ which contains certain _tag_(s). +
+Format: `delete t/TAG...`
+2. Delete _slot_ via the `list` command. +
+Format: `delete INDEX`
 
 [NOTE]
 ====
-If the date and time specified does not correspond directly to a slot, the nearest slot will be selected for editing.
+You may delete a specific slot by using the `list` or `find` command and select the specific _slot_ via index.
 ====
 
 Examples:
 
-* `edit d/01-01 t/0800 nd/01-03 nt/0900` +
-Select the _slot_ on the first of January, at 0800hrs and change it's date to the Third of January and it's time to 0900hrs.
+* `delete t/CS2113T t/Tutorial` +
+Delete _slots_ that contain tags "CS2113T" and "Tutorial".
+* `list delete 2` +
+Delete the second _slot_ shown via the `list` command.
 
-=== Delete Slots: `del`
+=== Listing Slots: `list` / `l`
 
-Deleting _slots_. +
-Format: `del [d/DATE]... [t/TIME]... [t/TAG]... `
+List _slots_ in the planner. +
+Format: `list [past] [next] [all]`
 
 [NOTE]
 ====
-All slots that strictly fits all the options given will be deleted. +
-This is useful for deleting a whole "category" of slots, such as an entire module's lab sessions.
+If you do not specify a keyword, then the `all` keyword will be used and all _slots_ will be listed.
 ====
 
-Example:
+Examples:
 
-* `del d/01-03 t/0800` +
-Delete the slot located on the 3th of January, 0800hrs.
-* TODO
+* `list next` +
+List all _slots_ that has yet to occurred in the planner.
 
-=== Locating Slots: `find`
+=== Locating Slots: `find` / `f`
 
-Find all _slots_ whose name and or tags contains any of the given keywords. +
-Format: `find [n/SLOT_NAMES]... [tag/TAG]...`
+Find all _slots_ that have a similar name and or contains specified _tags_. +
+Format: `find [n/SLOT_NAMES] [t/TAG]...`
 
 [NOTE]
 ====
@@ -215,16 +230,10 @@ Some commands are undoable. e.g. `wipe PlanMySem`.
 Reverses the most recent `undo` command. +
 Format: `redo`
 
-=== Wipe all data : wipe
+=== Clear all data : clear
 
-Wipe all data stored on the planner. +
-Format: `wipe PlanMySem`
-
-[NOTE]
-====
-* This can be used to restart the planner.
-* The user will be prompted for a confirmation.
-====
+Clear all data stored on the planner. +
+Format: `clear`
 
 === Exiting the program : `exit`
 

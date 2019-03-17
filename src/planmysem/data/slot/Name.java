@@ -7,7 +7,6 @@ import planmysem.data.exception.IllegalValueException;
  * Guarantees: immutable; is valid as declared in {@link #isValid(String)}
  */
 public class Name {
-    private static final String EXAMPLE = "CS2113T Meeting";
     private static final String MESSAGE_CONSTRAINTS = "Slot names should be spaces or alphanumeric characters";
     private static final String VALIDATION_REGEX = ".+";
 
