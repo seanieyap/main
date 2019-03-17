@@ -19,6 +19,7 @@ import planmysem.commands.CommandP;
 import planmysem.commands.DeleteCommandP;
 import planmysem.commands.EditCommandP;
 import planmysem.commands.ExitCommandP;
+import planmysem.commands.ExportCommandP;
 import planmysem.commands.FindCommand;
 import planmysem.commands.HelpCommand;
 import planmysem.commands.HelpCommandP;
@@ -84,6 +85,9 @@ public class ParserP {
         case EditCommandP.COMMAND_WORD:
         case EditCommandP.COMMAND_WORD_SHORT:
             return prepareEdit(arguments);
+
+        case ExportCommandP.COMMAND_WORD:
+            return new ExportCommandP();
 
         case DeleteCommandP.COMMAND_WORD:
         case DeleteCommandP.COMMAND_WORD_ALT:
@@ -295,27 +299,21 @@ public class ParserP {
     }
 
     /**
-     * Parses arguments in the context of the add Slot command.
+     * Parses arguments in the context of the list command.
      *
      * @param args full command args string
      * @return the prepared command
      */
     private CommandP prepareList(String args) {
         HashMap<String, Set<String>> arguments = getParametersWithArguments(args);
-
-
-        // Validate arg string format
-        if (args.isEmpty() || arguments.isEmpty()) {
+        String name = getFirstInSet(arguments.get(PARAMETER_NAME));
+        if (name == null || name.trim().isEmpty()) {
             return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommandP.MESSAGE_USAGE));
         }
-
         // TODO: prepare list
         //        try {
         // TODO: add exception handling
-        return new ListCommandP(arguments.get(PARAMETER_START_TIME));
-        //        } catch (IllegalValueException ive) {
-        //            return new IncorrectCommandP(ive.getMessage());
-        //        }
+        return new ListCommandP(name);
     }
 
     /**
