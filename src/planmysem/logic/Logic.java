@@ -12,13 +12,13 @@ import planmysem.commands.CommandResult;
 import planmysem.data.Planner;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.parser.Parser;
-import planmysem.storage.StorageFileP;
+import planmysem.storage.StorageFile;
 
 /**
  * Represents the main Logic of the Planner.
  */
 public class Logic {
-    private StorageFileP storage;
+    private StorageFile storage;
     private Planner planner;
 
     /**
@@ -31,12 +31,12 @@ public class Logic {
         setPlanner(storage.load());
     }
 
-    public Logic(StorageFileP storageFile, Planner planner) {
+    public Logic(StorageFile storageFile, Planner planner) {
         setStorage(storageFile);
         setPlanner(planner);
     }
 
-    public void setStorage(StorageFileP storage) {
+    public void setStorage(StorageFile storage) {
         this.storage = storage;
     }
 
@@ -47,10 +47,10 @@ public class Logic {
     /**
      * Creates the StorageFile object based on the user specified path (if any) or the default storage path.
      *
-     * @throws StorageFileP.InvalidStorageFilePathException if the target file path is incorrect.
+     * @throws StorageFile.InvalidStorageFilePathException if the target file path is incorrect.
      */
-    private StorageFileP initializeStorage() throws JAXBException, StorageFileP.InvalidStorageFilePathException {
-        return new StorageFileP();
+    private StorageFile initializeStorage() throws JAXBException, StorageFile.InvalidStorageFilePathException {
+        return new StorageFile();
     }
 
     public String getStorageFilePath() {

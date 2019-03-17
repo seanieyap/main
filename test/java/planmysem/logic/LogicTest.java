@@ -6,7 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import planmysem.data.Planner;
-import planmysem.storage.StorageFileP;
+import planmysem.storage.StorageFile;
 
 
 public class LogicTest {
@@ -17,7 +17,7 @@ public class LogicTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private StorageFileP storgageFile;
+    private StorageFile storgageFile;
     private Planner planner;
     private Logic logic;
 
