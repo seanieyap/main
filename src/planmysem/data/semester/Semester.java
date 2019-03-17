@@ -1,13 +1,17 @@
 package planmysem.data.semester;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import planmysem.data.exception.DuplicateDataException;
+import planmysem.data.exception.IllegalValueException;
+import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
+import planmysem.data.tag.TagP;
 
 /**
  * A list of days. Does not allow null elements or duplicates.
@@ -26,6 +30,7 @@ public class Semester implements ReadOnlySemester {
     private final Set<LocalDate> recessDays = new HashSet<>();
     private final Set<LocalDate> readingDays = new HashSet<>();
     private final Set<LocalDate> normalDays = new HashSet<>();
+    private final Set<LocalDate> examDays = new HashSet<>();
 
     /**
      * Constructs empty semester.
@@ -43,7 +48,7 @@ public class Semester implements ReadOnlySemester {
      */
     public Semester(String name, String academicYear, HashMap<LocalDate, Day> days, LocalDate startDate,
                     LocalDate endDate, int noOfWeeks, Set<LocalDate> recessDays, Set<LocalDate> readingDays,
-                    Set<LocalDate> normalDays) {
+                    Set<LocalDate> normalDays, Set<LocalDate> examDays) {
         this.name = name;
         this.academicYear = academicYear;
         this.days.putAll(days);
@@ -52,8 +57,9 @@ public class Semester implements ReadOnlySemester {
         this.noOfWeeks = noOfWeeks;
 
         this.recessDays.addAll(recessDays);
-        this.recessDays.addAll(readingDays);
-        this.recessDays.addAll(normalDays);
+        this.readingDays.addAll(readingDays);
+        this.normalDays.addAll(normalDays);
+        this.examDays.addAll(examDays);
     }
 
     /**
@@ -66,6 +72,11 @@ public class Semester implements ReadOnlySemester {
         this.startDate = source.startDate;
         this.endDate = source.endDate;
         this.noOfWeeks = source.noOfWeeks;
+
+        this.recessDays.addAll(source.recessDays);
+        this.readingDays.addAll(source.readingDays);
+        this.normalDays.addAll(source.normalDays);
+        this.examDays.addAll(source.examDays);
     }
 
     /**
@@ -93,28 +104,41 @@ public class Semester implements ReadOnlySemester {
     }
 
     /**
-     * Adds Slots to the Semester.
+     * Edits a Slot in the Semester.
      *
-     * @throws DateNotFoundException if an equivalent Day already exists.
+     * @throws DateNotFoundException if a targetDate is not found in the semester.
+     * @throws IllegalValueException if a targetDate is not found in the semester.
      */
-    //    public List<Slot> addSlots(Pair<Slot, Recurrence> slots) throws DateNotFoundException {
-    //        Recurrence recurrence = slots.getValue();
-    //
-    //        if (recurrence.date != null && (recurrence.date.isBefore(startDate)
-    //                || recurrence.date.isAfter(endDate))) {
-    //            throw new DateNotFoundException();
-    //        }
-    //
-    //        Slot slot = slots.getKey();
-    //
-    //        List<Slot> toAdd = new ArrayList<>();
-    //
-    //        // Generate dates to add
-    //        // Perform add
-    //
-    //        return toAdd;
-    //    }
+    public void editSlot(LocalDate targetDate, ReadOnlySlot targetSlot, LocalDate date, LocalTime startTime,
+                         int duration, String name, String location, String description, Set<TagP> tags)
+            throws DateNotFoundException, IllegalValueException {
+        if (targetDate == null || (targetDate.isBefore(startDate) || targetDate.isAfter(endDate))) {
+            throw new DateNotFoundException();
+        }
 
+        Slot editingSlot = days.get(targetDate).getSlots().stream()
+            .filter(s -> s.equals(targetSlot)).findAny().orElse(null);
+
+        if (date != null) {
+            Slot savedSlot = new Slot(editingSlot);
+            days.get(date).addSlot(savedSlot);
+            days.get(targetDate).removeSlot(editingSlot);
+            editingSlot = savedSlot;
+        }
+        if (startTime != null) {
+            editingSlot.setStartTime(startTime);
+        }
+        if (duration != -1) {
+            editingSlot.setDuration(duration);
+        }
+
+        editingSlot.setName(name);
+        editingSlot.setLocation(location);
+        editingSlot.setDescription(description);
+        if (tags.size() > 0) {
+            editingSlot.setTags(tags);
+        }
+    }
 
     /**
      * Removes the equivalent Day from the list.
@@ -154,6 +178,13 @@ public class Semester implements ReadOnlySemester {
         for (Map.Entry<LocalDate, Day> day : days.entrySet()) {
             day.getValue().clear();
         }
+    }
+
+    /**
+     * Checks if the list contains an equivalent slot as the given argument.
+     */
+    public boolean contains(LocalDate date, ReadOnlySlot slot) {
+        return days.get(date).contains(slot);
     }
 
     /**
@@ -213,6 +244,11 @@ public class Semester implements ReadOnlySemester {
     @Override
     public Set<LocalDate> getNormalDays() {
         return normalDays;
+    }
+
+    @Override
+    public Set<LocalDate> getExamDays() {
+        return examDays;
     }
 
     /**

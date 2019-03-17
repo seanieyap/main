@@ -30,7 +30,7 @@ public class AdaptedSlot {
     @XmlElement(required = true)
     private int duration;
     @XmlElement(required = true)
-    private LocalTime time;
+    private String startTime;
     @XmlElement(required = true)
     private List<AdaptedTagP> tags = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class AdaptedSlot {
         location = source.getLocation().toString();
         description = source.getDescription().toString();
         duration = source.getDuration();
-        time = source.getTime();
+        startTime = source.getStartTime().toString();
 
         tags = new ArrayList<>();
         for (TagP tag : source.getTags()) {
@@ -68,7 +68,7 @@ public class AdaptedSlot {
             }
         }
         // second call only happens if name, location, description, time are all not null
-        return Utils.isAnyNull(name, location, description, duration, time);
+        return Utils.isAnyNull(name, duration, startTime);
     }
 
     /**
@@ -80,7 +80,7 @@ public class AdaptedSlot {
         final Name name = new Name(this.name);
         final Location location = new Location(this.location);
         final Description description = new Description(this.description);
-        final LocalTime time = this.time;
+        final LocalTime startTime = LocalTime.parse(this.startTime);
         final int duration = this.duration;
 
         final Set<TagP> tags = new HashSet<>();
@@ -88,6 +88,6 @@ public class AdaptedSlot {
             tags.add(tag.toModelType());
         }
 
-        return new Slot(name, location, description, time, duration, tags);
+        return new Slot(name, location, description, startTime, duration, tags);
     }
 }

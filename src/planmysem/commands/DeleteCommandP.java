@@ -2,7 +2,6 @@ package planmysem.commands;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +12,6 @@ import planmysem.common.Messages;
 import planmysem.common.Utils;
 import planmysem.data.exception.IllegalValueException;
 import planmysem.data.semester.Day;
-import planmysem.data.semester.Semester;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
 import planmysem.data.tag.TagP;
@@ -21,71 +19,42 @@ import planmysem.data.tag.TagP;
 /**
  * Adds a person to the address book.
  */
-public class EditCommandP extends CommandP {
+public class DeleteCommandP extends CommandP {
 
-    public static final String COMMAND_WORD = "edit";
-    public static final String COMMAND_WORD_SHORT = "e";
+    public static final String COMMAND_WORD = "delete";
+    public static final String COMMAND_WORD_ALT = "del";
+    public static final String COMMAND_WORD_SHORT = "d";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edit single or multiple slots in the Planner."
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Delete single or multiple slots in the Planner."
             + "\n\tParameters: "
             + "\n\t\tMandatory: t/TAG... or INDEX"
-            + "\n\t\tOptional Parameters: [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] "
-            + "[nl/NEW_LOCATION] [nd/NEW_DESCRIPTION]"
             + "\n\tExample 1: " + COMMAND_WORD
-            + " t/CS2113T t/Tutorial nl/COM2 04-01"
+            + " t/CS2113T t/Tutorial"
             + "\n\tExample 2: " + COMMAND_WORD
-            + " 2 nl/COM2 04-01";
+            + " 2";
 
 
-    public static final String MESSAGE_SUCCESS_NO_CHANGE = "No Slots were edited.\n\n%1$s";
-    public static final String MESSAGE_SUCCESS = "%1$s Slots edited.\n\n%2$s\n%3$s";
-    public static final String MESSAGE_FAIL_ILLEGAL_VALUE = MESSAGE_SUCCESS
-        + " Illegal characters were detected.";
+    public static final String MESSAGE_SUCCESS_NO_CHANGE = "No Slots were deleted.\n\n%1$s";
+    public static final String MESSAGE_SUCCESS = "%1$s Slots deleted.\n\n%2$s\n%3$s";
+    public static final String MESSAGE_FAIL_ILLEGAL_VALUE = MESSAGE_SUCCESS_NO_CHANGE
+            + " Illegal characters were detected.";
 
-    private final LocalDate date;
-    private final LocalTime startTime;
-    private final int duration;
-    private final String name;
-    private final String location;
-    private final String description;
     private final Set<TagP> tags = new HashSet<>();
-    private final Set<TagP> newTags = new HashSet<>();
 
     /**
      * Convenience constructor using raw values.
      *
      * @throws IllegalValueException if any of the raw values are invalid
      */
-    public EditCommandP(String name, LocalTime startTime, int duration, String location, String description,
-                        Set<String> tags, Set<String> newTags) throws IllegalValueException {
-        this.date = null;
-        this.startTime = startTime;
-        this.duration = duration;
-        this.name = name;
-        this.location = location;
-        this.description = description;
+    public DeleteCommandP(Set<String> tags) throws IllegalValueException {
         this.tags.addAll(Utils.parseTags(tags));
-        if (newTags != null) {
-            this.newTags.addAll(Utils.parseTags(newTags));
-        }
     }
 
     /**
      * Convenience constructor using raw values.
      */
-    public EditCommandP(int index, String name, LocalDate date, LocalTime startTime, int duration,
-                        String location, String description, Set<String> newTags)
-            throws IllegalValueException {
+    public DeleteCommandP(int index) {
         super(index);
-        this.date = date;
-        this.startTime = startTime;
-        this.duration = duration;
-        this.name = name;
-        this.location = location;
-        this.description = description;
-        if (newTags != null) {
-            this.newTags.addAll(Utils.parseTags(newTags));
-        }
     }
 
     @Override
@@ -108,6 +77,7 @@ public class EditCommandP extends CommandP {
                 final Pair<LocalDate, ? extends ReadOnlySlot> target = getTargetSlot();
                 selectedSlots.put(LocalDateTime.of(target.getKey(),
                         target.getValue().getStartTime()), target.getValue());
+
                 if (!planner.containsSlot(target.getKey(), target.getValue())) {
                     return new CommandResultP(Messages.MESSAGE_SLOT_NOT_IN_PLANNER);
                 }
@@ -116,15 +86,9 @@ public class EditCommandP extends CommandP {
             }
         }
 
-        for (Map.Entry<LocalDateTime, ReadOnlySlot> entry : selectedSlots.entrySet()) {
-            try {
-                planner.editSlot(entry.getKey().toLocalDate(), entry.getValue(), date,
-                        startTime, duration, name, location, description, newTags);
-            } catch (IllegalValueException ive) {
-                return new CommandResultP(MESSAGE_FAIL_ILLEGAL_VALUE);
-            } catch (Semester.DateNotFoundException dnfe) {
-                return new CommandResultP(Messages.MESSAGE_SLOT_NOT_IN_PLANNER);
-            }
+        // perform deletion of slots from the planner
+        for (Map.Entry<LocalDateTime, ? extends ReadOnlySlot> slot: selectedSlots.entrySet()) {
+            planner.getSemester().getDays().get(slot.getKey().toLocalDate()).removeSlot(slot.getValue());
         }
 
         return new CommandResultP(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
@@ -137,43 +101,7 @@ public class EditCommandP extends CommandP {
     private String craftSuccessMessage(Map<LocalDateTime, ReadOnlySlot> selectedSlots) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Details Edited: ");
-
-        if (startTime != null) {
-            sb.append("\n\tStart Time: ");
-            sb.append("\"");
-            sb.append(startTime.toString());
-            sb.append("\"");
-        }
-        if (duration != -1) {
-            sb.append("\n\tDuration: ");
-            sb.append("\"");
-            sb.append(duration);
-            sb.append("\"");
-        }
-        if (location != null) {
-            sb.append("\n\tLocation: ");
-            sb.append("\"");
-            if ("".equals(location)) {
-                sb.append("null");
-            } else {
-                sb.append(location);
-            }
-            sb.append("\"");
-        }
-        if (description != null) {
-            sb.append("\n\tDescription: ");
-            sb.append("\"");
-            if ("".equals(description)) {
-                sb.append("null");
-            } else {
-                sb.append(description);
-            }
-            sb.append("\"");
-        }
-
-        sb.append("\n\n");
-        sb.append("Edited Slots: ");
+        sb.append("Deleted Slots: ");
         sb.append("\n");
 
         int count = 1;

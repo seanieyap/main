@@ -30,11 +30,13 @@ public class AdaptedSemester {
     @XmlElement(required = true)
     private HashMap<String, AdaptedDay> days = new HashMap<>();
     @XmlElement(required = true)
-    private Set<LocalDate> recessDays = new HashSet<>();
+    private Set<String> recessDays = new HashSet<>();
     @XmlElement(required = true)
-    private Set<LocalDate> readingDays = new HashSet<>();
+    private Set<String> readingDays = new HashSet<>();
     @XmlElement(required = true)
-    private Set<LocalDate> normalDays = new HashSet<>();
+    private Set<String> normalDays = new HashSet<>();
+    @XmlElement(required = true)
+    private Set<String> examDays = new HashSet<>();
 
     /**
      * No-arg constructor for JAXB use.
@@ -58,9 +60,21 @@ public class AdaptedSemester {
             days.put(day.getKey().toString(), new AdaptedDay(day.getValue()));
         }
 
-        recessDays = source.getRecessDays();
-        readingDays = source.getReadingDays();
-        normalDays = source.getNormalDays();
+        for (LocalDate date : source.getRecessDays()) {
+            recessDays.add(date.toString());
+        }
+
+        for (LocalDate date : source.getReadingDays()) {
+            readingDays.add(date.toString());
+        }
+
+        for (LocalDate date : source.getNormalDays()) {
+            normalDays.add(date.toString());
+        }
+
+        for (LocalDate date : source.getExamDays()) {
+            examDays.add(date.toString());
+        }
     }
 
     /**
@@ -101,12 +115,28 @@ public class AdaptedSemester {
             days.put(LocalDate.parse(day.getKey()), day.getValue().toModelType());
         }
 
-        final Set<LocalDate> recessDays = this.recessDays;
-        final Set<LocalDate> readingDays = this.recessDays;
-        final Set<LocalDate> normalDays = this.recessDays;
+        final Set<LocalDate> recessDays = new HashSet<>();
+        for (String date : this.recessDays) {
+            recessDays.add(LocalDate.parse(date));
+        }
+
+        final Set<LocalDate> readingDays = new HashSet<>();
+        for (String date : this.readingDays) {
+            readingDays.add(LocalDate.parse(date));
+        }
+
+        final Set<LocalDate> normalDays = new HashSet<>();
+        for (String date : this.normalDays) {
+            normalDays.add(LocalDate.parse(date));
+        }
+
+        final Set<LocalDate> examDays = new HashSet<>();
+        for (String date : this.examDays) {
+            examDays.add(LocalDate.parse(date));
+        }
 
         return new Semester(name, academicYear, days,
                 LocalDate.parse(startDate), LocalDate.parse(endDate), noOfWeeks,
-                recessDays, readingDays, normalDays);
+                recessDays, readingDays, normalDays, examDays);
     }
 }

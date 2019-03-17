@@ -5,7 +5,6 @@ import static planmysem.common.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,9 +13,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import planmysem.commands.AddCommandP;
+import planmysem.commands.ClearCommandP;
 import planmysem.commands.Command;
 import planmysem.commands.CommandP;
-import planmysem.commands.DeleteCommand;
+import planmysem.commands.DeleteCommandP;
 import planmysem.commands.EditCommandP;
 import planmysem.commands.ExitCommandP;
 import planmysem.commands.FindCommand;
@@ -25,7 +25,6 @@ import planmysem.commands.HelpCommandP;
 import planmysem.commands.IncorrectCommand;
 import planmysem.commands.IncorrectCommandP;
 import planmysem.commands.ListCommandP;
-import planmysem.commands.ViewAllCommand;
 import planmysem.commands.ViewCommand;
 import planmysem.common.Utils;
 import planmysem.data.exception.IllegalValueException;
@@ -40,44 +39,27 @@ public class ParserP {
     public static final Pattern KEYWORDS_ARGS_FORMAT =
             Pattern.compile("(?<keywords>\\S+(?:\\s+\\S+)*)"); // one or more keywords separated by whitespace
 
+    private static final String PARAMETER_NAME = "n";
+    private static final String PARAMETER_DATE_OR_DAY = "d";
     private static final String PARAMETER_START_TIME = "st";
+    private static final String PARAMETER_END_TIME = "et";
+    private static final String PARAMETER_RECURRENCE = "r";
+    private static final String PARAMETER_LOCATION = "l";
+    private static final String PARAMETER_DESCRIPTION = "des";
+    private static final String PARAMETER_TAG = "t";
+    private static final String PARAMETER_NEW_NAME = "nn";
+    private static final String PARAMETER_NEW_DATE = "nd";
+    private static final String PARAMETER_NEW_START_TIME = "nst";
+    private static final String PARAMETER_NEW_END_TIME = "net";
+    private static final String PARAMETER_NEW_LOCATION = "nl";
+    private static final String PARAMETER_NEW_DESCRIPTION = "ndes";
+    private static final String PARAMETER_NEW_TAG = "nt";
 
 
     /**
      * Used for initial separation of command word and args.
      */
     private static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
-
-    /**
-     * Extracts the new Slot's tags from the add command's tag arguments string.
-     * Merges duplicate tag strings.
-     */
-    private static Set<String> getTagsFromArgs(String tagArguments) throws IllegalValueException {
-        // no tags
-        if (tagArguments.isEmpty()) {
-            return Collections.emptySet();
-        }
-        // replace first delimiter prefix, then split
-        final Collection<String> tagStrings =
-                Arrays.asList(
-                        tagArguments.replaceFirst(" t/", "")
-                                .split(" t/"));
-        return new HashSet<>(tagStrings);
-    }
-
-    /**
-     * Extracts the new Slot's recursive arguments from the add command's recurse arguments string.
-     * Merges duplicate recursive strings.
-     */
-    private static Set<String> getRecurrencesFromArgs(String recursiveArguments) throws IllegalValueException {
-        // no tags
-        if (recursiveArguments.isEmpty()) {
-            return Collections.emptySet();
-        }
-        // replace first delimiter prefix, then split
-        final Collection<String> tagStrings = Arrays.asList(recursiveArguments.replaceFirst(" r/", "").split(" r/"));
-        return new HashSet<>(tagStrings);
-    }
 
     /**
      * Parses user input into command for execution.
@@ -95,15 +77,25 @@ public class ParserP {
         final String arguments = matcher.group("arguments");
 
         switch (commandWord) {
-
         case AddCommandP.COMMAND_WORD:
+        case AddCommandP.COMMAND_WORD_SHORT:
             return prepareAdd(arguments);
 
         case EditCommandP.COMMAND_WORD:
+        case EditCommandP.COMMAND_WORD_SHORT:
             return prepareEdit(arguments);
 
+        case DeleteCommandP.COMMAND_WORD:
+        case DeleteCommandP.COMMAND_WORD_ALT:
+        case DeleteCommandP.COMMAND_WORD_SHORT:
+            return prepareDelete(arguments);
+
         case ListCommandP.COMMAND_WORD:
+        case ListCommandP.COMMAND_WORD_SHORT:
             return prepareList(arguments);
+
+        case ClearCommandP.COMMAND_WORD:
+            return new ClearCommandP();
 
         case ExitCommandP.COMMAND_WORD:
             return new ExitCommandP();
@@ -116,29 +108,25 @@ public class ParserP {
     }
 
     /**
-     * Parses arguments in the context of the add Slot command.
+     * Parses arguments in the context of the add command.
      *
      * @param args full command args string
      * @return the prepared command
      */
     private CommandP prepareAdd(String args) {
-        HashMap<String, Set<String>> arguments = getSomething(args);
-        String name;
+        HashMap<String, Set<String>> arguments = getParametersWithArguments(args);
 
-        try {
-            name = getFirstArgument(args);
-        } catch (ParseException pe) {
-            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
-        }
+        // Name is mandatory
+        String name = getFirstInSet(arguments.get(PARAMETER_NAME));
 
-        if (arguments.isEmpty() || name.isEmpty() || arguments.get("d") == null
-                || arguments.get("st") == null || arguments.get("et") == null) {
+        if (arguments.isEmpty() || name.isEmpty() || arguments.get(PARAMETER_DATE_OR_DAY) == null
+                || arguments.get(PARAMETER_START_TIME) == null || arguments.get(PARAMETER_END_TIME) == null) {
             return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
         }
 
         // Either date or day must be present
-        String dateOrDay = getFirstInSet(arguments.get("d"));
-        int day = Utils.getDay(dateOrDay);
+        String dateOrDay = getFirstInSet(arguments.get(PARAMETER_DATE_OR_DAY));
+        int day = Utils.parseDay(dateOrDay);
         LocalDate date = null;
         if (day == 0) {
             date = Utils.parseDate(dateOrDay);
@@ -148,92 +136,64 @@ public class ParserP {
         }
 
         // Start time is mandatory
-        String stringStartTime = getFirstInSet(arguments.get("et"));
+        String stringStartTime = getFirstInSet(arguments.get(PARAMETER_START_TIME));
         LocalTime startTime = Utils.parseTime(stringStartTime);
         if (startTime == null) {
             return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
         }
 
         // determine if "end time" is a duration or time
-        String stringEndTime = getFirstInSet(arguments.get("st"));
-        int duration;
-        try {
-            duration = Integer.parseInt(stringEndTime);
-        } catch (NumberFormatException nfe) {
-            duration = -1;
-        }
+        String stringEndTime = getFirstInSet(arguments.get(PARAMETER_END_TIME));
+        int duration = Utils.parseInteger(stringEndTime);
 
-        LocalTime endTime = null;
         if (duration == -1) {
-            endTime = Utils.parseTime(stringEndTime);
-        }
-
-        if (duration == -1 && endTime == null) {
-            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
+            LocalTime endTime = Utils.parseTime(stringEndTime);
+            if (endTime == null) {
+                return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
+            }
+            duration = Utils.getDuration(startTime, endTime);
         }
 
         // Description is not mandatory and can be null
-        String description = getFirstInSet(arguments.get("des"));
+        String description = getFirstInSet(arguments.get(PARAMETER_DESCRIPTION));
 
         // Location is not mandatory and can be null
-        String location = getFirstInSet(arguments.get("l"));
+        String location = getFirstInSet(arguments.get(PARAMETER_LOCATION));
 
-        // Tags is not mandatory and can be null
-        Set<String> tags = arguments.get("t");
+        // Tags is not mandatory
+        Set<String> tags = arguments.get(PARAMETER_TAG);
+        for (String tag : tags) {
+            if (tag.length() == 0) {
+                return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
+            }
+        }
 
-        // Recurrences is not mandatory and can be null
-        Set<String> recurrences = arguments.get("r");
+        // Recurrences is not mandatory
+        Set<String> recurrences = arguments.get(PARAMETER_RECURRENCE);
 
         try {
-            if (duration != -1) {
-                // parse duration string into int
-                if (day != -1) {
-                    return new AddCommandP(
-                            day,
-                            name,
-                            location,
-                            description,
-                            startTime,
-                            duration,
-                            tags,
-                            recurrences
-                    );
-                } else {
-                    return new AddCommandP(
-                            date,
-                            name,
-                            location,
-                            description,
-                            startTime,
-                            duration,
-                            tags,
-                            recurrences
-                    );
-                }
+            if (day != -1) {
+                return new AddCommandP(
+                        day,
+                        name,
+                        location,
+                        description,
+                        startTime,
+                        duration,
+                        tags,
+                        recurrences
+                );
             } else {
-                if (day != -1) {
-                    return new AddCommandP(
-                            day,
-                            name,
-                            location,
-                            description,
-                            startTime,
-                            endTime,
-                            tags,
-                            recurrences
-                    );
-                } else {
-                    return new AddCommandP(
-                            date,
-                            name,
-                            location,
-                            description,
-                            startTime,
-                            endTime,
-                            tags,
-                            recurrences
-                    );
-                }
+                return new AddCommandP(
+                        date,
+                        name,
+                        location,
+                        description,
+                        startTime,
+                        duration,
+                        tags,
+                        recurrences
+                );
             }
         } catch (IllegalValueException ive) {
             return new IncorrectCommandP(ive.getMessage());
@@ -241,130 +201,98 @@ public class ParserP {
     }
 
     /**
-     * Parses arguments in the context of the add Slot command.
+     * Parses arguments in the context of the edit command.
      *
      * @param args full command args string
      * @return the prepared command
      */
     private CommandP prepareEdit(String args) {
-        HashMap<String, Set<String>> arguments = getSomething(args);
-        String name;
+        HashMap<String, Set<String>> arguments = getParametersWithArguments(args);
+        String stringIndex = getStartingArgument(args);
+        int index = Utils.parseInteger(stringIndex);
+        Set<String> tags = arguments.get(PARAMETER_TAG);
 
-        try {
-            name = getFirstArgument(args);
-        } catch (ParseException pe) {
-            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
+        if ((index == -1 && tags == null) || (index != -1 && tags != null)) {
+            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommandP.MESSAGE_USAGE));
         }
 
-        if (arguments.isEmpty() || name.isEmpty() || arguments.get("d") == null
-                || arguments.get("st") == null || arguments.get("et") == null) {
-            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
-        }
-
-        // Either date or day must be present
-        String dateOrDay = getFirstInSet(arguments.get("d"));
-        int day = Utils.getDay(dateOrDay);
-        LocalDate date = null;
-        if (day == 0) {
-            date = Utils.parseDate(dateOrDay);
-        }
-        if (day == 0 && date == null) {
-            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
-        }
-
-        // Start time is mandatory
-        String stringStartTime = getFirstInSet(arguments.get("et"));
-        LocalTime startTime = Utils.parseTime(stringStartTime);
-        if (startTime == null) {
-            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
+        String nst = getFirstInSet(arguments.get(PARAMETER_NEW_START_TIME));
+        LocalTime startTime = null;
+        if (nst != null) {
+            startTime = Utils.parseTime(nst);
+            if (startTime == null) {
+                return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommandP.MESSAGE_USAGE));
+            }
         }
 
         // determine if "end time" is a duration or time
-        String stringEndTime = getFirstInSet(arguments.get("st"));
-        int duration;
-        try {
-            duration = Integer.parseInt(stringEndTime);
-        } catch (NumberFormatException nfe) {
-            duration = -1;
-        }
-
-        LocalTime endTime = null;
-        if (duration == -1) {
-            endTime = Utils.parseTime(stringEndTime);
-        }
-
-        if (duration == -1 && endTime == null) {
-            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommandP.MESSAGE_USAGE));
-        }
-
-        // Description is not mandatory and can be null
-        String description = getFirstInSet(arguments.get("des"));
-
-        // Location is not mandatory and can be null
-        String location = getFirstInSet(arguments.get("l"));
-
-        // Tags is not mandatory and can be null
-        Set<String> tags = arguments.get("t");
-
-        // Recurrences is not mandatory and can be null
-        Set<String> recurrences = arguments.get("r");
-
-        try {
-            if (duration != -1) {
-                // parse duration string into int
-                if (day != -1) {
-                    return new AddCommandP(
-                            day,
-                            name,
-                            location,
-                            description,
-                            startTime,
-                            duration,
-                            tags,
-                            recurrences
-                    );
+        String net = getFirstInSet(arguments.get(PARAMETER_NEW_END_TIME));
+        int duration = -1;
+        if (net != null) {
+            duration = Utils.parseInteger(net);
+            if (duration == -1) {
+                LocalTime endTime = Utils.parseTime(net);
+                if (endTime == null) {
+                    return new IncorrectCommandP(String.format(
+                            MESSAGE_INVALID_COMMAND_FORMAT, EditCommandP.MESSAGE_USAGE));
                 } else {
-                    return new AddCommandP(
-                            date,
-                            name,
-                            location,
-                            description,
-                            startTime,
-                            duration,
-                            tags,
-                            recurrences
-                    );
-                }
-            } else {
-                if (day != -1) {
-                    return new AddCommandP(
-                            day,
-                            name,
-                            location,
-                            description,
-                            startTime,
-                            endTime,
-                            tags,
-                            recurrences
-                    );
-                } else {
-                    return new AddCommandP(
-                            date,
-                            name,
-                            location,
-                            description,
-                            startTime,
-                            endTime,
-                            tags,
-                            recurrences
-                    );
+                    duration = Utils.getDuration(startTime, endTime);
                 }
             }
-        } catch (IllegalValueException ive) {
-            return new IncorrectCommandP(ive.getMessage());
+        }
+
+        String name = getFirstInSet(arguments.get(PARAMETER_NEW_NAME));
+        String location = getFirstInSet(arguments.get(PARAMETER_NEW_LOCATION));
+        String description = getFirstInSet(arguments.get(PARAMETER_NEW_DESCRIPTION));
+        Set<String> newTags = arguments.get(PARAMETER_NEW_TAG);
+
+        if (index == -1) {
+            try {
+                return new EditCommandP(name, startTime, duration, location, description, tags, newTags);
+            } catch (IllegalValueException ive) {
+                return new IncorrectCommandP(ive.getMessage());
+            }
+        } else {
+            String nd = getFirstInSet(arguments.get(PARAMETER_NEW_DATE));
+            LocalDate date = Utils.parseDate(nd);
+            if (date == null) {
+                return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommandP.MESSAGE_USAGE));
+            }
+
+            try {
+                return new EditCommandP(index, name, date, startTime, duration, location, description, newTags);
+            } catch (IllegalValueException ive) {
+                return new IncorrectCommandP(ive.getMessage());
+            }
         }
     }
 
+    /**
+     * Parses arguments in the context of the delete command.
+     *
+     * @param args full command args string
+     * @return the prepared command
+     */
+    private CommandP prepareDelete(String args) {
+        HashMap<String, Set<String>> arguments = getParametersWithArguments(args);
+        String stringIndex = getStartingArgument(args);
+        int index = Utils.parseInteger(stringIndex);
+        Set<String> tags = arguments.get(PARAMETER_TAG);
+
+        if ((index == -1 && tags == null) || (index != -1 && tags != null)) {
+            return new IncorrectCommandP(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommandP.MESSAGE_USAGE));
+        }
+
+        if (index == -1) {
+            try {
+                return new DeleteCommandP(tags);
+            } catch (IllegalValueException ive) {
+                return new IncorrectCommandP(ive.getMessage());
+            }
+        } else {
+            return new DeleteCommandP(index);
+        }
+    }
 
     /**
      * Parses arguments in the context of the add Slot command.
@@ -373,7 +301,7 @@ public class ParserP {
      * @return the prepared command
      */
     private CommandP prepareList(String args) {
-        HashMap<String, Set<String>> arguments = getSomething(args);
+        HashMap<String, Set<String>> arguments = getParametersWithArguments(args);
 
 
         // Validate arg string format
@@ -390,22 +318,6 @@ public class ParserP {
         //        }
     }
 
-
-    /**
-     * Parses arguments in the context of the delete person command.
-     *
-     * @param args full command args string
-     * @return the prepared command
-     */
-    private Command prepareDelete(String args) {
-        try {
-            final int targetIndex = parseArgsAsDisplayedIndex(args);
-            return new DeleteCommand(targetIndex);
-        } catch (ParseException | NumberFormatException e) {
-            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
-        }
-    }
-
     /**
      * Parses arguments in the context of the view command.
      *
@@ -420,23 +332,6 @@ public class ParserP {
         } catch (ParseException | NumberFormatException e) {
             return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     ViewCommand.MESSAGE_USAGE));
-        }
-    }
-
-    /**
-     * Parses arguments in the context of the view all command.
-     *
-     * @param args full command args string
-     * @return the prepared command
-     */
-    private Command prepareViewAll(String args) {
-
-        try {
-            final int targetIndex = parseArgsAsDisplayedIndex(args);
-            return new ViewAllCommand(targetIndex);
-        } catch (ParseException | NumberFormatException e) {
-            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    ViewAllCommand.MESSAGE_USAGE));
         }
     }
 
@@ -478,31 +373,33 @@ public class ParserP {
     /**
      * Parses arguments in the context of the add slots command.
      *
-     * @return the prepared command
+     * @return hashmap of parameter command with set of parameters.
      */
-    private static HashMap<String, Set<String>> getSomething(String args) {
+    private static HashMap<String, Set<String>> getParametersWithArguments(String args) {
         String parameters = args.trim();
         String parameter;
         String option;
-        int t;
+        int buf;
         HashMap<String, Set<String>> result = new HashMap<>();
         while (true) {
-            t = parameters.indexOf('/');
-            if (t == -1) {
+            buf = parameters.indexOf('/');
+            if (buf == -1) {
                 break;
             }
 
-            option = parameters.substring(0, t).trim();
+            option = parameters.substring(0, buf).trim();
             if (option.contains(" ")) {
                 parameters = parameters.substring(option.lastIndexOf(" "));
                 continue;
             }
 
-            parameters = parameters.substring(t + 1).trim();
+            parameters = parameters.substring(buf + 1);
 
             if (parameters.indexOf('/') != -1) {
                 parameter = parameters.substring(0, parameters.indexOf('/'));
-                parameter = parameter.substring(0, parameter.lastIndexOf(" "));
+                if (parameter.indexOf(' ') != -1) {
+                    parameter = parameter.substring(0, parameter.lastIndexOf(" "));
+                }
             } else {
                 parameter = parameters;
             }
@@ -525,16 +422,14 @@ public class ParserP {
     }
 
     /**
-     * Parses arguments in the context of the find person command.
-     *
-     * @return the a string that is trimmed
+     * Get the first argument.
      */
-    private String getFirstArgument(String args) throws ParseException {
+    private String getStartingArgument(String args) {
         String result = args;
 
         // test if firstArgument is present
-        if (result.trim().length() == 0 || result.substring(result.indexOf('/')).indexOf(' ') == -1) {
-            throw new ParseException("");
+        if (result.trim().length() == 0) {
+            return null;
         } else if (result.indexOf('/') != -1) {
             result = result.substring(0, result.indexOf('/'));
             return result.substring(0, result.lastIndexOf(" ")).trim();
@@ -543,6 +438,9 @@ public class ParserP {
         }
     }
 
+    /**
+     * Get the first string in a set.
+     */
     private String getFirstInSet(Set<String> set) {
         if (set == null || set.size() == 0) {
             return null;

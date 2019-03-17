@@ -2,14 +2,19 @@ package planmysem.common;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import planmysem.data.exception.IllegalValueException;
+import planmysem.data.tag.TagP;
 
 /**
  * Utility methods
@@ -17,14 +22,14 @@ import java.util.regex.Pattern;
 public class Utils {
     public static final Pattern DATE_FORMAT =
             Pattern.compile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)");
-
     public static final Pattern DATE_FORMAT_NO_YEAR =
             Pattern.compile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])");
-
     public static final Pattern TWELVE_HOUR_FORMAT =
             Pattern.compile("(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)(am|pm)");
     public static final Pattern TWENTY_FOUR_HOUR_FORMAT =
             Pattern.compile("([01]?[0-9]|2[0-3]):[0-5][0-9]");
+    public static final Pattern INTEGER_FORMAT =
+            Pattern.compile("\\d+");
 
     /**
      * Checks whether any of the given items are null.
@@ -56,7 +61,7 @@ public class Utils {
      * Check if String represents an actual date or day.
      * Returns 0 if string does not represent a DayOfWeek, else returns int corresponding to the day.
      */
-    public static int getDay(String unknown) {
+    public static int parseDay(String unknown) {
         if (unknown.trim().isEmpty()) {
             return 0;
         }
@@ -80,6 +85,7 @@ public class Utils {
         case "3":
             result = 3;
             break;
+
         case "thursday":
         case "thurs":
         case "4":
@@ -94,6 +100,7 @@ public class Utils {
 
         default:
             result = 0;
+            break;
         }
 
         return result;
@@ -126,20 +133,53 @@ public class Utils {
     }
 
     /**
-     * Get the time difference between two LocalTimes
+     * Parse string into integer.
      */
-    public static int getDuration(LocalTime startTime, LocalTime endTime) {
-        return (int) MINUTES.between(endTime, startTime);
+    public static int parseInteger(String value) {
+        if (INTEGER_FORMAT.matcher(value).matches()) {
+            try {
+                return Integer.parseInt(value);
+            } catch (NumberFormatException nfe) {
+                return -1;
+            }
+        } else {
+            return -1;
+        }
     }
 
     /**
-     * Get number of matches
+     * Convert set of strings into set of tags.
+     *
+     * @throws IllegalValueException if any of the raw values are invalid
      */
-    //    public static int countMatches(Matcher matcher) {
-    //        int counter = 0;
-    //        while (matcher.find()) {
-    //            counter++;
-    //        }
-    //        return counter;
-    //    }
+    public static Set<TagP> parseTags(Set<String> tags) throws IllegalValueException {
+        Set<TagP> tagSet = new HashSet<>();
+        for (String tag : tags) {
+            tagSet.add(new TagP(tag));
+        }
+        return tagSet;
+    }
+
+
+    /**
+     * Get the time difference between two LocalTimes
+     */
+    public static int getDuration(LocalTime startTime, LocalTime endTime) {
+        return (int) MINUTES.between(startTime, endTime);
+    }
+
+    /**
+     * Get the end time of a time after a duration
+     */
+    public static LocalTime getEndTime(LocalTime time, int duration) {
+        return time.plusMinutes(duration);
+    }
+
+    /**
+     * Get the nearest date to a type of day from today
+     */
+    public static LocalDate getNearestDayOfWeek(LocalDate date, int day) {
+        return date.with(TemporalAdjusters.next(DayOfWeek.of(day)));
+    }
+
 }
