@@ -13,20 +13,23 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import planmysem.data.exception.IllegalValueException;
+import planmysem.data.tag.TagP;
+
 /**
  * Utility methods
  */
 public class Utils {
     public static final Pattern DATE_FORMAT =
             Pattern.compile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)");
-
     public static final Pattern DATE_FORMAT_NO_YEAR =
             Pattern.compile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])");
-
     public static final Pattern TWELVE_HOUR_FORMAT =
             Pattern.compile("(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)(am|pm)");
     public static final Pattern TWENTY_FOUR_HOUR_FORMAT =
             Pattern.compile("([01]?[0-9]|2[0-3]):[0-5][0-9]");
+    public static final Pattern INTEGER_FORMAT =
+            Pattern.compile("\\d+");
 
     /**
      * Checks whether any of the given items are null.
@@ -82,6 +85,7 @@ public class Utils {
         case "3":
             result = 3;
             break;
+
         case "thursday":
         case "thurs":
         case "4":
@@ -96,6 +100,7 @@ public class Utils {
 
         default:
             result = 0;
+            break;
         }
 
         return result;
@@ -128,10 +133,46 @@ public class Utils {
     }
 
     /**
+     * Parse string into integer.
+     */
+    public static int parseInteger(String value) {
+        if (INTEGER_FORMAT.matcher(value).matches()) {
+            try {
+                return Integer.parseInt(value);
+            } catch (NumberFormatException nfe) {
+                return -1;
+            }
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * Convert set of strings into set of tags.
+     *
+     * @throws IllegalValueException if any of the raw values are invalid
+     */
+    public static Set<TagP> parseTags(Set<String> tags) throws IllegalValueException {
+        Set<TagP> tagSet = new HashSet<>();
+        for (String tag : tags) {
+            tagSet.add(new TagP(tag));
+        }
+        return tagSet;
+    }
+
+
+    /**
      * Get the time difference between two LocalTimes
      */
     public static int getDuration(LocalTime startTime, LocalTime endTime) {
-        return (int) MINUTES.between(endTime, startTime);
+        return (int) MINUTES.between(startTime, endTime);
+    }
+
+    /**
+     * Get the end time of a time after a duration
+     */
+    public static LocalTime getEndTime(LocalTime time, int duration) {
+        return time.plusMinutes(duration);
     }
 
     /**

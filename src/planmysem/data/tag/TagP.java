@@ -19,11 +19,11 @@ public class TagP {
      * @throws IllegalValueException if the given tag name string is invalid.
      */
     public TagP(String name) throws IllegalValueException {
-        name = name.trim();
-        if (!isValidTagName(name)) {
+        String value = name.trim();
+        if (!isValidTagName(value)) {
             throw new IllegalValueException(MESSAGE_CONSTRAINTS);
         }
-        this.value = name;
+        this.value = value;
     }
 
     /**

@@ -35,6 +35,8 @@ public class AdaptedSemester {
     private Set<String> readingDays = new HashSet<>();
     @XmlElement(required = true)
     private Set<String> normalDays = new HashSet<>();
+    @XmlElement(required = true)
+    private Set<String> examDays = new HashSet<>();
 
     /**
      * No-arg constructor for JAXB use.
@@ -68,6 +70,10 @@ public class AdaptedSemester {
 
         for (LocalDate date : source.getNormalDays()) {
             normalDays.add(date.toString());
+        }
+
+        for (LocalDate date : source.getExamDays()) {
+            examDays.add(date.toString());
         }
     }
 
@@ -124,8 +130,13 @@ public class AdaptedSemester {
             normalDays.add(LocalDate.parse(date));
         }
 
+        final Set<LocalDate> examDays = new HashSet<>();
+        for (String date : this.examDays) {
+            examDays.add(LocalDate.parse(date));
+        }
+
         return new Semester(name, academicYear, days,
                 LocalDate.parse(startDate), LocalDate.parse(endDate), noOfWeeks,
-                recessDays, readingDays, normalDays);
+                recessDays, readingDays, normalDays, examDays);
     }
 }

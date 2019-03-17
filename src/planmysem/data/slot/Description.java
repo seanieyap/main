@@ -7,7 +7,6 @@ import planmysem.data.exception.IllegalValueException;
  * Guarantees: immutable; is valid as declared in {@link #isValid(String)}
  */
 public class Description {
-    private static final String EXAMPLE = "Meeting with John Doe regarding CS2113T project.";
     private static final String MESSAGE_CONSTRAINTS =
             "Slot's description should be spaces or alphanumeric characters";
     private static final String VALIDATION_REGEX = ".+";
@@ -30,7 +29,7 @@ public class Description {
      * Returns true if a given string is a valid Slot description.
      */
     public static boolean isValid(String value) {
-        return value.matches(VALIDATION_REGEX);
+        return "".equals(value) || value.matches(VALIDATION_REGEX);
     }
 
     @Override
