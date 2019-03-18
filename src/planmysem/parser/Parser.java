@@ -29,7 +29,7 @@ import planmysem.data.exception.IllegalValueException;
 /**
  * Parses user input.
  */
-public class    Parser {
+public class Parser {
 
     public static final Pattern PERSON_INDEX_ARGS_FORMAT = Pattern.compile("(?<targetIndex>.+)");
 
