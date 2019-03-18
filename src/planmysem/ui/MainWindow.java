@@ -39,7 +39,7 @@ public class MainWindow {
      * TODO: Add Javadoc comment.
      */
     @FXML
-    void onCommand(ActionEvent event) {
+    private void onCommand(ActionEvent event) {
         try {
             String userCommandText = commandInput.getText();
             CommandResult result = logic.execute(userCommandText);
@@ -51,7 +51,7 @@ public class MainWindow {
             clearCommandInput();
         } catch (Exception e) {
             display(e.getMessage());
-            throw new RuntimeException(e);
+            // throw new RuntimeException(e);
         }
     }
 

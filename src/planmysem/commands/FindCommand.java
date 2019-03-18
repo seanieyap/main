@@ -44,12 +44,11 @@ public class FindCommand extends Command {
         for (Map.Entry<LocalDate, Day> entry : planner.getSemester().getDays().entrySet()) {
             for (Slot slots : entry.getValue().getSlots()) {
                 for (String keyword : keywords) {
-                    if (Pattern.matches(".*" + keyword + ".*", slots.getName().value)) {
-                        if (!matchedSlots.contains(slots)) {
-                            matchedSlots.add(slots);
-                            date = entry.getKey();
-                            relevantSlots.add(new Pair<>(date, slots));
-                        }
+                    if (Pattern.matches(".*" + keyword + ".*", slots.getName().value)
+                        && !matchedSlots.contains(slots)) {
+                        matchedSlots.add(slots);
+                        date = entry.getKey();
+                        relevantSlots.add(new Pair<>(date, slots));
                     }
                 }
             }

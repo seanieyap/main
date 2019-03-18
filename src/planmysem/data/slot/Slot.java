@@ -79,7 +79,7 @@ public class Slot implements ReadOnlySlot {
         if (value == null) {
             return;
         }
-        if (value.equals("")) {
+        if ("".equals(value)) {
             location = new Location(null);
         } else {
             location = new Location(value);
