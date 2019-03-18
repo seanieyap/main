@@ -56,7 +56,7 @@ This will generate all resources required by the application and tests.
 
 === Verifying the setup
 
-. Run the `seedu.address.MainApp` and try a few commands
+. Run the `planmysem.Main` and try a few commands
 . <<Testing,Run the tests>> to ensure they all pass.
 
 === Configurations to do before writing code
@@ -76,9 +76,9 @@ Optionally, you can follow the <<UsingCheckstyle#, UsingCheckstyle.adoc>> docume
 
 ==== Updating documentation to match your fork
 
-After forking the repo, the documentation will still have the SE-EDU branding and refer to the `se-edu/addressbook-level4` repo.
+After forking the repo, the documentation will still have the SE-EDU branding and refer to the `https://github.com/CS2113-AY1819S2-T08-3/main` repo.
 
-If you plan to develop this fork as a separate product (i.e. instead of contributing to `se-edu/addressbook-level4`), you should do the following:
+If you plan to develop this fork as a separate product (i.e. instead of contributing to `https://github.com/CS2113-AY1819S2-T08-3/main`), you should do the following:
 
 . Configure the <<Docs-SiteWideDocSettings, site-wide documentation settings>> in link:{repoURL}/build.gradle[`build.gradle`], such as the `site-name`, to suit your own project.
 
@@ -118,7 +118,7 @@ The *_Architecture Diagram_* given above explains the high-level design of the A
 [TIP]
 The `.pptx` files used to create diagrams in this document can be found in the link:{repoURL}/docs/diagrams/[diagrams] folder. To update a diagram, modify the diagram in the pptx file, select the objects of the diagram, and choose `Save as picture`.
 
-`Main` has only one class called link:{repoURL}/src/main/java/seedu/address/MainApp.java[`MainApp`]. It is responsible for,
+`Main` has only one class called link:{repoURL}/src/planmysem/Main.java[`Main`]. It is responsible for,
 
 * At app launch: Initializes the components in the correct sequence, and connects them up with each other.
 * At shut down: Shuts down the components and invokes cleanup method where necessary.
@@ -193,59 +193,157 @@ Given below is the Sequence Diagram for interactions within the `Logic` componen
 .Interactions Inside the Logic Component for the `delete 1` Command
 image::DeletePersonSdForLogic.png[width="800"]
 
-[[Design-Model]]
-=== Model component
+[[Design-Planner]]
+=== Planner component
 
 .Structure of the Model Component
 image::ModelClassDiagram.png[width="800"]
 
-*API* : link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model.java`]
+*API* : link:{repoURL}/src/planmysem/data/Planner.java[`Planner.java`]
 
-The `Model`,
+The `Planner` component,
 
-* stores a `UserPref` object that represents the user's preferences.
-* stores the Address Book data.
-* exposes an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
-* does not depend on any of the other three components.
+* stores a `Planner` object that represents the entire Planner.
+* stores the data of the entire application.
+* stores the data of the current semester in an unmodifiable `Semester`.
+
+[[Design-Semester]]
+
+=== Semester component
+
+*API* : link:{repoURL}/src/planmysem/data/semester/Semester.java[`Semester.java`]
+
+The `Semester` component,
+
+* stores a `Semester` object that represents the an academic semester.
+* stores the data of the entire semester in an unmodifiable `HashMap<LocalDate, Day>`.
+* Semesters essentially hold "days" in which holds slots.
+
+[[Design-Slot]]
+
+=== Slot component
+
+*API* : link:{repoURL}/src/planmysem/data/slot/Slot.java[`Slot.java`]
+
+The `Slot` component,
+
+* stores a `Slot` object that represents a time-slot similar to traditional/conventional calendar/scheduling applications.
+** such as outlook or google calendar.
+* stores the data of the slot details as well as start time and duration.
 
 [NOTE]
-As a more OOP model, we can store a `Tag` list in `Address Book`, which `Person` can reference. This would allow `Address Book` to only require one `Tag` object per unique `Tag`, instead of each `Person` needing their own `Tag` object. An example of how such a model may look like is given below. +
- +
-image:ModelClassBetterOopDiagram.png[width="800"]
+Notice how `Slot` does not hold it's end time but rather it holds the `duration`. This is simply our design choice as it is meaningless to save both variables.
 
 [[Design-Storage]]
+
 === Storage component
 
 .Structure of the Storage Component
 image::StorageClassDiagram.png[width="800"]
 
-*API* : link:{repoURL}/src/main/java/seedu/address/storage/Storage.java[`Storage.java`]
+*API* : link:{repoURL}/src/planmysem/storage/Storage.java[`Storage.java`]
 
 The `Storage` component,
 
 * can save `UserPref` objects in json format and read it back.
 * can save the Address Book data in json format and read it back.
 
-[[Design-Planner]]
-=== Planner component
+[[Design-Common]]
 
-*API* : link:{repoURL}/src/planmysem/data/Planner.java[`Planner.java`]
-
-The `Planner` component,
-
-* can initialise and hold a `Semester` object.
-
-[[Design-Commons]]
 === Common classes
 
-Classes used by multiple components are in the `seedu.addressbook.commons` package.
+Classes used by multiple components are in the `planmysem.commons` package.
 
 == Implementation
 
 This section describes some noteworthy details on how certain features are implemented.
 
+=== Initializing of the Planner and it's Semesters
+
+==== Future Implementation
+
+=== Reinventing the Parser / Command Format and Structure
+
+Due to the flexibility and huge variation of the envisioned command format and structures, it was decided that it was more appropriate to create a new Parser
+instead of relying on the existing regex implementation in AB3 for heavy parsing.
+
+The AB3 parser was heavily modified to serve unordered command parameters as well as to allow more flexibility such that mistakes in commands will still be
+interpreted as valid as long as the "minimal" set of parameters are present. Regex is currently only used to retrieve the command keywords and arguments.
+Arguments are then parsed via 2 different methods/techniques according to the format and structure of the command keyword.
+
+==== Design Considerations
+
+* User's time, efficiency and productivity is of focus, such as in a planner/calendar/scheduling application.
+* Users are error prone when typing long commands.
+* Users may repeat parameters due to forgetting what was previously typed.
+* Users get frustrated when forced to retype commands or look for errors that they have made.
+
+==== Current Implementation
+
+* Ordering of parameters are ignored when possible.
+* Repeated parameters are ignored. The first parameter of the same "type" are taken as valid, the rest are discarded.
+* Alternate formats of commands are implemented to give freedom of choice and cater to different types of users such as different personalities and comfort levels.
+* Shortened versions of command keywords are implemented to give ways for users to shortened commands and be more efficient.
+
+Hence, parameters in PlanMySem can be categorised into 2 categories:
+
+1. Prepended parameters such as `n/NAME`, `st/START_TIME`, `des/DESCRIPTION`, etc.
+2. Non-prepended parameters, A.K.A. keywords, such as `INDEX`, `TYPE_OF_VIEW`. etc.
+
+===== Parsing Prepended Parameters
+
+To retrieve the set of parameters, the function `private static HashMap<String, Set<String>> getParametersWithArguments(String args)` can be called.
+The function returns a `Hashmap` data structure, specifically `HashMap<String, Set<String>>`, to hold parameters, allowing for easy, quick and efficient access to specific parameters.
+
+However, this means that exceptions have to be manually taken care of, at the stage of parsing, this exception would particularly be `IncorrectCommand`.
+
+The following are cases in which `IncorrectCommand` is invoked:
+
+* When the returned set is `null`, then the parameter was not keyed in at all.
+* When the returned set is not `null` but contains empty `strings` such that `string.isEmpty()`, then the paramter was keyed in but was left empty on purpose.
+
+===== Parsing Keywords
+
+Here, keywords are thought of as parameters that are not prepended.
+In PlanMySem, keywords are utilized in command structures when they are to be used alone or when order of parameters are important.
+In such cases, there is no logical need for prepending as the meaning of these parameters can be identified.
+
+The function `private String getStartingArgument(String args)` provides this functionality.
+Here, `IncorrectCommand` is invoked due to different circumstances:
+
+* When the keyword is null, then the parameter was not keyed in.
+* When the keyword data type does not match the intended, then the parameter was keyed in wrongly or is mis-ordered.
+
+[NOTE]
+Additional keywords are purposefully *not* handled to provide ease of use and cater to user mistakes.
+
+==== Future Implementation
+
+Though the current implementation has much flexibility, there is more that can be done to elevate user experience to the next level.
+These are some possible enhancements:
+
+1. Parse more formats of date and time.
+2. Parse time as a single parameter instead of two.
+3. Enhance function calls to retrieve prepended parameters and keywords to handle trivial cases that should invoke `IncorrectCommand`.
+
+=== Semester, Planner, Days and Slots
+
+==== Design Considerations
+
+==== Current Implementation
+
+===== Semester
+
+===== Planner
+
+===== Days
+
+===== Slots
+
+==== Future Implementation
+
 === Month/Week/Day View feature
-==== Planned Implementation
+==== Future Implementation
 
 The month/week/day view mechanism is facilitated by `PlannerView`.
 It extends `Planner` with different calendar views, stored internally as `monthView`, `weekView` and `dayView`.
@@ -263,7 +361,6 @@ Step 2. The user executes `add n/CS2113T Tutorial ...` to add a new slot to the 
 
 Step 3. The user executes `view month March` command to view the calendar for March. The `view` command calls `PlannerView.displayMonthView()`, which loads the data the updated `Semester` from the `Planner` into `monthView`.
 
-
 ==== Design Considerations
 
 ===== Aspect: How a type of view is initialised or updated
@@ -272,7 +369,7 @@ Step 3. The user executes `view month March` command to view the calendar for Ma
 ** Pros: Easy to implement. Less operations performed by the program.
 * **Alternative 2:** Updated upon any `add`/`edit`/`delete` slot command.
 ** Pros: `PlannerView` is always updated.
-** Cons: Large amount of extra operations.
+** Cons: Large amount of additional operations.
 
 
 // tag::undoredo[]
@@ -581,7 +678,7 @@ When a pull request has changes to asciidoc files, you can use https://www.netli
 
 Here are the steps to create a new release.
 
-.  Update the version number in link:{repoURL}/src/main/java/seedu/address/MainApp.java[`MainApp.java`].
+.  Update the version number in link:{repoURL}/src/planmysem/Main.java[`Main.java`].
 .  Generate a JAR file <<UsingGradle#creating-the-jar-file, using Gradle>>.
 .  Tag the repo with the version number. e.g. `v0.1`
 .  https://help.github.com/articles/creating-releases/[Create a new release using GitHub] and upload the JAR file you created.
