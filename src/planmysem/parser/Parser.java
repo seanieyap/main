@@ -1,6 +1,9 @@
 package planmysem.parser;
 
 import static planmysem.common.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static planmysem.common.Messages.MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL;
+import static planmysem.common.Messages.MESSAGE_INVALID_DATE;
+import static planmysem.common.Messages.MESSAGE_INVALID_TIME;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -32,8 +35,6 @@ import planmysem.data.exception.IllegalValueException;
  */
 public class Parser {
 
-    public static final Pattern PERSON_INDEX_ARGS_FORMAT = Pattern.compile("(?<targetIndex>.+)");
-
     public static final Pattern KEYWORDS_ARGS_FORMAT =
             Pattern.compile("(?<keywords>\\S+(?:\\s+\\S+)*)"); // one or more keywords separated by whitespace
 
@@ -52,7 +53,6 @@ public class Parser {
     private static final String PARAMETER_NEW_LOCATION = "nl";
     private static final String PARAMETER_NEW_DESCRIPTION = "ndes";
     private static final String PARAMETER_NEW_TAG = "nt";
-
 
     /**
      * Used for initial separation of command word and args.
@@ -138,20 +138,22 @@ public class Parser {
 
         // Either date or day must be present
         String dateOrDay = getFirstInSet(arguments.get(PARAMETER_DATE_OR_DAY));
-        int day = Utils.parseDay(dateOrDay);
-        LocalDate date = null;
-        if (day == 0) {
-            date = Utils.parseDate(dateOrDay);
+        int day = -1;
+        LocalDate date = Utils.parseDate(dateOrDay);
+        if (date == null) {
+            day = Utils.parseDay(dateOrDay);
         }
-        if (day == 0 && date == null) {
-            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+        if (day == -1 && date == null) {
+            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL,
+                    AddCommand.MESSAGE_USAGE, MESSAGE_INVALID_DATE));
         }
 
         // Start time is mandatory
         String stringStartTime = getFirstInSet(arguments.get(PARAMETER_START_TIME));
         LocalTime startTime = Utils.parseTime(stringStartTime);
         if (startTime == null) {
-            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL,
+                    AddCommand.MESSAGE_USAGE, MESSAGE_INVALID_TIME));
         }
 
         // determine if "end time" is a duration or time
@@ -161,7 +163,8 @@ public class Parser {
         if (duration == -1) {
             LocalTime endTime = Utils.parseTime(stringEndTime);
             if (endTime == null) {
-                return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL,
+                        AddCommand.MESSAGE_USAGE, MESSAGE_INVALID_TIME));
             }
             duration = Utils.getDuration(startTime, endTime);
         }
@@ -181,6 +184,8 @@ public class Parser {
                             AddCommand.MESSAGE_USAGE));
                 }
             }
+        } else {
+            tags = new HashSet<>();
         }
 
         // Recurrences is not mandatory
