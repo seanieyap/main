@@ -343,7 +343,7 @@ These are some possible enhancements:
 ==== Future Implementation
 
 === Month/Week/Day View feature
-==== Future Implementation
+==== [Planned] Implementation
 
 The month/week/day view mechanism is facilitated by `PlannerView`.
 It extends `Planner` with different calendar views, stored internally as `monthView`, `weekView` and `dayView`.
