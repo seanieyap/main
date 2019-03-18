@@ -25,6 +25,7 @@ public class FindCommand extends Command {
     public static final String MESSAGE_SUCCESS = "%1$s Slots listed.\n%2$s";
     public static final String MESSAGE_SUCCESS_NONE = "0 Slots listed.\n";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ":\n" + "Finds all slots whose name "
+
             + "contains the specified keywords (not case-sensitive).\n\t"
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n\t"
             + "Example: " + COMMAND_WORD + "CS";

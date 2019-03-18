@@ -165,9 +165,11 @@ public class Utils {
      * @throws IllegalValueException if any of the raw values are invalid
      */
     public static Set<Tag> parseTags(Set<String> tags) throws IllegalValueException {
+
         if (tags == null) {
             return null;
         }
+
         Set<Tag> tagSet = new HashSet<>();
         for (String tag : tags) {
             tagSet.add(new Tag(tag));

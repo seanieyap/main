@@ -201,6 +201,7 @@ public class UtilsTest {
         }
 
         assertEquals(tags, null);
+
     }
 
     private void assertAreUnique(Object... objects) {
