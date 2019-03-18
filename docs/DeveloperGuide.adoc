@@ -56,7 +56,7 @@ This will generate all resources required by the application and tests.
 
 === Verifying the setup
 
-. Run the `PlanMySem.Main` and try a few commands
+. Run the `planmysem.Main` and try a few commands
 . <<Testing,Run the tests>> to ensure they all pass.
 
 === Configurations to do before writing code
@@ -118,7 +118,7 @@ The *_Architecture Diagram_* given above explains the high-level design of the A
 [TIP]
 The `.pptx` files used to create diagrams in this document can be found in the link:{repoURL}/docs/diagrams/[diagrams] folder. To update a diagram, modify the diagram in the pptx file, select the objects of the diagram, and choose `Save as picture`.
 
-`Main` has only one class called link:{repoURL}/src/PlanMySem/Main.java[`Main`]. It is responsible for,
+`Main` has only one class called link:{repoURL}/src/planmysem/Main.java[`Main`]. It is responsible for,
 
 * At app launch: Initializes the components in the correct sequence, and connects them up with each other.
 * At shut down: Shuts down the components and invokes cleanup method where necessary.
@@ -678,7 +678,7 @@ When a pull request has changes to asciidoc files, you can use https://www.netli
 
 Here are the steps to create a new release.
 
-.  Update the version number in link:{repoURL}/src/PlanMySem/Main.java[`Main.java`].
+.  Update the version number in link:{repoURL}/src/planmysem/Main.java[`Main.java`].
 .  Generate a JAR file <<UsingGradle#creating-the-jar-file, using Gradle>>.
 .  Tag the repo with the version number. e.g. `v0.1`
 .  https://help.github.com/articles/creating-releases/[Create a new release using GitHub] and upload the JAR file you created.
@@ -1003,6 +1003,8 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 |`* * *` |user |view all slots on a certain week |conveniently view my planner for the week
 |`* * *` |user |view all slots on a certain month |conveniently view my planner for the month
 |`* * *` |user |add details to a slot |record information related to the slot
+|`* * *` |user |undo a command |easily revert my changes and restore a previous state
+|`* * *` |user |redo a command |easily revert my `undo` command in case I mistakenly undo too far
 |`* *` |user |view the planner in a graphic calendar format|easily view my schedule for the day/week/month/semester
 |`* *` |user |view a slot |view the details of a specific activity I am looking for
 |`* *` |user |remove tags on a time slot |remove unused/ unnecessary tags from an activity*
@@ -1015,6 +1017,7 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 |`*` |user |export semester timetable (.ics files) |view my timetable on another platform
 |`*` |user |receive notifications of upcoming activities |be reminded of important upcoming activities
 |`*` |user |view recess week and exam week |view specifically the weeks to rest
+|`*` |user |view vacations |plan my schedule on vacation days or special semesters
 |`*` |user |favourite an activity |prioritise important activities
 |`*` |user |view public holidays |be aware of upcoming public holidays
 |`*` |user |compare my timetable with someone else's |find a common time slot for a meeting
