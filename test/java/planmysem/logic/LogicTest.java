@@ -157,10 +157,14 @@ public class LogicTest {
     @Test
     public void execute_edit_invalidArgsFormat() throws Exception {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
-        assertCommandBehavior("edit wrong arguments", expectedMessage);
-        assertCommandBehavior("edit nl/COM2 04-01", expectedMessage);
-        assertCommandBehavior("edit -1", expectedMessage);
-        assertCommandBehavior("e nl/COM2 04-01", expectedMessage);
+        assertCommandBehavior(
+                "edit wrong arguments", expectedMessage);
+        assertCommandBehavior(
+                "edit nl/COM2 04-01", expectedMessage);
+        assertCommandBehavior(
+                "edit -1", expectedMessage);
+        assertCommandBehavior(
+                "e nl/COM2 04-01", expectedMessage);
     }
 
     /**
@@ -170,10 +174,14 @@ public class LogicTest {
     @Test
     public void execute_delete_invalidArgsFormat() throws Exception {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE);
-        assertCommandBehavior("delete wrong args wrong args", expectedMessage);
-        assertCommandBehavior("delete t", expectedMessage);
-        assertCommandBehavior("del wrong", expectedMessage);
-        assertCommandBehavior("d wrong", expectedMessage);
+        assertCommandBehavior(
+                "delete wrong args wrong args", expectedMessage);
+        assertCommandBehavior(
+                "delete t", expectedMessage);
+        assertCommandBehavior(
+                "del wrong", expectedMessage);
+        assertCommandBehavior(
+                "d wrong", expectedMessage);
     }
 
     /**

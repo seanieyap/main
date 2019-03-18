@@ -343,7 +343,7 @@ These are some possible enhancements:
 ==== Future Implementation
 
 === Month/Week/Day View feature
-==== [Planned] Implementation
+==== Future Implementation
 
 The month/week/day view mechanism is facilitated by `PlannerView`.
 It extends `Planner` with different calendar views, stored internally as `monthView`, `weekView` and `dayView`.
@@ -1030,33 +1030,78 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 (For all use cases below, the *System* is `PlanMySem` and the *Actor* is the `user`, unless specified otherwise)
 
 === Use case: Initialize Calendar
+* MSS:
 . User inputs the first day of school as well as which semester, 1 or 2, that the planner is meant for.
 . System generates a new timetable which is aligned with the academic semester. Weeks 1 to 13 as well as the Recess and Reading Weeks are labelled.
+
 +
 Use case ends.
 
-=== Use Case: Add a Module
-. User selects the category “Module” and inputs the details related to the new module.
-. System reflects the addition made to the list of Modules.
+=== Use Case: Add a slot
+* MSS:
+. User inputs add command followed by all the mandatory parameters.
+. System reflects the additions to the planner.
++
+User case ends.
+* Extensions:
+:: 1a. System detects an error in the entered data.
+:::: 1a1. System outputs error message.
 +
 User case ends.
 
-=== Use Case: List and Delete a Module
-. User inputs the command to list all modules he/she is enrolled in.
-. System lists all the modules.
-. User selects the intended module from the list and inputs the delete command along with the module name for deletion.
+:: 1a. System detects insufficient parameters in the entered data.
+:::: 1a1. System outputs error message.
++
+User case ends.
+
+=== Use Case: List slots
+* MSS:
+. User inputs the command to list slots followed by the tag or name of the slot.
+. System displays all slots with the specified name or tag with their indexes.
++
+Use case ends.
+* Extensions:
+:: 1b. Planner is empty.
+:::: 1b1. System outputs error message.
++
+Use case ends.
+:: 1b. Tag or name does not exist in the planner.
+:::: 1b1. System outputs error message.
 +
 Use case ends.
 
-=== Use Case: Edit a Module
-. User inputs command to edit a module along with the module name.
-. System returns module name and it’s color attribute.
-. User renames the module or changes the color attribute.
-. System reflects the renamed module and/or the changed color for the module.
+=== Use Case: Delete a slot
+* MSS:
+. User inputs the delete command followed by the index or tag of the intended slot.
+. System deletes the intended slot from the planner and outputs confirmation message.
++
+Use case ends.
+* Extensions:
+:: 1a. Tag or index does not exist in the planner.
+:::: 1a1. System outputs error message.
++
+Use case ends.
+
+=== Use Case: Edit a slot
+* MSS:
+. User inputs command to edit a slot along with the tag or index, followed by the parameters to be changed.
+. System changes the specified parameters for the slot.
+. System reflects the slots as well as the perimeters changed.
++
+Use case ends.
+* Extensions:
+:: 1a. Tag or index does not exist in the planner.
+:::: 1a1. System outputs error message.
++
+Use case ends.
+
+:: 1b. System detects an error in the entered data.
+:::: 1b1. System outputs error message.
 +
 Use case ends.
 
 === Use Case: Export planner
+* MSS:
 . User inputs command to export the planner.
 . System converts planner to .ics format.
 . System saves .ics file in the main directory as "PlanMySem.ics".
@@ -1065,41 +1110,25 @@ Use case ends.
 Use case ends.
 
 === Use Case: View all Activities in a Day
-. User inputs the command to view all activities along with the date.
-. System displays all the activities for that specified date.
+* MSS:
+. User inputs the command to view all slots along with the time frame.
+. System displays all the slots for that specified time frame.
 +
 Use case ends.
 
-=== Use Case: Add a Category
-. User inputs command to add a new category along with the name of the new category.
-. System reflects the addition made to the list of Categories.
-+
-Use case ends.
-
-=== Use Case: Filter by category
-. User inputs the command to list all categories (so he knows what categories exist).
-. User inputs the command to list all activities.
-. User inputs command to filter all the activities by an existing category.
-. System displays filtered activities.
-+
-Use case ends.
-
-////
-Include this if given feedback that this is necessary.
-*Extensions*
-
-[none]
-* 2a. The list is empty.
-+
-Use case ends.
-
-* 3a. The given index is invalid.
-+
-[none]
-** 3a1. AddressBook shows an error message.
-+
-Use case resumes at step 2.
-////
+//=== Use Case: Add a Category
+//. User inputs command to add a new category along with the name of the new category.
+//. System reflects the addition made to the list of Categories.
+//+
+//Use case ends.
+//
+//=== Use Case: Filter by category
+//. User inputs the command to list all categories (so he knows what categories exist).
+//. User inputs the command to list all activities.
+//. User inputs command to filter all the activities by an existing category.
+//. System displays filtered activities.
+//+
+//Use case ends.
 
 _{More to be added}_
 
