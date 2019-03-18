@@ -31,7 +31,6 @@ public class Main extends Application implements Stoppable {
     public void stop() throws Exception {
         super.stop();
         Platform.exit();
-        Runtime.getRuntime().exit(0);
     }
 }
 

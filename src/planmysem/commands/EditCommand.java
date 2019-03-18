@@ -64,6 +64,9 @@ public class EditCommand extends Command {
         this.name = name;
         this.location = location;
         this.description = description;
+        if (tags != null) {
+            this.tags.addAll(Utils.parseTags(tags));
+        }
         if (newTags != null) {
             this.newTags.addAll(Utils.parseTags(newTags));
         }
