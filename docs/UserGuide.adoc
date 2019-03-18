@@ -72,12 +72,12 @@ Below is the list of parameters for users such as yourself to jump right into gr
     * Day of Week: `Monday`, `mon`, `1`
 `st/`:: *Start Time.*
     Format: +
-    * 24-Hour: `hh:mm`
-    * 12-Hour: `hh:mm+AM|PM`
+    * 24-Hour in the form of “hh:mm”. e.g. `23:00`
+    * 12-Hour in the form of `hh:mm+AM|PM`. e.g. `12:30 AM`
 `et/`:: *End Time / duration.* +
     Format:
     * 24-Hour in the form of “hh:mm”. e.g. `23:00`
-    * 12-Hour format in the form of `hh:mm+AM|PM`. e.g. `12:30am`
+    * 12-Hour in the form of `hh:mm+AM|PM`. e.g. `12:30 AM`
     * Duration of the event in minutes. e.g. `60` represents 60 minutes
 `r/`:: *recurrence.* +
     Format:
