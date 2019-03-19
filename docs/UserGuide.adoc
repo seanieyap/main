@@ -100,6 +100,13 @@ The table of parameters and their descriptions (Table 1) below is useful for you
 * Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
 * Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
 
+*Command Format*
+
+* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
+* Items in square brackets are optional. e.g in `add [l/LOCATION]`, `LOCATION` is a parameter that may be omited.
+* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
+* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
+
 [horizontal]
 *Parameter*:: *Description*
 `n/`:: *Name of a _slot_.*
