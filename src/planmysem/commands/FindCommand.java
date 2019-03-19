@@ -33,7 +33,6 @@ public class FindCommand extends Command {
     public FindCommand(String keyword) {
         this.keyword = keyword;
     }
-
     @Override
     public CommandResult execute() {
         final List<Pair<LocalDate, ? extends ReadOnlySlot>> relevantSlots = new ArrayList<>();
