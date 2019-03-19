@@ -2,11 +2,8 @@ package planmysem.commands;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import javafx.util.Pair;
@@ -23,18 +20,18 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
     public static final String COMMAND_WORD_SHORT = "f";
-    public static final String MESSAGE_SUCCESS = "%1$s Slots listed.\n%2$s";
-    public static final String MESSAGE_SUCCESS_NONE = "0 Slots listed.\n";
+    private static final String MESSAGE_SUCCESS = "%1$s Slots listed.\n%2$s";
+    private static final String MESSAGE_SUCCESS_NONE = "0 Slots listed.\n";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ":\n" + "Finds all slots whose name "
 
             + "contains the specified keywords (not case-sensitive).\n\t"
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n\t"
             + "Example: " + COMMAND_WORD + "CS";
 
-    private final Set<String> keywords;
+    private final String keyword;
 
-    public FindCommand(Set<String> keywords) {
-        this.keywords = keywords;
+    public FindCommand(String keyword) {
+        this.keyword = keyword;
     }
 
     @Override
@@ -45,12 +42,10 @@ public class FindCommand extends Command {
 
         for (Map.Entry<LocalDate, Day> entry : planner.getSemester().getDays().entrySet()) {
             for (Slot slots : entry.getValue().getSlots()) {
-                for (String keyword : keywords) {
-                    if (Pattern.matches(".*" + keyword + ".*", slots.getName().value)) {
-                        matchedSlots.add(slots);
-                        date = entry.getKey();
-                        relevantSlots.add(new Pair<>(date, slots));
-                    }
+                if (Pattern.matches(".*" + keyword + ".*", slots.getName().value)) {
+                    matchedSlots.add(slots);
+                    date = entry.getKey();
+                    relevantSlots.add(new Pair<>(date, slots));
                 }
             }
         }
@@ -68,12 +63,6 @@ public class FindCommand extends Command {
      * Craft success message.
      */
     private String craftSuccessMessage(List<Pair<LocalDate, ? extends ReadOnlySlot>> result) {
-        Collections.sort(result, new Comparator<>() {
-            public int compare(Pair<LocalDate, ? extends ReadOnlySlot> p1, Pair<LocalDate, ? extends ReadOnlySlot> p2) {
-                return p1.getKey().compareTo(p2.getKey());
-            }
-        });
-
         int count = 1;
         StringBuilder sb = new StringBuilder();
 

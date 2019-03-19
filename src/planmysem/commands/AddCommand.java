@@ -90,13 +90,17 @@ public class AddCommand extends Command {
         StringBuilder sb = new StringBuilder();
         sb.append("On dates:");
 
+        int count = 1;
         for (Map.Entry<LocalDate, Day> day : days.entrySet()) {
-            sb.append("\n\t");
+            sb.append("\n");
+            sb.append(count);
+            sb.append(".\t");
             sb.append(day.getValue().getType());
             sb.append(", ");
             sb.append(day.getKey().toString());
             sb.append(", ");
             sb.append(day.getKey().getDayOfWeek().toString());
+            count++;
         }
         sb.append("\n\n");
 
