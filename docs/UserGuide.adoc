@@ -15,7 +15,8 @@ endif::[]
 :repoURL: https://github.com/CS2113-AY1819S2-T08-3/main
 
 By: `Team T08-3`      Since: `Jan 2019`      Licence: `MIT`
-[verse]
+{zwsp}
+
 {zwsp}
 
 == Introduction
@@ -30,7 +31,8 @@ Items can then be efficiently managed via the intuitive tagging system.
 _PlanMySem_ is optimized for those who prefer to work with a Command Line Interface (CLI) and/or are learning to work more efficiently with CLI tools. Additionally, unlike traditional calendar/scheduling applications, _PlanMySem_ utilizes minimal resources on the user’s machine while still allowing the user to view their schedules swiftly and efficiently.
 
 This user guide provides a quick start guide for you to easily setup and install _PlanMySem_, documentation of all the various features _PlanMySem_ offers, frequently asked questions and a summary of the available commands.
-[verse]
+{zwsp}
+
 {zwsp}
 
 == Quick Start
@@ -41,7 +43,7 @@ This user guide provides a quick start guide for you to easily setup and install
 .  Double-click the file to start the app. You should see the GUI appear in a few seconds.
 +
 [#img-startup]
-.**+++<u>GUI screen upon start-up</u>+++**
+.+++<u>GUI screen upon start-up</u>+++
 image::Start_Screen.png[width="790"]
 +
 .  Type the command in the command box and press kbd:[Enter] to execute it. +
@@ -56,7 +58,8 @@ Add a slot, named "CS2113T" on the coming monday, from 0800hrs to 0900hrs with t
 * *`exit`* : exit the app
 
 .  Refer to <<Features>> for details of each command.
-[verse]
+{zwsp}
+
 {zwsp}
 
 [[Features]]
@@ -133,7 +136,8 @@ The list of parameters below is useful for your reference as you jump right into
 `nl/`:: *New Location.*
 `ndes/`:: *New Description.*
 ====
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Viewing help : `help`
@@ -141,9 +145,10 @@ Displays all the available commands with the syntax and examples. +
 Format: `help`
 
 [#img-help]
-.**+++<u>Output after entering `help`</u>>+++**
+.+++<u>Output after entering `help`</u>>+++
 image::Help_Command_Output.png[width="790"]
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Adding Slots : `add` / `a`
@@ -171,7 +176,8 @@ Do the same but recurse the slot on "normal", instructional, weeks.
 ====
 You may add single _slots_ by omitting the recurrence parameter.
 ====
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Editing Slots: `edit` / `e`
@@ -195,12 +201,13 @@ Examples:
 Edit slots that contain tags "CS2113T" and "Tutorial", set these _slot's_ location to "COM2 04-01".
 
 [#img-edit]
-.**+++<u>Output after entering `edit t/CS2113T t/Tutorial nl/COM2 04-01`</u>+++**
+.+++<u>Output after entering `edit t/CS2113T t/Tutorial nl/COM2 04-01`</u>+++
 image::Edit_Command_Output_1.png[width="790"]
 
 * `edit 1 des/Topic: Sequence Diagram` +
 Edit the first item from the previous result of the `list` or `find` command.
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Delete Slots: `delete` / `del` / `d`
@@ -221,12 +228,13 @@ Examples:
 Delete _slots_ that contain tags "CS2113T" and "Tutorial".
 
 [#img-delete]
-.**+++<u>Output after entering `delete t/CS2113T t/Tutorial`</u>+++**
+.+++<u>Output after entering `delete t/CS2113T t/Tutorial`</u>+++
 image::Delete_Command_Output.png[width="790"]
 
 * `delete 2` +
 Delete the second _slot_ shown via the `list` command.
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Listing Slots: `list` / `l`
@@ -240,9 +248,10 @@ Examples:
 List all _slots_ that is named `CS2113T` in the planner.
 
 [#img-list]
-.**+++<u>Output after entering `list n/CS2113T`</u>+++**
+.+++<u>Output after entering `list n/CS2113T`</u>+++
 image::List_Command_Output_1.png[width="790"]
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Locating Slots: `find` / `f`
@@ -256,9 +265,10 @@ Example:
 Find all _slots_ whose name contains `CS` (eg. CS2101, CS2113T, SOCSMeet)
 
 [#img-find]
-.**+++<u>Output after entering `find n/CS`</u>+++**
+.+++<u>Output after entering `find n/CS`</u>+++
 image::Find_Command_Output_1.png[width="790"]
-[verse]
+{zwsp}
+
 {zwsp}
 
 === View the Planner : `view` / `v`
@@ -295,16 +305,18 @@ View planner for the month of March.
 View all the details in the planner.
 
 [#img-view]
-.**+++<u>Output after entering `view month`</u>+++**
+.+++<u>Output after entering `view month`</u>+++
 image::View_Command_Month_Output.png[width="790"]
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Listing previous input commands : `history` `[coming in v2.0]`
 
 Lists all the commands that you have entered in reverse chronological order. +
 Format: `history`
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Undoing previous command : `undo` `[coming in v2.0]`
@@ -316,14 +328,16 @@ Format: `undo`
 ====
 The `clear` command cannot be undone.
 ====
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Redoing the previously undone command : `redo` `[coming in v2.0]`
 
 Reverses the most recent `undo` command. +
 Format: `redo`
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Clear all data : clear
@@ -332,28 +346,31 @@ Clear all data stored on the planner. +
 Format: `clear`
 
 [#img-find]
-.**+++<u>Output after entering `clear`</u>+++**
+.+++<u>Output after entering `clear`</u>+++
 image::Clear_Command_Output_1.png[width="790"]
 
 [WARNING]
 ====
 The `clear` command cannot be undone! Your data will be permanently removed once `clear` is executed.
 ====
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Exiting the program : `exit`
 
 Exits the program. +
 Format: `exit`
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Saving the data
 
 Planner data is saved in the hard disk automatically after any command that changes the data is executed. +
 There is no need to save manually.
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Encrypting/decrypting data files
@@ -361,7 +378,8 @@ There is no need to save manually.
 Planner data is automatically encrypted before saving. You do not need to encrypt the data manually.
 
 Planner data is automatically decrypted after loading. You do not need to decrypt the data manually.
-[verse]
+{zwsp}
+
 {zwsp}
 
 // tag::importICS[]
@@ -369,7 +387,8 @@ Planner data is automatically decrypted after loading. You do not need to decryp
 
 You can import an .ics file into the planner.
 // end::importICS[]
-[verse]
+{zwsp}
+
 {zwsp}
 
 === Exporting .ics formatted files: `export`
@@ -377,8 +396,12 @@ You can import an .ics file into the planner.
 You can export the planner as an .ics file.
 
 [#img-export]
-.**+++<u>Output after entering `export`</u>+++**
+.+++<u>Output after entering `export`</u>+++
 image::Export_Command_Output_1.png[width="790"]
+
+{zwsp}
+
+{zwsp}
 
 [NOTE]
 ====
@@ -386,16 +409,19 @@ The exported file is named "PlanMySem.ics" and is saved in the main directory.
 Double-clicking the .ics file will import the planner data into your personal calendar app. +
 
 [#img-exportFile]
-.**+++<u>Location of PlanMySem.ics file</u>+++**
+.+++<u>Location of PlanMySem.ics file</u>+++
 image::Export_Command_Directory_1.png[width="790"]
 ====
+{zwsp}
 
+{zwsp}
 [TIP]
 ====
 A file with the ICS file extension is an iCalendar file.
 These are plain text files that include calendar event details like a description, beginning and ending times, location, etc.
 ====
-[verse]
+{zwsp}
+
 {zwsp}
 
 == FAQ
@@ -407,7 +433,8 @@ These are plain text files that include calendar event details like a descriptio
 2. Copy _PlanMySem.txt_ from your old _PlanMySem_ folder and paste it into the new _PlanMySem_ folder. +
 
 This will overwrite the empty data file it creates with the file that contains the data of your previous _PlanMySem_ folder.
-[verse]
+{zwsp}
+
 {zwsp}
 
 == Command Summary
