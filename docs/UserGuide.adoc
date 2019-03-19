@@ -187,7 +187,7 @@ Format: `edit t/TAG... [nn/NEW_NAME] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURA
 2. Edit specific _slot_ via the `list` command. +
 Format: `edit INDEX [nn/NEW_NAME] [nd/NEW_DATE] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...`
 
-[CAUTION]
+[WARNING]
 ====
 You are not able to edit a slot's date when selecting via _tags_.
 To edit a _slot_'s date, you may use the `list` or `find` command and select specific _slots_ via index.
@@ -322,7 +322,7 @@ Format: `history`
 Restores the planner to the state before the previous command was executed. +
 Format: `undo`
 
-[CAUTION]
+[WARNING]
 ====
 The `clear` command cannot be undone.
 ====
@@ -346,8 +346,9 @@ Format: `clear`
 [#img-find]
 .[.underline]#Output after entering `clear`#
 image::Clear_Command_Output_1.png[width="790"]
+{zwsp}
 
-[CAUTION]
+[WARNING]
 ====
 The `clear` command cannot be undone! Your data will be permanently removed once `clear` is executed.
 ====
@@ -395,7 +396,7 @@ You can export the planner as an .ics file.
 
 [#img-export]
 .[.underline]#Output after entering `export`#
-image::Export_Command_Output_1.png[width="790"]
+image::Export_Command_Output_1.png[width="420"]
 
 {zwsp}
 
@@ -410,8 +411,6 @@ Double-clicking the .ics file will import the planner data into your personal ca
 .[.underline]#Location of PlanMySem.ics file#
 image::Export_Command_Directory_1.png[width="790"]
 ====
-{zwsp}
-
 {zwsp}
 [TIP]
 ====
@@ -462,4 +461,5 @@ e.g.`view month`
 * *Redo previously undone command* : `redo`
 * *Clear all data* : `clear`
 * *Exit the program* : `exit`
-* *Export .ics  files* : `export`
+* *Import .ics  files into planner* : `import`
+* *Export .ics  files from planner* : `export`
