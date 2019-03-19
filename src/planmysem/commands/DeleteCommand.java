@@ -89,7 +89,7 @@ public class DeleteCommand extends Command {
 
         // perform deletion of slots from the planner
         for (Map.Entry<LocalDateTime, ? extends ReadOnlySlot> slot: selectedSlots.entrySet()) {
-            planner.getSemester().getDays().get(slot.getKey().toLocalDate()).removeSlot(slot.getValue());
+            planner.getSemester().removeSlot(slot.getKey().toLocalDate(), slot.getValue());
         }
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, selectedSlots.size(),

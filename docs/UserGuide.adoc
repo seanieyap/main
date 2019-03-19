@@ -18,7 +18,7 @@ By: `Team T08-3`      Since: `Jan 2019`      Licence: `MIT`
 
 == Introduction
 
-Welcome to _PlanMySem_!
+Welcome to _PlanMySem_! Choose a topic from the table of contents to learn about available features with examples, find answers or view a summary of the commands.
 
 _PlanMySem_ is a text-based (Command Line Interface) scheduling/calendar application that targets NUS students and staff who prefer to use a desktop application for managing their schedule/calendar.
 _PlanMySem_ automatically creates a planner that is synchronised according to the NUS academic calendar for the current semester and enables easy creation, editing and deleting of items.
@@ -26,6 +26,8 @@ Special weeks such as recess week and reading week are taken into account within
 Items can then be efficiently managed via the intuitive tagging system.
 
 _PlanMySem_ is optimized for those who prefer to work with a Command Line Interface (CLI) and/or are learning to work more efficiently with CLI tools. Additionally, unlike traditional calendar/scheduling applications, _PlanMySem_ utilizes minimal resources on the user’s machine while still allowing the user to view their schedules swiftly and efficiently.
+
+This user guide provides a quick start guide for you to easily setup and install _PlanMySem_, documentation of all the various features _PlanMySem_ offers, frequently asked questions and a summary of the available commands.
 
 == Quick Start
 
@@ -54,13 +56,10 @@ Add a slot, named "CS2113T" on the coming monday, from 0800hrs to 0900hrs with t
 
 This section displays the current implemented features as well as features that will be implemented in the future.
 
-====
-*Command Format*
+[NOTE]
+*For ease of communication, this document will refer to lessons/activities/events/appointments that you might add into the Planner as _slots_.*
 
-* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
-* Items in square brackets are optional. e.g in `add [l/LOCATION]`, `LOCATION` is a parameter that may be omited.
-* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
-* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
+====
 
 *Tagging System*
 
@@ -86,24 +85,31 @@ In NUS, academic semesters are split into weeks of several types. Recursion allo
 Parameters in _PlanMySem_ are designed to be, short and easy to memorise. Once you are familarised with them, they should be intuitive to use.
 The list of parameters below is useful for your reference as you jump right into grasping the system.
 
+*Command Format*
+
+* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
+* Items in square brackets are optional. e.g in `add [l/LOCATION]`, `LOCATION` is a parameter that may be omited.
+* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
+* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
+
 [horizontal]
 *Parameter*:: *Description*
-`n/`:: *Name specific to the object at hand.*
+`n/`:: *Name of a _slot_.*
 `d/`:: *Date / Day of week.* +
     Format: +
     * Dates: `01-01`, `2019-01-02`
     * Day of Week: `Monday`, `mon`, `1`
-`st/`:: *Start Time.*
+`st/`:: *Start Time.* +
     Format: +
     * 24-Hour in the form of “hh:mm”. e.g. `23:00`
     * 12-Hour in the form of `hh:mm+AM|PM`. e.g. `12:30 AM`
 `et/`:: *End Time / duration.* +
-    Format:
+    Format: +
     * 24-Hour in the form of “hh:mm”. e.g. `23:00`
     * 12-Hour in the form of `hh:mm+AM|PM`. e.g. `12:30 AM`
     * Duration of the event in minutes. e.g. `60` represents 60 minutes
-`r/`:: *recurrence.* +
-    Format:
+`r/`:: *Specify recurrence of a _slot_.* +
+    Format: +
     * Select normal weeks: `normal`
     * Select recess week: `recess`
     * Select reading week: `reading`
@@ -112,17 +118,16 @@ The list of parameters below is useful for your reference as you jump right into
 `l/`:: *Location.*
 `des/`:: *Description.*
 `t/`:: *Tag.*
-`nn/`:: *New name of the object at hand.*
+`nn/`:: *New name of a _slot_.*
 `nd/`:: *New Date.*
 `nst/`:: *New Start Time.*
 `net/`:: *New End Time.*
 `nl/`:: *New Location.*
 `ndes/`:: *New Description.*
-
 ====
 
 === Viewing help : `help`
-
+Displays all the available commands with the syntax and examples. +
 Format: `help`
 
 === Adding Slots : `add` / `a`
@@ -144,7 +149,7 @@ Do the same but recurse the slot on "normal", instructional, weeks.
 
 [NOTE]
 ====
-You may add single slots by neglecting the recurrence parameters.
+You may add single _slots_ by omitting the recurrence parameter.
 ====
 
 === Editing Slots: `edit` / `e`
@@ -185,7 +190,7 @@ Examples:
 
 * `delete t/CS2113T t/Tutorial` +
 Delete _slots_ that contain tags "CS2113T" and "Tutorial".
-* `list delete 2` +
+* `delete 2` +
 Delete the second _slot_ shown via the `list` command.
 
 === Listing Slots: `list` / `l`
@@ -216,22 +221,29 @@ Format: `find [KEYWORD]...`
 
 Example:
 
-* `find CS`
+* `find CS` +
 Find all _slots_ whose name contains `CS` (eg. CS1010, CS2113T, SCS1010)
 
 
 === View the Planner : `view` / `v`
 
-View the planner according to day/week/month.  +
-Format: `view day DATE | view week WEEK | view month MONTH | view all`
+View the planner in a month/week/day view.
+
+1. View the monthly calendar view of the current academic semester. +
+Format: `view month [MONTH]`
+2. View the weekly calendar view of the current academic week. +
+Format: `view week [WEEK]`
+3. View the day view of a particular day in the academic semester. +
+Format: `view day [DATE]`
+4. View all the details in the planner. +
+Format: `view all`
 
 [NOTE]
 ====
-. If no date is given, the current date is assumed.
-. If the `all` option is specified, the planner will not be displayed, instead all the details in the planner will be displayed.
+If MONTH/WEEK/DATE is not specified, the current date is assumed.
 ====
 
-Example:
+Examples:
 
 * `view day` +
 View planner for the current date.
@@ -284,14 +296,15 @@ Format: `exit`
 
 === Saving the data
 
-Planner data is saved in the hard disk automatically after any command that changes the data is executed. + There is no need to save manually.
+Planner data is saved in the hard disk automatically after any command that changes the data is executed. +
+There is no need to save manually.
 
 
 === Encrypting/decrypting data files
 
 Planner data is automatically encrypted before saving. You do not need to encrypt the data manually.
 
-Planner data is automatically decrypted before loading. You do not need to decrypt the data manually.
+Planner data is automatically decrypted after loading. You do not need to decrypt the data manually.
 
 // tag::importICS[]
 === Importing .ics formated files `[coming in v2.0]`
@@ -319,7 +332,8 @@ These are plain text files that include calendar event details like a descriptio
 == FAQ
 
 *Q*: How do I transfer my data to another Computer? +
-*A*: In order to transfer your data to another Computer, you should: +
+*A*: In order to transfer your data to another Computer, you should:
+
 1. Install the app on the other computer +
 2. Copy _PlanMySem.txt_ from your old _PlanMySem_ folder and paste it into the new _PlanMySem_ folder. +
 
@@ -328,7 +342,7 @@ This will overwrite the empty data file it creates with the file that contains t
 
 == Command Summary
 
-* *View help* `help` +
+* *View help* : `help` +
 * *Add Slot* : `add n/NAME d/DATE_OR_DAY_OF_WEEK st/START_TIME et/END_TIME_OR_DURATION [l/LOCATION] [des/DESCRIPTION] [r/normal] [r/recess] [r/reading] [r/exam] [r/past] [t/TAG]…​` +
 e.g. `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial` +
 * *List Slot(s)* : `list n/NAME` +
@@ -342,13 +356,12 @@ e.g. `edit 1 des/Topic: Sequence Diagram`
 1. Via tags: `delete t/TAG…​` +
 eg. `delete t/CS2113T t/Tutorial`
 2. Via `list` command: `delete INDEX` +
-eg. `list delete 2`
+eg. `delete 2`
 * *Find Slots* : `find [KEYWORD]…​` +
 e.g. `find CS`
 * *View planner* : `view day [DATE] | view week [WEEK] | view month [MONTH]` +
-e.g.`view day 01/04/2019`
-* *View all details* : `view all` +
-e.g.`view all`
+e.g.`view month`
+* *View all details* : `view all`
 * *View history* : `history`
 * *Undo previous command* : `undo`
 * *Redo previously undone command* : `redo`
