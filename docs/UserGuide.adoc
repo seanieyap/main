@@ -91,7 +91,7 @@ In NUS, academic semesters are split into weeks of several types. Recursion allo
 *Parameters*
 
 Parameters in _PlanMySem_ are designed to be, short and easy to memorise. Once you are familarised with them, they should be intuitive to use.
-The list of parameters below is useful for your reference as you jump right into grasping the system.
+The table of parameters and their descriptions (Table 1) below is useful for your reference as you jump right into grasping the system.
 
 *Command Format*
 
