@@ -304,7 +304,7 @@ View all the details in the planner.
 
 [#img-view]
 .[.underline]#Output after entering `view month`#
-image::UI.png[width="790"]
+image::Ui.png[width="790"]
 {zwsp}
 
 {zwsp}
