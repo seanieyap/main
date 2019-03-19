@@ -133,6 +133,7 @@ The list of parameters below is useful for your reference as you jump right into
 `nl/`:: *New Location.*
 `ndes/`:: *New Description.*
 ====
+Table 1. Parameters and their descriptions
 {zwsp}
 
 {zwsp}
@@ -186,7 +187,7 @@ Format: `edit t/TAG... [nn/NEW_NAME] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURA
 2. Edit specific _slot_ via the `list` command. +
 Format: `edit INDEX [nn/NEW_NAME] [nd/NEW_DATE] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...`
 
-[WARNING]
+[CAUTION]
 ====
 You are not able to edit a slot's date when selecting via _tags_.
 To edit a _slot_'s date, you may use the `list` or `find` command and select specific _slots_ via index.
@@ -321,7 +322,7 @@ Format: `history`
 Restores the planner to the state before the previous command was executed. +
 Format: `undo`
 
-[WARNING]
+[CAUTION]
 ====
 The `clear` command cannot be undone.
 ====
@@ -346,7 +347,7 @@ Format: `clear`
 .[.underline]#Output after entering `clear`#
 image::Clear_Command_Output_1.png[width="790"]
 
-[WARNING]
+[CAUTION]
 ====
 The `clear` command cannot be undone! Your data will be permanently removed once `clear` is executed.
 ====
