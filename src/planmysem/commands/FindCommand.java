@@ -2,13 +2,14 @@ package planmysem.commands;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import javafx.util.Pair;
-
 import planmysem.data.semester.Day;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
@@ -45,8 +46,7 @@ public class FindCommand extends Command {
         for (Map.Entry<LocalDate, Day> entry : planner.getSemester().getDays().entrySet()) {
             for (Slot slots : entry.getValue().getSlots()) {
                 for (String keyword : keywords) {
-                    if (Pattern.matches(".*" + keyword + ".*", slots.getName().value)
-                        && !matchedSlots.contains(slots)) {
+                    if (Pattern.matches(".*" + keyword + ".*", slots.getName().value)) {
                         matchedSlots.add(slots);
                         date = entry.getKey();
                         relevantSlots.add(new Pair<>(date, slots));
@@ -68,6 +68,12 @@ public class FindCommand extends Command {
      * Craft success message.
      */
     private String craftSuccessMessage(List<Pair<LocalDate, ? extends ReadOnlySlot>> result) {
+        Collections.sort(result, new Comparator<>() {
+            public int compare(Pair<LocalDate, ? extends ReadOnlySlot> p1, Pair<LocalDate, ? extends ReadOnlySlot> p2) {
+                return p1.getKey().compareTo(p2.getKey());
+            }
+        });
+
         int count = 1;
         StringBuilder sb = new StringBuilder();
 
