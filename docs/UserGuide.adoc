@@ -28,6 +28,9 @@ Items can then be efficiently managed via the intuitive tagging system.
 _PlanMySem_ is optimized for those who prefer to work with a Command Line Interface (CLI) and/or are learning to work more efficiently with CLI tools. Additionally, unlike traditional calendar/scheduling applications, _PlanMySem_ utilizes minimal resources on the user’s machine while still allowing the user to view their schedules swiftly and efficiently.
 
 This user guide provides a quick start guide for you to easily setup and install _PlanMySem_, documentation of all the various features _PlanMySem_ offers, frequently asked questions and a summary of the available commands.
+{zwsp}
+
+{zwsp}
 
 == Quick Start
 
@@ -36,7 +39,9 @@ This user guide provides a quick start guide for you to easily setup and install
 .  Copy the file to the folder you want to use as the home folder for your planner.
 .  Double-click the file to start the app. You should see the GUI appear in a few seconds.
 +
-image::Ui.png[width="790"]
+[#img-startup]
+.[.underline]#GUI screen upon start-up#
+image::Start_Screen.png[width="790"]
 +
 .  Type the command in the command box and press kbd:[Enter] to execute it. +
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
@@ -50,6 +55,9 @@ Add a slot, named "CS2113T" on the coming monday, from 0800hrs to 0900hrs with t
 * *`exit`* : exit the app
 
 .  Refer to <<Features>> for details of each command.
+{zwsp}
+
+{zwsp}
 
 [[Features]]
 == Features
@@ -83,7 +91,21 @@ In NUS, academic semesters are split into weeks of several types. Recursion allo
 *Parameters*
 
 Parameters in _PlanMySem_ are designed to be, short and easy to memorise. Once you are familarised with them, they should be intuitive to use.
-The list of parameters below is useful for your reference as you jump right into grasping the system.
+The table of parameters and their descriptions (Table 1) below is useful for your reference as you jump right into grasping the system.
+
+*Command Format*
+
+* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
+* Items in square brackets are optional. e.g in `add [l/LOCATION]`, `LOCATION` is a parameter that may be omited.
+* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
+* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
+
+*Command Format*
+
+* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
+* Items in square brackets are optional. e.g in `add [l/LOCATION]`, `LOCATION` is a parameter that may be omited.
+* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
+* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
 
 *Command Format*
 
@@ -125,10 +147,21 @@ The list of parameters below is useful for your reference as you jump right into
 `nl/`:: *New Location.*
 `ndes/`:: *New Description.*
 ====
+Table 1. Parameters and their descriptions
+{zwsp}
+
+{zwsp}
 
 === Viewing help : `help`
 Displays all the available commands with the syntax and examples. +
 Format: `help`
+
+[#img-help]
+.[.underline]#Output after entering `help`#
+image::Help_Command_Output.png[width="790"]
+{zwsp}
+
+{zwsp}
 
 === Adding Slots : `add` / `a`
 
@@ -141,16 +174,23 @@ Examples:
 * `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial` +
 Add a _slot_, named "CS2113T Tutorial" on the coming monday, from 0800hrs to 0900hrs with the tags "CS2113T" and "Tutorial".
 
+[#img-add]
+.[.underline]#Output after entering `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial`#
+image::Add_Command_Output_1.png[width="790"]
+
 * `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial r/recess r/reading` +
 Do the same but additionally, recurse the slot on recess and reading week.
 
 * `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial r/normal` +
 Do the same but recurse the slot on "normal", instructional, weeks.
 
-[NOTE]
+[TIP]
 ====
 You may add single _slots_ by omitting the recurrence parameter.
 ====
+{zwsp}
+
+{zwsp}
 
 === Editing Slots: `edit` / `e`
 
@@ -161,7 +201,7 @@ Format: `edit t/TAG... [nn/NEW_NAME] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURA
 2. Edit specific _slot_ via the `list` command. +
 Format: `edit INDEX [nn/NEW_NAME] [nd/NEW_DATE] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...`
 
-[NOTE]
+[WARNING]
 ====
 You are not able to edit a slot's date when selecting via _tags_.
 To edit a _slot_'s date, you may use the `list` or `find` command and select specific _slots_ via index.
@@ -171,8 +211,16 @@ Examples:
 
 * `edit t/CS2113T t/Tutorial nl/COM2 04-01` +
 Edit slots that contain tags "CS2113T" and "Tutorial", set these _slot's_ location to "COM2 04-01".
+
+[#img-edit]
+.[.underline]#Output after entering `edit t/CS2113T t/Tutorial nl/COM2 04-01`#
+image::Edit_Command_Output_1.png[width="790"]
+
 * `edit 1 des/Topic: Sequence Diagram` +
 Edit the first item from the previous result of the `list` or `find` command.
+{zwsp}
+
+{zwsp}
 
 === Delete Slots: `delete` / `del` / `d`
 
@@ -181,7 +229,7 @@ Format: `delete t/TAG...`
 2. Delete _slot_ via the `list` command. +
 Format: `delete INDEX`
 
-[NOTE]
+[TIP]
 ====
 You may delete a specific slot by using the `list` or `find` command and select the specific _slot_ via index.
 ====
@@ -190,40 +238,50 @@ Examples:
 
 * `delete t/CS2113T t/Tutorial` +
 Delete _slots_ that contain tags "CS2113T" and "Tutorial".
+
+[#img-delete]
+.[.underline]#Output after entering `delete t/CS2113T t/Tutorial`#
+image::Delete_Command_Output.png[width="790"]
+
 * `delete 2` +
 Delete the second _slot_ shown via the `list` command.
+{zwsp}
+
+{zwsp}
 
 === Listing Slots: `list` / `l`
 
 Lists all slots whose name directly matches the specified keyword (not case-sensitive). +
-//Format: `list [past] [next] [all]`
 Format: `list n/NAME`
-
-//[NOTE]
-//====
-//If you do not specify a keyword, then the `all` keyword will be used and all _slots_ will be listed.
-//====
 
 Examples:
 
 * `list n/CS2113T` +
 List all _slots_ that is named `CS2113T` in the planner.
 
+[#img-list]
+.[.underline]#Output after entering `list n/CS2113T`#
+image::List_Command_Output_1.png[width="790"]
+{zwsp}
+
+{zwsp}
+
 === Locating Slots: `find` / `f`
 
 Find all _slots_ whose part of their name contains the specified keyword and displays them as a list. +
-Format: `find [KEYWORD]...`
-
-//[NOTE]
-//====
-//TODO
-//====
+Format: `find n/KEYWORD`
 
 Example:
 
-* `find CS` +
-Find all _slots_ whose name contains `CS` (eg. CS1010, CS2113T, SCS1010)
+* `find n/CS` +
+Find all _slots_ whose name contains `CS` (eg. CS2101, CS2113T, SOCSMeet)
 
+[#img-find]
+.[.underline]#Output after entering `find n/CS`#
+image::Find_Command_Output_1.png[width="790"]
+{zwsp}
+
+{zwsp}
 
 === View the Planner : `view` / `v`
 
@@ -258,76 +316,124 @@ View planner for the month of March.
 * `view all` +
 View all the details in the planner.
 
+[#img-view]
+.[.underline]#Output after entering `view month`#
+image::Ui.png[width="790"]
+{zwsp}
 
-=== Listing previous input commands : `history`
+{zwsp}
+
+=== Listing previous input commands : `history` `[coming in v2.0]`
 
 Lists all the commands that you have entered in reverse chronological order. +
 Format: `history`
+{zwsp}
 
-=== Undoing previous command : `undo`
+{zwsp}
+
+=== Undoing previous command : `undo` `[coming in v2.0]`
 
 Restores the planner to the state before the previous command was executed. +
 Format: `undo`
 
-[NOTE]
+[WARNING]
 ====
 The `clear` command cannot be undone.
 ====
+{zwsp}
 
-=== Redoing the previously undone command : `redo`
+{zwsp}
+
+=== Redoing the previously undone command : `redo` `[coming in v2.0]`
 
 Reverses the most recent `undo` command. +
 Format: `redo`
+{zwsp}
+
+{zwsp}
 
 === Clear all data : clear
 
 Clear all data stored on the planner. +
 Format: `clear`
 
+[#img-find]
+.[.underline]#Output after entering `clear`#
+image::Clear_Command_Output_1.png[width="790"]
+{zwsp}
+
 [WARNING]
 ====
 The `clear` command cannot be undone! Your data will be permanently removed once `clear` is executed.
 ====
+{zwsp}
+
+{zwsp}
 
 === Exiting the program : `exit`
 
 Exits the program. +
 Format: `exit`
+{zwsp}
+
+{zwsp}
 
 === Saving the data
 
 Planner data is saved in the hard disk automatically after any command that changes the data is executed. +
 There is no need to save manually.
+{zwsp}
 
+{zwsp}
 
 === Encrypting/decrypting data files
 
 Planner data is automatically encrypted before saving. You do not need to encrypt the data manually.
 
 Planner data is automatically decrypted after loading. You do not need to decrypt the data manually.
+{zwsp}
+
+{zwsp}
 
 // tag::importICS[]
-=== Importing .ics formated files `[coming in v2.0]`
+=== Importing .ics formatted files `[coming in v2.0]`
 
-
-_{explain how the user can import .ics formatted files}_
+You can import an .ics file into the planner.
 // end::importICS[]
+{zwsp}
+
+{zwsp}
 
 === Exporting .ics formatted files: `export`
 
 You can export the planner as an .ics file.
 
+[#img-export]
+.[.underline]#Output after entering `export`#
+image::Export_Command_Output_1.png[width="420"]
+
+{zwsp}
+
+{zwsp}
+
 [NOTE]
 ====
 The exported file is named "PlanMySem.ics" and is saved in the main directory.
 Double-clicking the .ics file will import the planner data into your personal calendar app. +
-====
 
-[NOTE]
+[#img-exportFile]
+.[.underline]#Location of PlanMySem.ics file#
+image::Export_Command_Directory_1.png[width="790"]
+====
+{zwsp}
+[TIP]
 ====
 A file with the ICS file extension is an iCalendar file.
 These are plain text files that include calendar event details like a description, beginning and ending times, location, etc.
 ====
+{zwsp}
+
+{zwsp}
 
 == FAQ
 
@@ -338,7 +444,9 @@ These are plain text files that include calendar event details like a descriptio
 2. Copy _PlanMySem.txt_ from your old _PlanMySem_ folder and paste it into the new _PlanMySem_ folder. +
 
 This will overwrite the empty data file it creates with the file that contains the data of your previous _PlanMySem_ folder.
+{zwsp}
 
+{zwsp}
 
 == Command Summary
 
@@ -367,4 +475,5 @@ e.g.`view month`
 * *Redo previously undone command* : `redo`
 * *Clear all data* : `clear`
 * *Exit the program* : `exit`
-* *Export .ics  files* : `export`
+* *Import .ics  files into planner* : `import`
+* *Export .ics  files from planner* : `export`
