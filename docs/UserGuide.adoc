@@ -36,7 +36,9 @@ This user guide provides a quick start guide for you to easily setup and install
 .  Copy the file to the folder you want to use as the home folder for your planner.
 .  Double-click the file to start the app. You should see the GUI appear in a few seconds.
 +
-image::Ui.png[width="790"]
+[#img-startup]
+.GUI screen upon start-up
+image::Start_Screen.png[width="790"]
 +
 .  Type the command in the command box and press kbd:[Enter] to execute it. +
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
@@ -130,6 +132,10 @@ The list of parameters below is useful for your reference as you jump right into
 Displays all the available commands with the syntax and examples. +
 Format: `help`
 
+[#img-help]
+.Output after entering `help`
+image::Help_Command_Output.png[width="790"]
+
 === Adding Slots : `add` / `a`
 
 Add _slots_ to the planner. +
@@ -141,13 +147,17 @@ Examples:
 * `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial` +
 Add a _slot_, named "CS2113T Tutorial" on the coming monday, from 0800hrs to 0900hrs with the tags "CS2113T" and "Tutorial".
 
+[#img-add]
+.Output after entering `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial`
+image::Add_Command_Output_1.png[width="790"]
+
 * `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial r/recess r/reading` +
 Do the same but additionally, recurse the slot on recess and reading week.
 
 * `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial r/normal` +
 Do the same but recurse the slot on "normal", instructional, weeks.
 
-[NOTE]
+[TIP]
 ====
 You may add single _slots_ by omitting the recurrence parameter.
 ====
@@ -161,7 +171,7 @@ Format: `edit t/TAG... [nn/NEW_NAME] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURA
 2. Edit specific _slot_ via the `list` command. +
 Format: `edit INDEX [nn/NEW_NAME] [nd/NEW_DATE] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...`
 
-[NOTE]
+[WARNING]
 ====
 You are not able to edit a slot's date when selecting via _tags_.
 To edit a _slot_'s date, you may use the `list` or `find` command and select specific _slots_ via index.
@@ -171,6 +181,11 @@ Examples:
 
 * `edit t/CS2113T t/Tutorial nl/COM2 04-01` +
 Edit slots that contain tags "CS2113T" and "Tutorial", set these _slot's_ location to "COM2 04-01".
+
+[#img-edit]
+.Output after entering `edit t/CS2113T t/Tutorial nl/COM2 04-01`
+image::Edit_Command_Output_1.png[width="790"]
+
 * `edit 1 des/Topic: Sequence Diagram` +
 Edit the first item from the previous result of the `list` or `find` command.
 
@@ -181,7 +196,7 @@ Format: `delete t/TAG...`
 2. Delete _slot_ via the `list` command. +
 Format: `delete INDEX`
 
-[NOTE]
+[TIP]
 ====
 You may delete a specific slot by using the `list` or `find` command and select the specific _slot_ via index.
 ====
@@ -190,40 +205,41 @@ Examples:
 
 * `delete t/CS2113T t/Tutorial` +
 Delete _slots_ that contain tags "CS2113T" and "Tutorial".
+
+[#img-delete]
+.Output after entering `delete t/CS2113T t/Tutorial`
+image::Delete_Command_Output.png[width="790"]
+
 * `delete 2` +
 Delete the second _slot_ shown via the `list` command.
 
 === Listing Slots: `list` / `l`
 
 Lists all slots whose name directly matches the specified keyword (not case-sensitive). +
-//Format: `list [past] [next] [all]`
 Format: `list n/NAME`
-
-//[NOTE]
-//====
-//If you do not specify a keyword, then the `all` keyword will be used and all _slots_ will be listed.
-//====
 
 Examples:
 
 * `list n/CS2113T` +
 List all _slots_ that is named `CS2113T` in the planner.
 
+[#img-list]
+.Output after entering `list n/CS2113T`
+image::List_Command_Output_1.png[width="790"]
+
 === Locating Slots: `find` / `f`
 
 Find all _slots_ whose part of their name contains the specified keyword and displays them as a list. +
-Format: `find [KEYWORD]...`
-
-//[NOTE]
-//====
-//TODO
-//====
+Format: `find n/KEYWORD`
 
 Example:
 
-* `find CS` +
-Find all _slots_ whose name contains `CS` (eg. CS1010, CS2113T, SCS1010)
+* `find n/CS` +
+Find all _slots_ whose name contains `CS` (eg. CS2101, CS2113T, SOCSMeet)
 
+[#img-find]
+.Output after entering `find n/CS`
+image::Find_Command_Output_1.png[width="790"]
 
 === View the Planner : `view` / `v`
 
@@ -258,23 +274,27 @@ View planner for the month of March.
 * `view all` +
 View all the details in the planner.
 
+[#img-view]
+.Output after entering `view month`
+image::View_Command_Month_Output.png[width="790"]
 
-=== Listing previous input commands : `history`
+
+=== Listing previous input commands : `history` `[coming in v2.0]`
 
 Lists all the commands that you have entered in reverse chronological order. +
 Format: `history`
 
-=== Undoing previous command : `undo`
+=== Undoing previous command : `undo` `[coming in v2.0]`
 
 Restores the planner to the state before the previous command was executed. +
 Format: `undo`
 
-[NOTE]
+[WARNING]
 ====
 The `clear` command cannot be undone.
 ====
 
-=== Redoing the previously undone command : `redo`
+=== Redoing the previously undone command : `redo` `[coming in v2.0]`
 
 Reverses the most recent `undo` command. +
 Format: `redo`
@@ -283,6 +303,10 @@ Format: `redo`
 
 Clear all data stored on the planner. +
 Format: `clear`
+
+[#img-find]
+.Output after entering `clear`
+image::Clear_Command_Output_1.png[width="790"]
 
 [WARNING]
 ====
@@ -309,21 +333,28 @@ Planner data is automatically decrypted after loading. You do not need to decryp
 // tag::importICS[]
 === Importing .ics formated files `[coming in v2.0]`
 
-
-_{explain how the user can import .ics formatted files}_
+You can import an .ics file into the planner.
 // end::importICS[]
 
 === Exporting .ics formatted files: `export`
 
 You can export the planner as an .ics file.
 
+[#img-export]
+.Output after entering `export`
+image::Export_Command_Output_1.png[width="790"]
+
 [NOTE]
 ====
 The exported file is named "PlanMySem.ics" and is saved in the main directory.
 Double-clicking the .ics file will import the planner data into your personal calendar app. +
+
+[#img-exportFile]
+.Location of _PlanMySem.ics_ file
+image::Export_Command_Directory_1.png[width="790"]
 ====
 
-[NOTE]
+[TIP]
 ====
 A file with the ICS file extension is an iCalendar file.
 These are plain text files that include calendar event details like a description, beginning and ending times, location, etc.
@@ -338,7 +369,6 @@ These are plain text files that include calendar event details like a descriptio
 2. Copy _PlanMySem.txt_ from your old _PlanMySem_ folder and paste it into the new _PlanMySem_ folder. +
 
 This will overwrite the empty data file it creates with the file that contains the data of your previous _PlanMySem_ folder.
-
 
 == Command Summary
 

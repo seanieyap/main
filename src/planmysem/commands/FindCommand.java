@@ -26,7 +26,7 @@ public class FindCommand extends Command {
 
             + "contains the specified keywords (not case-sensitive).\n\t"
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n\t"
-            + "Example: " + COMMAND_WORD + "CS";
+            + "Example: " + COMMAND_WORD + "n/CS";
 
     private final String keyword;
 
