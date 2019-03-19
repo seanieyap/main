@@ -56,22 +56,45 @@ Add a slot, named "CS2113T" on the coming monday, from 0800hrs to 0900hrs with t
 
 This section displays the current implemented features as well as features that will be implemented in the future.
 
-====
-*Command Format*
+[NOTE]
+*For ease of communication, this document will refer to lessons/activities/events/appointments that you might add into the Planner as _slots_.*
 
-* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
-* Items in square brackets are optional. e.g in `add n/NAME [l/LOCATION]`, `LOCATION` is an optional parameter and is not required to successfully run the command.
-* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used 0 times, or as `t/lab`, `t/lecture`, `t/tutorial` etc.
-* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` are acceptable.
+====
+
+*Tagging System*
+
+Unlike other commercial calendar/scheduling/planner software, PlanMySem makes use of a tagging system to manage slots.
+
+Using tags to tag slots will make tasks easier for you in the future. Tasks such as viewing, deleting and editing slots will be more efficient and performed quicker.
+
+Recommended uses for tags:
+
+1. Tag modules. e.g. "CS2113T", "CS2101".
+2. Tag type of lesson. e.g. "Lecture", "Tutorial", "Lab".
+3. Tag type of activities. e.g. "Sports", "Seminar", "Talk"
+4. Tag difficulty of task. e.g. "Tough", "Simple", "Trivial"
+
+*Recursion System*
+
+Recursion facilitate quick addition of multiple slots, similar to Microsoft Outlook's series of appointments.
+
+In NUS, academic semesters are split into weeks of several types. Recursion allows you to add slots to these types of weeks with ease through the use of the `r/` parameter.
 
 *Parameters*
 
 Parameters in _PlanMySem_ are designed to be, short and easy to memorise. Once you are familarised with them, they should be intuitive to use.
 The list of parameters below is useful for your reference as you jump right into grasping the system.
 
+*Command Format*
+
+* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
+* Items in square brackets are optional. e.g in `add [l/LOCATION]`, `LOCATION` is a parameter that may be omited.
+* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
+* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
+
 [horizontal]
 *Parameter*:: *Description*
-`n/`:: *Name of an activity _slot_.*
+`n/`:: *Name of a _slot_.*
 `d/`:: *Date / Day of week.* +
     Format: +
     * Dates: `01-01`, `2019-01-02`
@@ -85,7 +108,7 @@ The list of parameters below is useful for your reference as you jump right into
     * 24-Hour in the form of “hh:mm”. e.g. `23:00`
     * 12-Hour in the form of `hh:mm+AM|PM`. e.g. `12:30 AM`
     * Duration of the event in minutes. e.g. `60` represents 60 minutes
-`r/`:: *Specify recurrence of an activity _slot_.* +
+`r/`:: *Specify recurrence of a _slot_.* +
     Format: +
     * Select normal weeks: `normal`
     * Select recess week: `recess`
@@ -95,7 +118,7 @@ The list of parameters below is useful for your reference as you jump right into
 `l/`:: *Location.*
 `des/`:: *Description.*
 `t/`:: *Tag.*
-`nn/`:: *New name of an activity _slot_.*
+`nn/`:: *New name of a _slot_.*
 `nd/`:: *New Date.*
 `nst/`:: *New Start Time.*
 `net/`:: *New End Time.*
