@@ -2,11 +2,14 @@ package planmysem.commands;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import planmysem.common.Utils;
 import planmysem.data.exception.IllegalValueException;
 import planmysem.data.recurrence.Recurrence;
+import planmysem.data.semester.Day;
 import planmysem.data.semester.Semester;
 import planmysem.data.slot.Description;
 import planmysem.data.slot.Location;
@@ -62,10 +65,11 @@ public class AddCommand extends Command {
     @Override
     public CommandResult execute() {
         Set<LocalDate> dates = recurrence.generateDates(planner.getSemester());
+        Map<LocalDate, Day> days = new TreeMap<>();
 
         for (LocalDate date : dates) {
             try {
-                planner.addSlot(date, slot);
+                days.put(date, planner.addSlot(date, slot));
             } catch (Semester.DateNotFoundException dnfe) {
                 return new CommandResult(MESSAGE_FAIL_OUT_OF_BOUNDS);
             }
@@ -75,24 +79,28 @@ public class AddCommand extends Command {
             return new CommandResult(MESSAGE_SUCCESS_NO_CHANGE);
         } else {
             return new CommandResult(String.format(MESSAGE_SUCCESS, dates.size(),
-                    craftSuccessMessage(dates, slot)));
+                    craftSuccessMessage(days, slot)));
         }
     }
 
     /**
      * Craft success message.
      */
-    private String craftSuccessMessage(Set<LocalDate> dates, Slot slot) {
+    public static String craftSuccessMessage(Map<LocalDate, Day> days, Slot slot) {
         StringBuilder sb = new StringBuilder();
         sb.append("On dates:");
 
-        for (LocalDate date : dates) {
-            sb.append("\n\t");
-            sb.append(planner.getSemester().getDays().get(date).getType());
+        int count = 1;
+        for (Map.Entry<LocalDate, Day> day : days.entrySet()) {
+            sb.append("\n");
+            sb.append(count);
+            sb.append(".\t");
+            sb.append(day.getValue().getType());
             sb.append(", ");
-            sb.append(date.toString());
+            sb.append(day.getKey().toString());
             sb.append(", ");
-            sb.append(date.getDayOfWeek().toString());
+            sb.append(day.getKey().getDayOfWeek().toString());
+            count++;
         }
         sb.append("\n\n");
 
