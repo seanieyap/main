@@ -124,12 +124,14 @@ Identifiers in _PlanMySem_ are designed to be, short and easy to memorise.
 Once you are familiarised with them, they should be intuitive to use to add your parameters.
 The table of Identifiers and Parameters and their descriptions (Table 1) below is useful for your reference as you jump right into grasping the system.
 
-.Table 1. Identifiers and their Parameters and descriptions.
+.Identifiers and their Parameters and descriptions.
 [width="100%",cols="5%,<10%,<30%,<30%,<25",options="header"]
 |=======================================================================
 |Identifier |Parameter |Description |Format |Example
 
-|`n/` |`NAME` |Name of a _slot_ |Text |`n/CS2113T`
+.2+|`n/`
+    |`NAME` |Name of a _slot_ |Text |`n/CS2113T`
+    |`KEYWORD` |Text that are part of the name of a _slot_ |Text |`n/CS`
 |`l/` |`LOCATION` |Location of a _slot_ |Text |`l/COM2 04-22`
 |`des/` |`DESCRIPTION` |Description of a _slot_ |Text |`des/Topic: Abstraction`
 |`t/` |`TAG` |Tag of a _slot_ |Text |`nt/Lab`
@@ -142,29 +144,40 @@ The table of Identifiers and Parameters and their descriptions (Table 1) below i
         |Name of day |`d/Monday`
         |Name of day (short-form) |`d/mon`
 
-.2+|`st/` .2+|START_TIME .2+|Start time
+.2+|`st/` .2+|`START_TIME` .2+|Start time
     |Time in 24-Hour format, `hh:mm` |`st/23:00`
     |Time in 12-Hour format, form of `hh:mm+AM\|PM` |`st/11:00 PM`
 
 .3+|`et/`
-    .2+|END_TIME .2+|End Time
+    .2+|`END_TIME` .2+|End Time
         |Time in 24-Hour format, `hh:mm` |`e/23:00`
         |Time 12-Hour format, `hh:mm+AM\|PM` |`e/11:00 PM`
-    |DURATION |Duration from Start Time |Number of minutes |`et/60`
+        |`DURATION` |Duration from Start Time |Number of minutes |`et/60`
 
-.5+|`r/` .5+|RECURRENCE
+.5+|`r/` .5+|`RECURRENCE`
     |Recurse _slot_ on normal academic weeks |`normal` |`r/normal`
     |Recurse _slot_ on recess week |`recess` |`r/recess`
     |Recurse _slot_ on reading week |`reading` |`r/reading`
     |Recurse _slot_ on examination weeks |`exam` |`r/exam`
     |Recurse _slot_ on past dates |`past` |`r/past`
-
 |=======================================================================
+
+[TIP]
+====
+You may order identifiers and parameters in any fashion and you will still be able to achieve what you want!
+So, do not bother thinking about where to place parameters as ordering does not matter, instead become more efficient and save your time!
+====
 
 [IMPORTANT]
 ====
-Additionally, identifiers may be appended with a `n` to dictate "new". +
+Identifiers may be appended with a `n` to dictate "new". +
 E.g. `nt/NEW_TAG` signifies new tags in which you want to replace existing tags with.
+====
+
+[CAUTION]
+====
+While this table 1 shows you all the identifiers and parameters that _PlanMySem_ uses, there are some commands that do not make use of identifiers nor parameters.
+The view command is one such exception that make use of keywords that must be typed in a specific order.
 ====
 //
 //[horizontal]
@@ -242,9 +255,8 @@ Do the same but recurse the slot on "normal", instructional, weeks.
 
 [TIP]
 ====
-You may add single _slots_ by omitting the recurrence parameter.
+You may add single _slots_ by omitting the `r/` identifiers and its parameters.
 ====
-
 {zwsp}
 
 {zwsp}
@@ -358,7 +370,8 @@ Format: `view all`
 
 [TIP]
 ====
-You may omit MONTH/WEEK/to select the current date!
+You may omit `[MONTH]`/`[WEEK]`/`[DATE]` to view the format chosen in respect to the current day! +
+E.g. `view month` will allow you to view the current month and `view day` will allow you to view the current day!
 ====
 
 Examples:
@@ -415,6 +428,52 @@ Format: `redo`
 
 {zwsp}
 
+[[encrypt]]
+=== Encrypting/decrypting data files
+
+Planner data is automatically encrypted before saving and decrypted before loading. You do not need to encrypt or decrypt he data manually.
+{zwsp}
+
+{zwsp}
+
+[[import]]
+=== Importing .ics formatted files `[coming in v2.0]`
+
+You can import an .ics file into the planner.
+Format: `import FILENAME`
+{zwsp}
+
+{zwsp}
+
+[[export]]
+=== Exporting .ics formatted files: `export`
+
+You can export the planner as a .ics file.
+
+[#img-export]
+.[.underline]#Output after entering `export`#
+image::Export_Command_Output_1.png[width="420"]
+
+[NOTE]
+====
+The exported file is named "PlanMySem.ics" and is saved in the main directory.
+The .ics file can be imported into other calendar apps that support .ics files such as Google Calendar. +
+
+[#img-exportFile]
+.[.underline]#Location of PlanMySem.ics file#
+image::Export_Command_Directory_1.png[width="790"]
+====
+
+[TIP]
+A file with the ICS file extension is an iCalendar file.
+These are plain text files that include calendar event details like a description, beginning and ending times, location, etc.
+{zwsp}
+
+{zwsp}
+{zwsp}
+
+{zwsp}
+
 [[clear]]
 === Clear all data : `clear`
 
@@ -448,53 +507,6 @@ Format: `exit`
 
 Planner data is saved in the hard disk automatically after any command that changes the data is executed. +
 There is no need to save manually.
-{zwsp}
-
-{zwsp}
-
-[[encrypt]]
-=== Encrypting/decrypting data files
-
-Planner data is automatically encrypted before saving and decrypted before loading. You do not need to encrypt or decrypt he data manually.
-{zwsp}
-
-{zwsp}
-
-[[import]]
-=== Importing .ics formatted files `[coming in v2.0]`
-
-You can import an .ics file into the planner.
-Format: `import FILENAME`
-{zwsp}
-
-{zwsp}
-
-[[export]]
-=== Exporting .ics formatted files: `export`
-
-You can export the planner as a .ics file.
-
-[#img-export]
-.[.underline]#Output after entering `export`#
-image::Export_Command_Output_1.png[width="420"]
-
-{zwsp}
-
-{zwsp}
-
-[NOTE]
-====
-The exported file is named "PlanMySem.ics" and is saved in the main directory.
-The .ics file can be imported into other calendar apps that support .ics files such as Google Calendar. +
-
-[#img-exportFile]
-.[.underline]#Location of PlanMySem.ics file#
-image::Export_Command_Directory_1.png[width="790"]
-====
-
-[TIP]
-A file with the ICS file extension is an iCalendar file.
-These are plain text files that include calendar event details like a description, beginning and ending times, location, etc.
 {zwsp}
 
 {zwsp}
@@ -585,11 +597,14 @@ Commands to view _slots_:
 
 |_<<view, View the planner>>_ |view the planner in a chosen format/layout |
 `view` | `view month`
-|_<<list, list slot(s)>>_ |list _slot(s)_ of a certain name |
+|_<<list, List slot(s)>>_ |list _slot(s)_ of a certain name |
 `list` | `list n/CS2113T`
-|_<<find, find slot(s)>>_ |find _slot(s)_ containing certain keywords |
+|_<<find, Find slot(s)>>_ |find _slot(s)_ containing certain keywords |
 `find` | `find CS`
 |=======================================================================
+{zwsp}
+
+{zwsp}
 
 === Import/Exporting the Planner
 Commands to view _slots_:
