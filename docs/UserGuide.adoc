@@ -32,6 +32,23 @@ This user guide provides a quick start guide for you to easily setup and install
 
 {zwsp}
 
+=== Terminology
+For ease of communication, this document will refer to lessons/activities/events/appointments that you might add into the planner as _slots_.
+
+Additionally, throughout this user guide, there will be various icons used as described below.
+
+[TIP]
+This is a tip. Follow these suggested tips to make your life much simpler when using _PlanMySem_!
+
+[NOTE]
+This is a note. These are things for you to take note of when using _PlanMySem_.
+
+[WARNING]
+This is a rule. Ensure that you follow these rule to make your life using _PlanMySem_ a pleasant one.
+{zwsp}
+
+{zwsp}
+
 == Quick Start
 
 .  Ensure you have Java version `9` or later installed in your Computer.
@@ -44,7 +61,7 @@ This user guide provides a quick start guide for you to easily setup and install
 image::Start_Screen.png[width="790"]
 +
 .  Type the command in the command box and press kbd:[Enter] to execute it. +
-e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
+E.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 .  Some example commands you can try:
 
 
@@ -62,25 +79,20 @@ Add a slot, named "CS2113T" on the coming monday, from 0800hrs to 0900hrs with t
 [[Features]]
 == Features
 
-This section displays the current implemented features as well as features that will be implemented in the future.
-
-[NOTE]
-*For ease of communication, this document will refer to lessons/activities/events/appointments that you might add into the Planner as _slots_.*
-
-====
+This section displays the features of _PlanMySem_.
 
 *Tagging System*
 
-Unlike other commercial calendar/scheduling/planner software, PlanMySem makes use of a tagging system to manage slots.
+Unlike other commercial calendar/scheduling/planner software, _PlanMySem_ makes use of a tagging system to manage slots.
 
 Using tags to tag slots will make tasks easier for you in the future. Performing tasks such as viewing, deleting and editing slots will be more efficient.
 
 Recommended uses for tags:
 
-1. Tag modules. e.g. "CS2113T", "CS2101".
-2. Tag type of lesson. e.g. "Lecture", "Tutorial", "Lab".
-3. Tag type of activities. e.g. "Sports", "Seminar", "Talk".
-4. Tag difficulty of task. e.g. "Tough", "Simple", "Trivial".
+1. Tag modules. E.g. "CS2113T", "CS2101".
+2. Tag type of lesson. E.g. "Lecture", "Tutorial", "Lab".
+3. Tag type of activities. E.g. "Sports", "Seminar", "Talk".
+4. Tag difficulty of task. E.g. "Tough", "Simple", "Trivial".
 
 *Recursion System*
 
@@ -92,20 +104,16 @@ In NUS, academic semesters are split into weeks of several types. Recursion allo
 
 * Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
 * Items in square brackets are optional. e.g in `add [l/LOCATION]`, `LOCATION` is a parameter that may be omitted.
-* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used 0 times, or as `t/lab`, `t/lecture`, `t/tutorial` etc.
-* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` are acceptable.
+* Items with `…` after them can be used multiple times including zero times. E.g. `[t/TAG]…` can be used 0 times, or as `t/lab`, `t/lecture`, `t/tutorial` etc.
+* Parameters can be in any order. E.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` are acceptable.
+
+[TIP]
+You can save time by utilizing the alternate and shortcut commands. E.g. instead of using `delete`, you may also use `del` or simply `d`.
 
 *Parameters*
 
 Parameters in _PlanMySem_ are designed to be, short and easy to memorise. Once you are familarised with them, they should be intuitive to use.
 The table of parameters and their descriptions (Table 1) below is useful for your reference as you jump right into grasping the system.
-
-*Command Format*
-
-* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
-* Items in square brackets are optional. e.g in `add [l/LOCATION]`, `LOCATION` is a parameter that may be omited.
-* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
-* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
 
 [horizontal]
 *Parameter*:: *Description*
@@ -116,13 +124,13 @@ The table of parameters and their descriptions (Table 1) below is useful for you
     * Day of Week: `Monday`, `mon`, `1`
 `st/`:: *Start Time.* +
     Format: +
-    * 24-Hour in the form of “hh:mm”. e.g. `23:00`
-    * 12-Hour in the form of `hh:mm+AM|PM`. e.g. `12:30 AM`
+    * 24-Hour in the form of “hh:mm”. E.g. `23:00`
+    * 12-Hour in the form of `hh:mm+AM|PM`. E.g. `12:30 AM`
 `et/`:: *End Time / duration.* +
     Format: +
-    * 24-Hour in the form of “hh:mm”. e.g. `23:00`
-    * 12-Hour in the form of `hh:mm+AM|PM`. e.g. `12:30 AM`
-    * Duration of the event in minutes. e.g. `60` represents 60 minutes
+    * 24-Hour in the form of “hh:mm”. E.g. `23:00`
+    * 12-Hour in the form of `hh:mm+AM|PM`. E.g. `12:30 AM`
+    * Duration of the event in minutes. E.g. `60` represents 60 minutes
 `r/`:: *Specify recurrence of a _slot_.* +
     Format: +
     * Select normal weeks: `normal`
@@ -178,9 +186,8 @@ Do the same but additionally, recurse the slot on recess and reading week.
 Do the same but recurse the slot on "normal", instructional, weeks.
 
 [TIP]
-====
 You may add single _slots_ by omitting the recurrence parameter.
-====
+
 {zwsp}
 
 {zwsp}
@@ -194,7 +201,7 @@ Format: `edit t/TAG... [nn/NEW_NAME] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURA
 2. Edit specific _slot_ via the `list` command. +
 Format: `edit INDEX [nn/NEW_NAME] [nd/NEW_DATE] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...`
 
-[WARNING]
+[NOTE]
 ====
 You are not able to edit a slot's date when editing via _tags_.
 To edit a _slot_'s date, you may use the `list` or `find` command and edit specific _slot(s)_ via index.
@@ -223,9 +230,7 @@ Format: `delete t/TAG...`
 Format: `delete INDEX`
 
 [TIP]
-====
 You may delete a specific slot by using the `list` or `find` command and select the specific _slot_ via index.
-====
 
 Examples:
 
@@ -289,9 +294,9 @@ Format: `view day [DATE]`
 4. View all the details in the planner. +
 Format: `view all`
 
-[NOTE]
+[TIP]
 ====
-If MONTH/WEEK/DATE is not specified, the current date is assumed.
+You may omit MONTH/WEEK/to select the current date!
 ====
 
 Examples:
@@ -330,10 +335,9 @@ Format: `history`
 Restores the planner to the state before the previous command was executed. +
 Format: `undo`
 
-[WARNING]
-====
+[TIP]
 The `clear` command cannot be undone.
-====
+
 {zwsp}
 
 {zwsp}
@@ -356,7 +360,7 @@ Format: `clear`
 image::Clear_Command_Output_1.png[width="790"]
 {zwsp}
 
-[WARNING]
+[NOTE]
 ====
 The `clear` command cannot be undone! Your data will be permanently removed once `clear` is executed.
 ====
@@ -416,17 +420,13 @@ The .ics file can be imported into other calendar apps that support .ics files s
 .[.underline]#Location of PlanMySem.ics file#
 image::Export_Command_Directory_1.png[width="790"]
 ====
-{zwsp}
+
 [TIP]
-====
 A file with the ICS file extension is an iCalendar file.
 These are plain text files that include calendar event details like a description, beginning and ending times, location, etc.
-====
 {zwsp}
 
 {zwsp}
-
-
 
 == FAQ
 
@@ -445,23 +445,23 @@ This will overwrite the empty data file it creates with the file that contains t
 
 * *View help* : `help` +
 * *Add Slot* : `add n/NAME d/DATE_OR_DAY_OF_WEEK st/START_TIME et/END_TIME_OR_DURATION [l/LOCATION] [des/DESCRIPTION] [r/normal] [r/recess] [r/reading] [r/exam] [r/past] [t/TAG]…​` +
-e.g. `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial` +
+E.g. `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial` +
 * *List Slot(s)* : `list n/NAME` +
 eg. `list n/CS2113T`
 * *Edit Slot* : `edit` +
 1. Via tags: `edit t/TAG... [nn/NEW_NAME] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...` +
-e.g. `edit t/CS2113T t/Tutorial nl/COM2 04-01`
+E.g. `edit t/CS2113T t/Tutorial nl/COM2 04-01`
 2. Via `list` command: `edit INDEX [nn/NEW_NAME] [nd/NEW_DATE] [nst/NEW_START_TIME] [net/NEW_END_TIME|DURATION] [nl/NEW_LOCATION] [nd/NEW_DESCRIPTION] [nt/NEW_TAG]...` +
-e.g. `edit 1 des/Topic: Sequence Diagram`
+E.g. `edit 1 des/Topic: Sequence Diagram`
 * *Delete Slot* : `delete` +
 1. Via tags: `delete t/TAG…​` +
 eg. `delete t/CS2113T t/Tutorial`
 2. Via `list` command: `delete INDEX` +
 eg. `delete 2`
 * *Find Slots* : `find [KEYWORD]…​` +
-e.g. `find CS`
+E.g. `find CS`
 * *View planner* : `view day [DATE] | view week [WEEK] | view month [MONTH]` +
-e.g.`view month`
+E.g.`view month`
 * *View all details* : `view all`
 * *View history* : `history`
 * *Undo previous command* : `undo`
