@@ -73,14 +73,14 @@ This section displays the current implemented features as well as features that 
 
 Unlike other commercial calendar/scheduling/planner software, PlanMySem makes use of a tagging system to manage slots.
 
-Using tags to tag slots will make tasks easier for you in the future. Tasks such as viewing, deleting and editing slots will be more efficient and performed quicker.
+Using tags to tag slots will make tasks easier for you in the future. Performing tasks such as viewing, deleting and editing slots will be more efficient.
 
 Recommended uses for tags:
 
 1. Tag modules. e.g. "CS2113T", "CS2101".
 2. Tag type of lesson. e.g. "Lecture", "Tutorial", "Lab".
-3. Tag type of activities. e.g. "Sports", "Seminar", "Talk"
-4. Tag difficulty of task. e.g. "Tough", "Simple", "Trivial"
+3. Tag type of activities. e.g. "Sports", "Seminar", "Talk".
+4. Tag difficulty of task. e.g. "Tough", "Simple", "Trivial".
 
 *Recursion System*
 
@@ -88,17 +88,17 @@ Recursion facilitates quick addition of multiple slots, similar to Microsoft Out
 
 In NUS, academic semesters are split into weeks of several types. Recursion allows you to add slots to these types of weeks with ease through the use of the `r/`(recursion) parameter.
 
+*Command Format*
+
+* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
+* Items in square brackets are optional. e.g in `add [l/LOCATION]`, `LOCATION` is a parameter that may be omitted.
+* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used 0 times, or as `t/lab`, `t/lecture`, `t/tutorial` etc.
+* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` are acceptable.
+
 *Parameters*
 
 Parameters in _PlanMySem_ are designed to be, short and easy to memorise. Once you are familarised with them, they should be intuitive to use.
 The table of parameters and their descriptions (Table 1) below is useful for your reference as you jump right into grasping the system.
-
-*Command Format*
-
-* Words in UPPER_CASE are the parameters to be supplied by the user. E.g. in `t/TAG`, `TAG` is a parameter which can be used as the name of the tag.
-* Items in square brackets are optional. e.g in `add [l/LOCATION]`, `LOCATION` is a parameter that may be omited.
-* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]…` can be used as   (i.e. 0 times), `t/lab`, `t/lecture`, `t/tutorial` etc.
-* Parameters can be in any order e.g. if the command specifies `st/START_TIME et/END_TIME d/DATE`, then both `et/09:00 st/08:00 d/2-13-2019` and `et/09:00 d/2-13-2019 st/08:00` is also acceptable.
 
 [horizontal]
 *Parameter*:: *Description*
@@ -297,14 +297,15 @@ View planner for the first of March.
 View planner for week 7 of the academic calendar.
 * `view week recess` +
 View planner for recess week of the academic calendar.
-* `view month March` +
-View planner for the month of March.
-* `view all` +
-View all the details in the planner.
+* `view month` +
+View planner for the months of the current academic semester.
 
 [#img-view]
 .[.underline]#Output after entering `view month`#
 image::Ui.png[width="790"]
+
+* `view all` +
+View all the details in the planner.
 {zwsp}
 
 {zwsp}
