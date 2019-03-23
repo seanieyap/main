@@ -1,4 +1,4 @@
-= PlanMySem - User Guide
+﻿= PlanMySem - User Guide
 :site-section: UserGuide
 :toc:
 :toc-title:
@@ -410,6 +410,10 @@ Format: `redo`
 === Encrypting/decrypting data files
 Planner data is automatically encrypted before saving and decrypted before loading. You do not need to encrypt or decrypt he data manually.
 {zwsp}
+[NOTE]
+====
+The key used for encryption and decryption is saved as a file named "KeyStorage.jceks". Deleting this file will prevent the data from being decrypted.
+====
 
 {zwsp}
 
