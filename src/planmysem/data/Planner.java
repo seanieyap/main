@@ -311,7 +311,6 @@ public class Planner {
     /**
      * Edit specific slot within the planner.
      *
-     * @throws Semester.DateNotFoundException if a targetDate is not found in the semester.
      * @throws IllegalValueException if a targetDate is not found in the semester.
      */
     public void editSlot(LocalDate targetDate, ReadOnlySlot targetSlot, LocalDate date,
