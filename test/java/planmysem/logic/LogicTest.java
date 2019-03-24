@@ -42,6 +42,7 @@ import planmysem.data.Planner;
 import planmysem.data.recurrence.Recurrence;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
+import planmysem.data.semester.Semester;
 import planmysem.data.slot.Description;
 import planmysem.data.slot.Location;
 import planmysem.data.slot.Name;
@@ -74,7 +75,7 @@ public class LogicTest {
     }
 
     private Planner createPlanner() {
-        return new Planner(Planner.generateSemester(LocalDate.of(2019, 1, 14)));
+        return new Planner(Semester.generateSemester(LocalDate.of(2019, 1, 14)));
     }
 
     @Test
