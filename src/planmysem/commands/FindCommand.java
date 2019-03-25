@@ -13,7 +13,6 @@ import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
-import planmysem.data.tag.Tag;
 
 
 /**
@@ -46,13 +45,13 @@ public class FindCommand extends Command {
         for (Map.Entry<LocalDate, Day> entry : planner.getAllDays().entrySet()) {
             for (Slot slot : entry.getValue().getSlots()) {
                 if (isFindByName) {
-                    if (Pattern.matches(".*" + keyword + ".*", slot.getName().value)) {
+                    if (Pattern.matches(".*" + keyword + ".*", slot.getName())) {
                         selectedSlots.put(entry.getKey(), new Pair<>(entry.getValue(), slot));
                     }
                 } else {
-                    Set<Tag> tagSet = slot.getTags();
-                    for (Tag tag : tagSet) {
-                        if (Pattern.matches(".*" + keyword + ".*", tag.value)) {
+                    Set<String> tagSet = slot.getTags();
+                    for (String tag : tagSet) {
+                        if (Pattern.matches(".*" + keyword + ".*", tag)) {
                             selectedSlots.put(entry.getKey(), new Pair<>(entry.getValue(), slot));
                         }
                     }

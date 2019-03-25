@@ -45,7 +45,7 @@ public class AdaptedPlanner {
     /**
      * Converts this jaxb-friendly {@code AdaptedPlanner} object into the corresponding(@code Planner} object.
      *
-     * @throws IllegalValueException if there were any data constraints violated in the adapted person
+     * @throws IllegalValueException if there were any data constraints violated in the AdaptedSemester
      */
     public Planner toModelType() throws IllegalValueException {
         return new Planner(semester.toModelType());

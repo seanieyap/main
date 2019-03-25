@@ -15,11 +15,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import planmysem.data.exception.DuplicateDataException;
-import planmysem.data.exception.IllegalValueException;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
-import planmysem.data.tag.Tag;
 
 /**
  * A list of days. Does not allow null elements or duplicates.
@@ -328,21 +325,9 @@ public class Semester implements ReadOnlySemester {
     }
 
     /**
-     * Adds a Day to the list.
-     *
-     * @throws DuplicateDayException if the Day to addDay is a duplicate of an existing Day in the list.
-     */
-    public void addDay(LocalDate date, Day day) throws DuplicateDayException {
-        if (contains(day)) {
-            throw new DuplicateDayException();
-        }
-        days.put(date, day);
-    }
-
-    /**
      * Get set of slots which contain all specified tags.
      */
-    public Map<LocalDateTime, ReadOnlySlot> getSlots(Set<Tag> tags) {
+    public Map<LocalDateTime, ReadOnlySlot> getSlots(Set<String> tags) {
         Map<LocalDateTime, ReadOnlySlot> selectedSlots = new TreeMap<>();
 
         for (Map.Entry<LocalDate, Day> day : days.entrySet()) {
@@ -378,13 +363,9 @@ public class Semester implements ReadOnlySemester {
 
     /**
      * Edits a Slot in the Semester.
-     *
-     * @throws IllegalValueException if a targetDate is not found in the semester.
      */
     public void editSlot(LocalDate targetDate, ReadOnlySlot targetSlot, LocalDate date, LocalTime startTime,
-                         int duration, String name, String location, String description, Set<Tag> tags)
-            throws IllegalValueException {
-
+                         int duration, String name, String location, String description, Set<String> tags) {
         Slot editingSlot = days.get(targetDate).getSlots().stream()
             .filter(s -> s.equals(targetSlot)).findAny().orElse(null);
 
@@ -540,15 +521,6 @@ public class Semester implements ReadOnlySemester {
     public int hashCode() {
         return Objects.hash(name, academicYear, days, startDate, endDate, noOfWeeks,
                 recessDays, readingDays, normalDays, examDays);
-    }
-
-    /**
-     * Signals that an operation would have violated the 'no duplicates' property.
-     */
-    public static class DuplicateDayException extends DuplicateDataException {
-        protected DuplicateDayException() {
-            super("Operation would result in duplicate days");
-        }
     }
 
     /**

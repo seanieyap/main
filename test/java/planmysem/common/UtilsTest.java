@@ -9,15 +9,10 @@ import static planmysem.common.Utils.getNearestDayOfWeek;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
-import planmysem.data.exception.IllegalValueException;
-import planmysem.data.tag.Tag;
 
 public class UtilsTest {
     @Test
@@ -162,49 +157,6 @@ public class UtilsTest {
         assertEquals(Utils.parseInteger("0.1"), -1);
         assertEquals(Utils.parseInteger("test"), -1);
         assertEquals(Utils.parseInteger("OO"), -1);
-    }
-
-    @Test
-    public void parse_tags_successful() {
-        List<String> listOfTag = new ArrayList<>();
-        listOfTag.add("0");
-        listOfTag.add("tag1");
-        listOfTag.add("tag 2");
-        listOfTag.add("tag 3 super long tag");
-
-        Set<String> tagStrings = new HashSet<>(listOfTag);
-
-        Set<Tag> expectedTags = new HashSet<>();
-        Set<Tag> tags = new HashSet<>();
-        try {
-            expectedTags = new HashSet<>(Arrays.asList(new Tag("0"),
-                    new Tag("tag1"), new Tag("tag 2"),
-                    new Tag("tag 3 super long tag")));
-
-            tags = Utils.parseTags(tagStrings);
-        } catch (IllegalValueException ive) {
-        }
-
-        assertEquals(tags, expectedTags);
-
-        try {
-            tags = Utils.parseTags(null);
-        } catch (IllegalValueException ive) {
-        }
-
-        assertEquals(tags, null);
-    }
-
-    @Test
-    public void parse_tags_unsuccessful() {
-        Set<Tag> tags = new HashSet<>();
-
-        try {
-            tags = Utils.parseTags(null);
-        } catch (IllegalValueException ive) {
-        }
-
-        assertEquals(tags, null);
     }
 
     @Test

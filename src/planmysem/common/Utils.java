@@ -13,9 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import planmysem.data.exception.IllegalValueException;
-import planmysem.data.tag.Tag;
-
 /**
  * Utility methods
  */
@@ -171,19 +168,17 @@ public class Utils {
 
     /**
      * Convert set of strings into set of tags.
-     *
-     * @throws IllegalValueException if any of the raw values are invalid
      */
-    public static Set<Tag> parseTags(Set<String> tags) throws IllegalValueException {
-        if (tags == null) {
-            return null;
-        }
-        Set<Tag> tagSet = new HashSet<>();
-        for (String tag : tags) {
-            tagSet.add(new Tag(tag));
-        }
-        return tagSet;
-    }
+    //    public static Set<String> parseTags(Set<String> tags) {
+    //        if (tags == null) {
+    //            return null;
+    //        }
+    //        Set<String> tagSet = new HashSet<>();
+    //        for (String tag : tags) {
+    //            tagSet.add(new String(tag));
+    //        }
+    //        return tagSet;
+    //    }
 
 
     /**

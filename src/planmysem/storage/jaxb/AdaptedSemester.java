@@ -101,7 +101,7 @@ public class AdaptedSemester {
     /**
      * Converts this jaxb-friendly adapted person object into the Person object.
      *
-     * @throws IllegalValueException if there were any data constraints violated in the adapted person
+     * @throws IllegalValueException if there were any data constraints violated in the AdaptedSemester
      */
     public Semester toModelType() throws IllegalValueException {
         final String name = this.name;
