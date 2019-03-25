@@ -86,7 +86,7 @@ public abstract class Command {
         int count = 0;
         for (Map.Entry<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> entry : relevantSlots.entrySet()) {
             if (count == targetIndex - DISPLAYED_INDEX_OFFSET) {
-                return new Pair(entry.getKey(), entry.getValue());
+                return new Pair<>(entry.getKey(), entry.getValue());
             }
             count++;
         }

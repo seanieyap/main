@@ -379,7 +379,6 @@ public class Semester implements ReadOnlySemester {
     /**
      * Edits a Slot in the Semester.
      *
-     * @throws DateNotFoundException if a targetDate is not found in the semester.
      * @throws IllegalValueException if a targetDate is not found in the semester.
      */
     public void editSlot(LocalDate targetDate, ReadOnlySlot targetSlot, LocalDate date, LocalTime startTime,
