@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>planmysem.storage.StorageFile</OriginalElement>
+  <nodes>
+    <node x="14.0" y="79.0">planmysem.storage.jaxb.AdaptedSlot</node>
+    <node x="14.0" y="0.0">planmysem.storage.jaxb.AdaptedTag</node>
+    <node x="14.0" y="158.0">planmysem.storage.jaxb.AdaptedDay</node>
+    <node x="4.0" y="316.0">planmysem.storage.jaxb.AdaptedPlanner</node>
+    <node x="0.0" y="237.0">planmysem.storage.jaxb.AdaptedSemester</node>
+    <node x="50.75" y="395.0">planmysem.storage.StorageFile</node>
+    <node x="161.0" y="237.0">planmysem.storage.KeyStorage</node>
+    <node x="165.0" y="316.0">planmysem.storage.Encryptor</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="planmysem.storage.StorageFile" target="planmysem.storage.Encryptor">
+      <point x="35.333333333333314" y="-14.5" />
+      <point x="139.08333333333331" y="370.0" />
+      <point x="214.5" y="370.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="planmysem.storage.jaxb.AdaptedSlot" target="planmysem.storage.jaxb.AdaptedTag">
+      <point x="-37.66666666666663" y="-14.5" />
+      <point x="-37.66666666666663" y="14.5" />
+    </edge>
+    <edge source="planmysem.storage.jaxb.AdaptedPlanner" target="planmysem.storage.jaxb.AdaptedSemester">
+      <point x="-33.25" y="-14.5" />
+      <point x="37.25" y="291.0" />
+      <point x="35.25" y="291.0" />
+      <point x="-35.25" y="14.5" />
+    </edge>
+    <edge source="planmysem.storage.StorageFile" target="planmysem.storage.jaxb.AdaptedPlanner">
+      <point x="0.0" y="-14.5" />
+      <point x="33.25" y="14.5" />
+    </edge>
+    <edge source="planmysem.storage.jaxb.AdaptedDay" target="planmysem.storage.jaxb.AdaptedSlot">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="planmysem.storage.jaxb.AdaptedSemester" target="planmysem.storage.jaxb.AdaptedDay">
+      <point x="-47.0" y="-14.5" />
+      <point x="23.5" y="212.0" />
+      <point x="32.833333333333314" y="212.0" />
+      <point x="-37.666666666666686" y="14.5" />
+    </edge>
+    <edge source="planmysem.storage.Encryptor" target="planmysem.storage.KeyStorage">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Tree" zoom="1.0" x="602.5" y="187.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
