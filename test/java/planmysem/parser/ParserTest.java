@@ -321,6 +321,7 @@ public class ParserTest {
      * @param expectedCommandClass expected class of returned command
      * @return the parsed command object
      */
+    @SuppressWarnings("unchecked")
     private <T extends Command> T parseAndAssertCommandType(String input, Class<T> expectedCommandClass) {
         final Command result = parser.parseCommand(input);
         assertTrue(result.getClass().isAssignableFrom(expectedCommandClass));
