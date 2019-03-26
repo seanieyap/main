@@ -43,12 +43,8 @@ import planmysem.data.recurrence.Recurrence;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.semester.Semester;
-import planmysem.data.slot.Description;
-import planmysem.data.slot.Location;
-import planmysem.data.slot.Name;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
-import planmysem.data.tag.Tag;
 import planmysem.storage.StorageFile;
 
 public class LogicTest {
@@ -300,20 +296,18 @@ public class LogicTest {
         expectedPlanner.addSlot(dateToBeAdded, slotToBeAdded);
 
         // create tags
-        Set<String> rawTags = new HashSet<>();
-        rawTags.add("CS2113T");
-        Set<Tag> tags = Utils.parseTags(rawTags);
+        Set<String> tags = new HashSet<>();
+        tags.add("CS2113T");
 
-        Set<String> rawNewTags = new HashSet<>();
-        rawNewTags.add("CS2101");
-        Set<Tag> newTags = Utils.parseTags(rawNewTags);
+        Set<String> newTags = new HashSet<>();
+        newTags.add("CS2101");
 
         expectedPlanner.editSlot(dateToBeAdded, slotToBeAdded, null, LocalTime.of(4, 0), 60,
                 "test", "testlo", "testdes", newTags);
 
         // Just to generate the crafted message in this case.
         EditCommand ec = new EditCommand("test", LocalTime.of(4, 0), 60,
-                "testlo", "testdes", rawTags, rawNewTags);
+                "testlo", "testdes", tags, newTags);
 
         // execute command and verify result
         assertCommandBehavior("edit t/CS2113T nt/CS2101 nn/test nl/testlo ndes/testdes nst/04:00 net/60",
@@ -326,10 +320,8 @@ public class LogicTest {
 
     @Test
     public void execute_edit_no_change_successful() throws Exception {
-        TestDataHelper helper = new TestDataHelper();
-        Set<String> rawTags = new HashSet<>();
-        rawTags.add("someTagThatDoesNotExist");
-        Set<Tag> tags = Utils.parseTags(rawTags);
+        Set<String> tags = new HashSet<>();
+        tags.add("someTagThatDoesNotExist");
 
         assertCommandBehavior("edit t/someTagThatDoesNotExist n/test",
                 String.format(EditCommand.MESSAGE_SUCCESS_NO_CHANGE,
@@ -391,9 +383,8 @@ public class LogicTest {
     @Test
     public void execute_delete_no_change_successful() throws Exception {
         TestDataHelper helper = new TestDataHelper();
-        Set<String> rawTags = new HashSet<>();
-        rawTags.add("someTagThatDoesNotExist");
-        Set<Tag> tags = Utils.parseTags(rawTags);
+        Set<String> tags = new HashSet<>();
+        tags.add("someTagThatDoesNotExist");
 
         assertCommandBehavior(helper.generateDeleteCommand(tags),
                 String.format(DeleteCommand.MESSAGE_SUCCESS_NO_CHANGE,
@@ -474,14 +465,12 @@ public class LogicTest {
     class TestDataHelper{
 
         Slot slotOne() throws Exception {
-            Name name = new Name("CS2113T Tutorial");
-            Location location = new Location("COM2 04-11");
-            Description description = new Description("Topic: Sequence Diagram");
+            String name = "CS2113T Tutorial";
+            String location = "COM2 04-11";
+            String description = "Topic: Sequence Diagram";
             LocalTime startTime = LocalTime.parse("08:00");
             LocalTime endTime = LocalTime.parse("09:00");
-            Tag tag1 = new Tag("CS2113T");
-            Tag tag2 = new Tag("Tutorial");
-            Set<Tag> tags = new HashSet<>(Arrays.asList(tag1, tag2));
+            Set<String> tags = new HashSet<>(Arrays.asList( "CS2113T", "Tutorial"));
             return new Slot(name, location, description, startTime, endTime, tags);
         }
 
@@ -494,12 +483,12 @@ public class LogicTest {
          */
         Slot generateSlot(int seed) throws Exception {
             return new Slot(
-                    new Name("slot " + seed),
-                    new Location("location " + Math.abs(seed)),
-                    new Description("description " + Math.abs(seed)),
+                    "slot " + seed,
+                    "location " + Math.abs(seed),
+                    "description " + Math.abs(seed),
                     LocalTime.parse("00:00"),
                     LocalTime.parse("00:00"),
-                    new HashSet<>(Arrays.asList(new Tag("tag" + Math.abs(seed)), new Tag("tag" + Math.abs(seed + 1))))
+                    new HashSet<>(Arrays.asList("tag" + Math.abs(seed), "tag" + Math.abs(seed + 1)))
             );
         }
 
@@ -520,9 +509,9 @@ public class LogicTest {
                 cmd.add("des/" + s.getDescription());
             }
 
-            Set<Tag> tags = s.getTags();
+            Set<String> tags = s.getTags();
             if (tags != null) {
-                for(Tag tag : tags){
+                for(String tag : tags){
                     cmd.add("t/" + tag);
                 }
             }
@@ -549,9 +538,9 @@ public class LogicTest {
                 cmd.add("des/" + s.getDescription());
             }
 
-            Set<Tag> tags = s.getTags();
+            Set<String> tags = s.getTags();
             if (tags != null) {
-                for(Tag tag : tags){
+                for(String tag : tags){
                     cmd.add("t/" + tag);
                 }
             }
@@ -562,13 +551,13 @@ public class LogicTest {
         }
 
         /** Generates the correct delete command based on tags */
-        String generateDeleteCommand(Set<Tag> tags) {
+        String generateDeleteCommand(Set<String> tags) {
             StringJoiner cmd = new StringJoiner(" ");
 
             cmd.add("delete");
 
             if (tags != null) {
-                for(Tag tag : tags){
+                for(String tag : tags){
                     cmd.add("t/" + tag);
                 }
             }
@@ -582,9 +571,9 @@ public class LogicTest {
 
             cmd.add("delete");
 
-            Set<Tag> tags = slot.getTags();
+            Set<String> tags = slot.getTags();
             if (tags != null) {
-                for(Tag tag : tags){
+                for(String tag : tags){
                     cmd.add("t/" + tag);
                 }
             }

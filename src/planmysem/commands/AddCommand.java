@@ -6,14 +6,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import planmysem.common.Utils;
 import planmysem.data.exception.IllegalValueException;
 import planmysem.data.recurrence.Recurrence;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.Semester;
-import planmysem.data.slot.Description;
-import planmysem.data.slot.Location;
-import planmysem.data.slot.Name;
 import planmysem.data.slot.Slot;
 
 /**
@@ -39,13 +35,10 @@ public class AddCommand extends Command {
 
     /**
      * Convenience constructor using raw values.
-     *
-     * @throws IllegalValueException if any of the raw values are invalid
      */
     public AddCommand(LocalDate date, String name, String location, String description, LocalTime startTime,
-                      int duration, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
-        slot = new Slot(new Name(name), new Location(location), new Description(description),
-                startTime, duration, Utils.parseTags(tags));
+                      int duration, Set<String> tags, Set<String> recurrences) {
+        slot = new Slot(name, location, description, startTime, duration, tags);
         recurrence = new Recurrence(recurrences, date);
     }
 
@@ -56,8 +49,7 @@ public class AddCommand extends Command {
      */
     public AddCommand(int day, String name, String location, String description, LocalTime startTime,
                       int duration, Set<String> tags, Set<String> recurrences) throws IllegalValueException {
-        slot = new Slot(new Name(name), new Location(location), new Description(description),
-                startTime, duration, Utils.parseTags(tags));
+        slot = new Slot(name, location, description, startTime, duration, tags);
         recurrence = new Recurrence(recurrences, day);
     }
 

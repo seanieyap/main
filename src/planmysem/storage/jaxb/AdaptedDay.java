@@ -64,7 +64,7 @@ public class AdaptedDay {
     /**
      * Converts this jaxb-friendly adapted Day object into the Day object.
      *
-     * @throws IllegalValueException if there were any data constraints violated in the adapted Day
+     * @throws IllegalValueException if there were any data constraints violated in the AdaptedSemester
      */
     public Day toModelType() throws IllegalValueException {
         final ArrayList<Slot> slots = new ArrayList<>();

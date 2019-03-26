@@ -10,11 +10,8 @@ import java.util.TreeMap;
 
 import javafx.util.Pair;
 import planmysem.common.Messages;
-import planmysem.common.Utils;
-import planmysem.data.exception.IllegalValueException;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.slot.ReadOnlySlot;
-import planmysem.data.tag.Tag;
 
 /**
  * Adds a person to the address book.
@@ -46,16 +43,14 @@ public class EditCommand extends Command {
     private final String name;
     private final String location;
     private final String description;
-    private final Set<Tag> tags = new HashSet<>();
-    private final Set<Tag> newTags = new HashSet<>();
+    private final Set<String> tags = new HashSet<>();
+    private final Set<String> newTags = new HashSet<>();
 
     /**
      * Convenience constructor using raw values.
-     *
-     * @throws IllegalValueException if any of the raw values are invalid
      */
     public EditCommand(String name, LocalTime startTime, int duration, String location, String description,
-                       Set<String> tags, Set<String> newTags) throws IllegalValueException {
+                       Set<String> tags, Set<String> newTags) {
         this.date = null;
         this.startTime = startTime;
         this.duration = duration;
@@ -63,10 +58,10 @@ public class EditCommand extends Command {
         this.location = location;
         this.description = description;
         if (tags != null) {
-            this.tags.addAll(Utils.parseTags(tags));
+            this.tags.addAll(tags);
         }
         if (newTags != null) {
-            this.newTags.addAll(Utils.parseTags(newTags));
+            this.newTags.addAll(newTags);
         }
     }
 
@@ -74,8 +69,7 @@ public class EditCommand extends Command {
      * Convenience constructor using raw values.
      */
     public EditCommand(int index, String name, LocalDate date, LocalTime startTime, int duration,
-                       String location, String description, Set<String> newTags)
-            throws IllegalValueException {
+                       String location, String description, Set<String> newTags) {
         super(index);
         this.date = date;
         this.startTime = startTime;
@@ -84,7 +78,7 @@ public class EditCommand extends Command {
         this.location = location;
         this.description = description;
         if (newTags != null) {
-            this.newTags.addAll(Utils.parseTags(newTags));
+            this.newTags.addAll(newTags);
         }
     }
 
@@ -112,12 +106,8 @@ public class EditCommand extends Command {
         String successMessage = craftSuccessMessage(selectedSlots);
 
         for (Map.Entry<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> entry : selectedSlots.entrySet()) {
-            try {
-                planner.editSlot(entry.getKey(), entry.getValue().getValue(), date,
-                        startTime, duration, name, location, description, newTags);
-            } catch (IllegalValueException ive) {
-                return new CommandResult(MESSAGE_FAIL_ILLEGAL_VALUE);
-            }
+            planner.editSlot(entry.getKey(), entry.getValue().getValue(), date,
+                    startTime, duration, name, location, description, newTags);
         }
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
@@ -178,7 +168,7 @@ public class EditCommand extends Command {
             sb.append("\nTags: ");
             StringJoiner sj = new StringJoiner(", ");
 
-            for (Tag tag : newTags) {
+            for (String tag : newTags) {
                 StringBuilder sb2 = new StringBuilder();
                 sb2.append("\"");
                 sb2.append(tag);

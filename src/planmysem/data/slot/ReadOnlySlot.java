@@ -4,16 +4,15 @@ import java.time.LocalTime;
 import java.util.Set;
 
 import planmysem.common.Utils;
-import planmysem.data.tag.Tag;
 
 /**
  * A read-only immutable interface for a Slot in the Planner.
  * Implementations should guarantee: details are present and not null, field values are validated.
  */
 public interface ReadOnlySlot {
-    Name getName();
-    Location getLocation();
-    Description getDescription();
+    String getName();
+    String getLocation();
+    String getDescription();
     int getDuration();
     LocalTime getStartTime();
 
@@ -21,7 +20,7 @@ public interface ReadOnlySlot {
      * The returned {@code Set} is a deep copy of the internal {@code Set},
      * changes on the returned list will not affect the slot's internal tags.
      */
-    Set<Tag> getTags();
+    Set<String> getTags();
 
     /**
      * Returns true if the values inside this object is same as
@@ -67,12 +66,12 @@ public interface ReadOnlySlot {
         sb.append("\nTags: ");
 
         int count = 1;
-        for (Tag tag : getTags()) {
+        for (String tag : getTags()) {
             sb.append("\n");
             sb.append("\t");
             sb.append(count);
             sb.append(".\t");
-            sb.append(tag.toString());
+            sb.append(tag);
             count++;
         }
         return sb.toString();
