@@ -6,26 +6,24 @@ import java.util.Objects;
 import java.util.Set;
 
 import planmysem.common.Utils;
-import planmysem.data.exception.IllegalValueException;
-import planmysem.data.tag.Tag;
 
 /**
  * Represents a slot in the planner.
  * Guarantees: details are present and not null, field values are validated.
  */
 public class Slot implements ReadOnlySlot {
-    private final Set<Tag> tags = new HashSet<>();
-    private Name name;
-    private Location location;
-    private Description description;
+    private final Set<String> tags = new HashSet<>();
+    private String name;
+    private String location;
+    private String description;
     private LocalTime startTime;
     private int duration;
 
     /**
      * Assumption: Every field must be present and not null.
      */
-    public Slot(Name name, Location location, Description description,
-                LocalTime startTime, LocalTime endTime, Set<Tag> tags) {
+    public Slot(String name, String location, String description,
+                LocalTime startTime, LocalTime endTime, Set<String> tags) {
         this.name = name;
         this.location = location;
         this.description = description;
@@ -39,8 +37,8 @@ public class Slot implements ReadOnlySlot {
     /**
      * Assumption: Every field must be present and not null.
      */
-    public Slot(Name name, Location location, Description description,
-                LocalTime startTime, int duration, Set<Tag> tags) {
+    public Slot(String name, String location, String description,
+                LocalTime startTime, int duration, Set<String> tags) {
         this.name = name;
         this.location = location;
         this.description = description;
@@ -53,7 +51,6 @@ public class Slot implements ReadOnlySlot {
 
     /**
      * Copy constructor.
-     * @throws IllegalValueException if value is invalid
      */
     public Slot(ReadOnlySlot source) {
         this(source.getName(), source.getLocation(), source.getDescription(),
@@ -62,49 +59,41 @@ public class Slot implements ReadOnlySlot {
 
     /**
      * Set name.
-     * @throws IllegalValueException if value is invalid
      */
-    public void setName(String value) throws IllegalValueException {
+    public void setName(String value) {
         if (value == null) {
             return;
         }
-        name = new Name(value);
+        name = value;
     }
 
     /**
      * Set location.
-     * @throws IllegalValueException if value is invalid
      */
-    public void setLocation(String value) throws IllegalValueException {
+    public void setLocation(String value) {
         if (value == null) {
             return;
         }
-        if ("".equals(value)) {
-            location = new Location(null);
-        } else {
-            location = new Location(value);
-        }
+        location = value;
     }
 
     /**
      * Set description.
-     * @throws IllegalValueException if value is invalid
      */
-    public void setDescription(String value) throws IllegalValueException {
+    public void setDescription(String value) {
         if (value == null) {
             return;
         }
-        if ("".equals(value)) {
-            description = new Description(null);
-        } else {
-            description = new Description(value);
-        }
+        description = value;
     }
 
     /**
      * Set start time.
      */
     public void setStartTime(LocalTime value) {
+        if (value == null) {
+            return;
+        }
         startTime = value;
     }
 
@@ -116,17 +105,17 @@ public class Slot implements ReadOnlySlot {
     }
 
     @Override
-    public Name getName() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public Location getLocation() {
+    public String getLocation() {
         return location;
     }
 
     @Override
-    public Description getDescription() {
+    public String getDescription() {
         return description;
     }
 
@@ -141,14 +130,17 @@ public class Slot implements ReadOnlySlot {
     }
 
     @Override
-    public Set<Tag> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
     /**
      * Replaces this slot's tags with the tags in {@code replacement}.
      */
-    public void setTags(Set<Tag> tags) {
+    public void setTags(Set<String> tags) {
+        if (tags == null) {
+            return;
+        }
         this.tags.clear();
         this.tags.addAll(tags);
     }

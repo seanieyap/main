@@ -8,13 +8,11 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javafx.util.Pair;
-import planmysem.data.exception.IllegalValueException;
 import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.semester.Semester;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
-import planmysem.data.tag.Tag;
 
 /**
  * Represents the entire Planner. Contains the data of the Planner.
@@ -64,12 +62,10 @@ public class Planner {
 
     /**
      * Edit specific slot within the planner.
-     *
-     * @throws IllegalValueException if a targetDate is not found in the semester.
      */
     public void editSlot(LocalDate targetDate, ReadOnlySlot targetSlot, LocalDate date,
                          LocalTime startTime, int duration, String name, String location,
-                         String description, Set<Tag> tags) throws IllegalValueException {
+                         String description, Set<String> tags) {
         semester.editSlot(targetDate, targetSlot, date, startTime, duration, name, location, description, tags);
     }
 
@@ -150,7 +146,7 @@ public class Planner {
     /**
      * gets all slots in the Planner containing all specified tags.
      */
-    public Map<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> getSlots(Set<Tag> tags) {
+    public Map<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> getSlots(Set<String> tags) {
         final Map<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> selectedSlots = new TreeMap<>();
 
         for (Map.Entry<LocalDate, Day> entry : getAllDays().entrySet()) {

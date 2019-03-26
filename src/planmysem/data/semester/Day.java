@@ -5,7 +5,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import planmysem.data.exception.IllegalValueException;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
 
@@ -46,7 +45,7 @@ public class Day implements ReadOnlyDay {
      * Edit a slot in the day.
      */
     public void editSlot(ReadOnlySlot targetSlot, LocalTime startTime, int duration,
-                         String name, String location, String description) throws IllegalValueException {
+                         String name, String location, String description) {
         for (Slot slot : slots) {
             if (slot.equals(targetSlot)) {
                 if (startTime != null) {

@@ -8,11 +8,8 @@ import java.util.TreeMap;
 
 import javafx.util.Pair;
 import planmysem.common.Messages;
-import planmysem.common.Utils;
-import planmysem.data.exception.IllegalValueException;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.slot.ReadOnlySlot;
-import planmysem.data.tag.Tag;
 
 /**
  * Adds a person to the address book.
@@ -34,15 +31,13 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_SUCCESS_NO_CHANGE = "No Slots were deleted.\n\n%1$s";
     public static final String MESSAGE_SUCCESS = "%1$s Slots deleted.\n\n%2$s\n%3$s";
 
-    private final Set<Tag> tags = new HashSet<>();
+    private final Set<String> tags = new HashSet<>();
 
     /**
      * Convenience constructor using raw values.
-     *
-     * @throws IllegalValueException if any of the raw values are invalid
      */
-    public DeleteCommand(Set<String> tags) throws IllegalValueException {
-        this.tags.addAll(Utils.parseTags(tags));
+    public DeleteCommand(Set<String> tags) {
+        this.tags.addAll(tags);
     }
 
     /**
