@@ -261,26 +261,19 @@ public class Parser {
             }
         }
 
+        // The following are not mandatory and can be null
         String name = getFirstInSet(arguments.get(PARAMETER_NEW_NAME));
         String location = getFirstInSet(arguments.get(PARAMETER_NEW_LOCATION));
         String description = getFirstInSet(arguments.get(PARAMETER_NEW_DESCRIPTION));
         Set<String> newTags = arguments.get(PARAMETER_NEW_TAG);
 
         if (index == -1) {
-            try {
-                return new EditCommand(name, startTime, duration, location, description, tags, newTags);
-            } catch (IllegalValueException ive) {
-                return new IncorrectCommand(ive.getMessage());
-            }
+            return new EditCommand(name, startTime, duration, location, description, tags, newTags);
         } else {
             String nd = getFirstInSet(arguments.get(PARAMETER_NEW_DATE));
             LocalDate date = Utils.parseDate(nd);
 
-            try {
-                return new EditCommand(index, name, date, startTime, duration, location, description, newTags);
-            } catch (IllegalValueException ive) {
-                return new IncorrectCommand(ive.getMessage());
-            }
+            return new EditCommand(index, name, date, startTime, duration, location, description, newTags);
         }
     }
 
@@ -301,11 +294,7 @@ public class Parser {
         }
 
         if (index == -1) {
-            try {
-                return new DeleteCommand(tags);
-            } catch (IllegalValueException ive) {
-                return new IncorrectCommand(ive.getMessage());
-            }
+            return new DeleteCommand(tags);
         } else {
             return new DeleteCommand(index);
         }

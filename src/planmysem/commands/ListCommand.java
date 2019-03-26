@@ -12,7 +12,6 @@ import planmysem.data.semester.Day;
 import planmysem.data.semester.ReadOnlyDay;
 import planmysem.data.slot.ReadOnlySlot;
 import planmysem.data.slot.Slot;
-import planmysem.data.tag.Tag;
 
 /**
  * Displays a list of all slots in the planner whose name matches the argument keyword.
@@ -38,6 +37,7 @@ public class ListCommand extends Command {
         this.keyword = (name == null) ? tag.trim() : name.trim();
         this.isListByName = (name != null);
     }
+
     @Override
     public CommandResult execute() {
         Map<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> selectedSlots = new TreeMap<>();
@@ -45,14 +45,14 @@ public class ListCommand extends Command {
         for (Map.Entry<LocalDate, Day> entry : planner.getAllDays().entrySet()) {
             for (Slot slot : entry.getValue().getSlots()) {
                 if (isListByName) {
-                    if (slot.getName().value.equalsIgnoreCase(keyword)) {
+                    if (slot.getName().equalsIgnoreCase(keyword)) {
                         selectedSlots.put(entry.getKey(), new Pair<>(entry.getValue(), slot));
                     }
                 } else {
-                    Set<Tag> tagSet = slot.getTags();
-                    for (Tag tag : tagSet) {
+                    Set<String> tagSet = slot.getTags();
+                    for (String tag : tagSet) {
                         //                        if (slot.getTags().contains(keyword))
-                        if (tag.value.equalsIgnoreCase(keyword)) {
+                        if (tag.equalsIgnoreCase(keyword)) {
                             selectedSlots.put(entry.getKey(), new Pair<>(entry.getValue(), slot));
                         }
                     }
