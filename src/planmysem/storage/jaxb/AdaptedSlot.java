@@ -12,12 +12,12 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 
 import planmysem.common.Utils;
-import planmysem.data.exception.IllegalValueException;
-import planmysem.data.slot.ReadOnlySlot;
-import planmysem.data.slot.Slot;
+import planmysem.common.exceptions.IllegalValueException;
+import planmysem.model.slot.ReadOnlySlot;
+import planmysem.model.slot.Slot;
 
 /**
- * JAXB-friendly adapted person data holder class.
+ * JAXB-friendly adapted person model holder class.
  */
 public class AdaptedSlot {
     @XmlElement(required = true)
@@ -72,7 +72,7 @@ public class AdaptedSlot {
     /**
      * Converts this jaxb-friendly adapted person object into the Person object.
      *
-     * @throws IllegalValueException if there were any data constraints violated in the AdaptedSemester
+     * @throws IllegalValueException if there were any model constraints violated in the IcsSemester
      */
     public Slot toModelType() throws IllegalValueException {
         if (hasIllegalValues(name) || hasIllegalValues(location) || hasIllegalValues(description) || duration < 0) {
