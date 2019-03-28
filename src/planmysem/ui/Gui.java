@@ -11,7 +11,7 @@ import planmysem.logic.LogicManager;
 /**
  * The GUI of the App
  */
-public class Gui {
+public class Gui implements Ui {
 
     /**
      * Offset required to convert between 1-indexing and 0-indexing.
@@ -30,9 +30,7 @@ public class Gui {
         this.version = version;
     }
 
-    /**
-     * TODO: Add Javadoc comment.
-     */
+    @Override
     public void start(Stage stage, Stoppable mainApp) throws IOException {
         mainWindow = createMainWindowP(stage, mainApp);
         mainWindow.displayWelcomeMessage(version, logicManager.getStorageFilePath());

@@ -160,17 +160,18 @@ The sections below give more details of each component.
 .Structure of the UI Component
 image::UiClassDiagram.png[width="800"]
 
-*API* : link:{repoURL}/src/main/PlanMySem/ui/Gui.java[`Gui.java`]
+*API* : link:{repoURL}/src/main/PlanMySem/ui/Ui.java[`Ui.java`]
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`commandInput`, `outputConsole` etc.
-//All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
+The UI consists of a `MainWindow` that is made up of just `commandInput` and `outputConsole`.
+This application is mainly a text-based application, hence here are not much componenets here.
 
-//The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
+The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder.
+For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
 The `UI` component,
 
 * Executes user commands read from `commandInput`, using the `Logic` component.
-* Displays `commandResult` to the user via the `outputConsole`.
+* Displays `commandResult` to the user via `outputConsole`.
 
 [[Design-Logic]]
 === Logic component
