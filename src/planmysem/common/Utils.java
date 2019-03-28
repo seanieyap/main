@@ -22,7 +22,7 @@ public class Utils {
     public static final Pattern DATE_FORMAT_NO_YEAR =
             Pattern.compile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])");
     public static final Pattern TWELVE_HOUR_FORMAT =
-            Pattern.compile("(1[012]|[1-9]):[0-5][0-9](\\s)?(AM|PM)");
+            Pattern.compile("(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)(AM|PM)");
     public static final Pattern TWENTY_FOUR_HOUR_FORMAT =
             Pattern.compile("([01]?[0-9]|2[0-3]):[0-5][0-9]");
     public static final Pattern INTEGER_FORMAT =
@@ -142,13 +142,16 @@ public class Utils {
      * Parse String to 12 hour or 24 hour time format.
      */
     public static LocalTime parseTime(String time) {
-        LocalTime result = null;
-        if (time != null && TWELVE_HOUR_FORMAT.matcher(time).matches()) {
-            result = LocalTime.parse(time, DateTimeFormatter.ofPattern("h[h]:mm a"));
-        } else if (TWENTY_FOUR_HOUR_FORMAT.matcher(time).matches()) {
-            result = LocalTime.parse(time, DateTimeFormatter.ofPattern("H[H]:mm"));
+        if (time == null) {
+            return null;
         }
-        return result;
+        if (TWELVE_HOUR_FORMAT.matcher(time).matches()) {
+            return LocalTime.parse(time.toUpperCase(), DateTimeFormatter.ofPattern("h[h]:mm a"));
+        } else if (TWENTY_FOUR_HOUR_FORMAT.matcher(time).matches()) {
+            return LocalTime.parse(time, DateTimeFormatter.ofPattern("H[H]:mm"));
+        }
+
+        return null;
     }
 
     /**
@@ -165,21 +168,6 @@ public class Utils {
             return -1;
         }
     }
-
-    /**
-     * Convert set of strings into set of tags.
-     */
-    //    public static Set<String> parseTags(Set<String> tags) {
-    //        if (tags == null) {
-    //            return null;
-    //        }
-    //        Set<String> tagSet = new HashSet<>();
-    //        for (String tag : tags) {
-    //            tagSet.add(new String(tag));
-    //        }
-    //        return tagSet;
-    //    }
-
 
     /**
      * Get the time difference between two LocalTimes in minutes.
