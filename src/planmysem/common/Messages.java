@@ -83,17 +83,9 @@ public class Messages {
     }
 
     /**
-     * Craft selected message without header.
-     */
-    public static String craftSelectedMessage(Map<LocalDate,
-            Pair<ReadOnlyDay, ReadOnlySlot>> selectedSlots) {
-        return getSelectedMessage(selectedSlots);
-    }
-
-    /**
      * Craft selected message via weighted Set of Pairs.
      */
-    public static String craftSelectedMessagePair(Set<WeightedName> pairs) {
+    public static String craftListMessage(Set<WeightedName> pairs) {
         StringBuilder sb = new StringBuilder();
         sb.append("Here are the closest matching names/tags: \n");
 
