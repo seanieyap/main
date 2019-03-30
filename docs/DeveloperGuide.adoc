@@ -493,7 +493,7 @@ Additionally, doing these actions when parsing, though bloats code, allows for m
 
 * *Alternative 2:* Store `Slots` in a huge list.
 ** Pros: Allows for easier access by "index" and offers flexibility, for example, in the time of slots.
-** Cons: Expensive to access and remove items.
+** Cons: Expensive to access, add and remove items. Furthermore, it is extremely expensive to collect slots that occur in a day, a very important and most likely to be a commonly used feature.
 
 ==== Future Implementation
 
