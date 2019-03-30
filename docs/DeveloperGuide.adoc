@@ -15,7 +15,7 @@ ifdef::env-github[]
 :warning-caption: :warning:
 :experimental:
 endif::[]
-:repoURL: https://github.com/CS2113-AY1819S2-T08-3/main
+:repoURL: https://github.com/CS2113-AY1819S2-T08-3/main/blob/master
 
 By: `T08-3`      Since: `Jan 2019`      Licence: `MIT`
 
@@ -46,7 +46,7 @@ Do not disable them. If you have disabled them, go to `File` > `Settings` > `Plu
 . Locate the `build.gradle` file and select it. Click `OK`
 . Click `Open as Project`
 . Click `OK` to accept the default settings
-. Run the `planmysem.Main` class (right-click the `Main` class and click `Run Main.main()`) and try executing a few commands
+. Run the `PlanMySem.Main` class (right-click the `Main` class and click `Run Main.main()`) and try executing a few commands
 . Run all the tests (right-click the `test` folder, and click `Run 'All Tests'`) and ensure that they pass
 . Open the `StorageFile` file and check for any code errors
 . Open a console and run the command `gradlew processResources` (Mac/Linux: `./gradlew processResources`). It should finish with the `BUILD SUCCESSFUL` message. +
@@ -58,7 +58,7 @@ This will generate all resources required by the application and tests.
 
 === Verifying the setup
 
-. Run the `planmysem.Main` and try a few commands
+. Run the `PlanMySem.Main` and try a few commands
 . <<Testing,Run the tests>> to ensure they all pass.
 
 === Configurations to do before writing code
@@ -78,7 +78,7 @@ Optionally, you can follow the <<UsingCheckstyle#, UsingCheckstyle.adoc>> docume
 
 ==== Updating documentation to match your fork
 
-After forking the repo, the documentation will still have the _PlanMySem_ branding and refer to the `https://github.com/CS2113-AY1819S2-T08-3/main` repo.
+After forking the repo, the documentation will still have the *PlanMySem* branding and refer to the `https://github.com/CS2113-AY1819S2-T08-3/main` repo.
 
 If you plan to develop this fork as a separate product (i.e. instead of contributing to `https://github.com/CS2113-AY1819S2-T08-3/main`), you should do the following:
 
@@ -113,7 +113,7 @@ When you are ready to start coding,
 === Architecture
 
 .Architecture Diagram
-image::Architecture.png[width="600"]
+image::Architecture.png[width="800"]
 
 The *_Architecture Diagram_* given above explains the high-level design of the App. Given below is a quick overview of each component.
 
@@ -126,15 +126,12 @@ The `.pptx` files used to create diagrams in this document can be found in the l
 * At shut down: Shuts down the components and invokes cleanup method where necessary.
 
 <<Design-Common,*`Common`*>> represents a collection of classes used by multiple other components.
-//The following class plays an important role at the architecture level:
-//
-//* `LogsCenter` : Used by many classes to write log messages to the App's log file.
 
-The following class plays an important role at the architecture level, the App consists of four components.
+The following class plays an important role at the architecture level, the App consists of four components:
 
 * <<Design-Ui,*`UI`*>>: The UI of the App.
 * <<Design-Logic,*`Logic`*>>: The command executor.
-* <<Design-Data,*`Data`*>>: Holds the data of the App in-memory.
+* <<Design-Model,*`Model`*>>: Holds the data of the App in-memory.
 * <<Design-Storage,*`Storage`*>>: Reads data from, and writes data to, the hard disk.
 
 Each of the four components
@@ -144,8 +141,8 @@ Each of the four components
 
 For example, the `Logic` component (see the class diagram given below) defines it's API in the `Logic.java` interface and exposes its functionality using the `Logic.java` class.
 
-.Class Diagram of the Logic Component
-image::LogicClassDiagram.png[width="800"]
+.Class Diagram of overall application.
+image::OverallClassDiagram.png[width="800"]
 
 [discrete]
 ==== How the architecture components interact with each other
@@ -163,17 +160,18 @@ The sections below give more details of each component.
 .Structure of the UI Component
 image::UiClassDiagram.png[width="800"]
 
-*API* : link:{repoURL}/src/main/planmysem/ui/Gui.java[`Gui.java`]
+*API* : link:{repoURL}/src/planmysem/ui/Ui.java[`Ui.java`]
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`commandInput`, `outputConsole` etc.
-//All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
+The UI consists of a `MainWindow` that is made up of just `commandInput` and `outputConsole`.
+This application is mainly a text-based application, hence here are not much componenets here.
 
-//The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
+The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder.
+For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
 The `UI` component,
 
 * Executes user commands read from `commandInput`, using the `Logic` component.
-* Displays `commandResult` to the user via the `outputConsole`.
+* Displays `commandResult` to the user via `outputConsole`.
 
 [[Design-Logic]]
 === Logic component
@@ -183,7 +181,7 @@ The `UI` component,
 image::LogicClassDiagram.png[width="800"]
 
 *API* :
-link:{repoURL}/src/main/java/plamysem/logic/Logic.java[`Logic.java`]
+link:{repoURL}/src/planmysem/logic/Logic.java[`Logic.java`]
 
 .  `Logic` uses the `parser` class to parse the user command.
 .  This results in a `Command` object which is executed.
@@ -194,15 +192,15 @@ link:{repoURL}/src/main/java/plamysem/logic/Logic.java[`Logic.java`]
 Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete 1")` API call.
 
 .Interactions Inside the Logic Component for the `delete 1` Command
-image::DeletePersonSdForLogic.png[width="800"]
+image::SDforDeleteSlot.png[width="800"]
 
-[[Design-Data]]
-=== Data component
+[[Design-Model]]
+=== Model component
 
-.Overall structure of the Data Component
-image::DataClassDiagram.png[width="800"]
+.Overall structure of the Model Component
+image::ModelClassDiagram.png[width="600"]
 
-//*API* : link:{repoURL}/src/planmysem/data/Planner.java[`Planner.java`]
+*API* : link:{repoURL}/src/planmysem/model/Model.java[`Model.java`]
 
 [[Design-Planner]]
 ==== Planner component
@@ -218,7 +216,7 @@ The `Planner` component,
 [[Design-Semester]]
 ==== Semester component
 
-*API* : link:{repoURL}/src/planmysem/data/semester/Semester.java[`Semester.java`]
+*API* : link:{repoURL}/src/planmysem/model/semester/Semester.java[`Semester.java`]
 
 The `Semester` component,
 
@@ -229,7 +227,7 @@ The `Semester` component,
 [[Design-Slot]]
 ==== Slot component
 
-*API* : link:{repoURL}/src/planmysem/data/slot/Slot.java[`Slot.java`]
+*API* : link:{repoURL}/src/planmysem/model/slot/Slot.java[`Slot.java`]
 
 The `Slot` component,
 
@@ -244,7 +242,7 @@ Notice how `Slot` does not hold it's end time but rather it holds the `duration`
 === Storage component
 
 .Structure of the Storage Component
-image::StorageClassDiagram.png[width="800"]
+image::StorageClassDiagram.png[width="400"]
 
 *API* : link:{repoURL}/src/planmysem/storage/Storage.java[`Storage.java`]
 
@@ -256,7 +254,7 @@ The `Storage` component,
 [[Design-Common]]
 === Common classes
 
-Classes used by multiple components are in the `planmysem.common` package.
+Classes used by multiple components are in the `PlanMySem.common` package.
 
 == Implementation
 
@@ -264,12 +262,12 @@ This section describes some noteworthy details on how certain features are imple
 
 === Initialization of the Planner and it's Semester
 
-The `Planner` and it's `Semester` has to be initialized for _PlanMySem_ to work as all other features of _PlanMySem_ would
+The `Planner` and it's `Semester` has to be initialized for *PlanMySem* to work as all other features of *PlanMySem* would
 interact with this `Semester` object.
 
 ==== Current Implementation
 
-Upon launching _PlanMySem_, the initialization of the `Planner` and it's `Semester` would be implemented via two steps:
+Upon launching *PlanMySem*, the initialization of the `Planner` and it's `Semester` would be implemented via two steps:
 
 1. Automatically generate the academic calendar from the current date.
 2. Setup current `Semester` from the academic calendar.
@@ -365,7 +363,7 @@ These information would be assigned to the `Semester` object upon initialization
 ** Pros: Generation of academic calendar is efficient and not prone to calculation errors.
 ** Cons: Requires the pre-generated file which may be accidentally edited or deleted by the user.
 
-=== Reinventing the Parser / Command Format and Structure
+=== Parser / Command Format and Structure
 
 Due to the flexibility and huge variation of the envisioned command format and structures, it was decided that it was more appropriate to create a new Parser
 instead of relying on the existing regex implementation in AB3 for heavy parsing.
@@ -381,12 +379,12 @@ Arguments are then parsed via 2 different methods/techniques according to the fo
 * Alternate formats of commands are implemented to give freedom of choice and cater to different types of users such as different personalities and comfort levels.
 * Shortened versions of command keywords are implemented to give ways for users to shortened commands and be more efficient.
 
-Hence, parameters in PlanMySem can be categorised into 2 categories:
+Hence, parameters in *PlanMySem* can be categorised into 2 categories:
 
-1. Prepended parameters such as `n/NAME`, `st/START_TIME`, `des/DESCRIPTION`, etc.
-2. Non-prepended parameters, A.K.A. keywords, such as `INDEX`, `TYPE_OF_VIEW`. etc.
+1. Prefixed parameters such as `n/NAME`, `st/START_TIME`, `des/DESCRIPTION`, etc.
+2. Non-Prefixed parameters, A.K.A. keywords, such as `INDEX`, `TYPE_OF_VIEW`. etc.
 
-===== Parsing Prepended Parameters
+===== Parsing Prefixed Parameters
 
 To retrieve the set of parameters, the function `private static HashMap<String, Set<String>> getParametersWithArguments(String args)` can be called.
 The function returns a `Hashmap` data structure, specifically `HashMap<String, Set<String>>`, to hold parameters, allowing for easy, quick and efficient access to specific parameters.
@@ -400,9 +398,9 @@ The following are cases in which `IncorrectCommand` is invoked:
 
 ===== Parsing Keywords
 
-Here, keywords are thought of as parameters that are not prepended.
-In PlanMySem, keywords are utilized in command structures when they are to be used alone or when order of parameters are important.
-In such cases, there is no logical need for prepending as the meaning of these parameters can be identified.
+Here, keywords are thought of as parameters that are not prefixed.
+In *PlanMySem*, keywords are utilized in command structures when they are to be used alone or when order of parameters are important.
+In such cases, there is no logical need for prefixing as the meaning of these parameters can be identified.
 
 The function `private String getStartingArgument(String args)` provides this functionality.
 Here, `IncorrectCommand` is invoked due to different circumstances:
@@ -471,9 +469,40 @@ The `Edit` and `Delete` command then makes use of the _tagging_ system to then s
 
 ==== Design Considerations
 
+===== Aspect: Wrapping of primitive data types in `Slot`
 
+* *Alternative 1 (current choice):* Use of "primitive" data types instead of creating and utilising wrapped objects. +
+E.g. `name`, `location` amd `description` are not wrapped but "primitive".
+** Pros: Allows for more flexible code to account for flexible parsing (as needed in this application).
+** Cons: Bigger code base and duplicated code.
+
+* *Alternative 2:* Wrap "primitive" data types.
+** Pros: Less errors in handling invalid values.
+** Cons: May cause inflexibility in writing code to account for flexible parsing.
+
+In summary, in this cause of *PlanMySme*, there is a need to achieve varied and flexible commands and as such,
+it is not necessary to handle invalid values with the innate `Model` objects as these are taken care of when parsing.
+
+Additionally, doing these actions when parsing, though bloats code, allows for more varied responses to the user and improves user experience.
+
+===== Aspect: Storing and accessing `Slots`
+
+* *Alternative 1 (current choice):* Use of `Map`, such as `HashMap` to store `Days` that store `Slots`.
+** Pros: `HashMap` allows for easier and faster, O(1) access time, access of particular `Day` according to date.
+** Cons: This requires splitting of the calendar into days, as such there is no easy way to account for `Slots` that occur across days.
+
+* *Alternative 2:* Store `Slots` in a huge list.
+** Pros: Allows for easier access by "index" and offers flexibility, for example, in the time of slots.
+** Cons: Expensive to access, add and remove items. Furthermore, it is extremely expensive to collect slots that occur in a day, a very important and most likely to be a commonly used feature.
 
 ==== Future Implementation
+
+===== Create and utilise an object to hold `Slots`
+
+===== Create and utilise an object in `Planner` to hold multiple `Semesters`
+
+=== List feature
+
 
 === Find feature
 ==== Current Implementation
@@ -515,7 +544,7 @@ FindCommand will be enhanced by using Levenshtein Distance to generate an ordere
 ** Cons: Large amount of additional operations.
 
 ==== Future Implementation
-
+// to be edited
 The month/week/day view mechanism is facilitated by `PlannerView`.
 It extends `Planner` with different calendar views, stored internally as `monthView`, `weekView` and `dayView`.
 Additionally, it implements the following operations:
@@ -534,6 +563,84 @@ Step 3. The user executes `view month March` command to view the calendar for Ma
 
 // tag::undoredo[]
 === Undo/Redo feature
+
+==== Current Implementation
+
+The undo/redo mechanism is facilitated by `VersionedAddressBook`.
+It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`.
+Additionally, it implements the following operations:
+
+* `VersionedAddressBook#commit()` -- Saves the current address book state in its history.
+* `VersionedAddressBook#undo()` -- Restores the previous address book state from its history.
+* `VersionedAddressBook#redo()` -- Restores a previously undone address book state from its history.
+
+These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+
+Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
+
+Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+
+image::UndoRedoStartingStateListDiagram.png[width="800"]
+
+Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+
+image::UndoRedoNewCommand1StateListDiagram.png[width="800"]
+
+Step 3. The user executes `add n/David ...` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+
+image::UndoRedoNewCommand2StateListDiagram.png[width="800"]
+
+[NOTE]
+If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+
+Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+
+image::UndoRedoExecuteUndoStateListDiagram.png[width="800"]
+
+[NOTE]
+If the `currentStatePointer` is at index 0, pointing to the initial address book state, then there are no previous address book states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the undo.
+
+The following sequence diagram shows how the undo operation works:
+
+image::UndoRedoSequenceDiagram.png[width="800"]
+
+The `redo` command does the opposite -- it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+
+[NOTE]
+If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone address book states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+
+Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+
+image::UndoRedoNewCommand3StateListDiagram.png[width="800"]
+
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. We designed it this way because it no longer makes sense to redo the `add n/David ...` command. This is the behavior that most modern desktop applications follow.
+
+image::UndoRedoNewCommand4StateListDiagram.png[width="800"]
+
+The following activity diagram summarizes what happens when a user executes a new command:
+
+image::UndoRedoActivityDiagram.png[width="650"]
+
+==== Design Considerations
+
+===== Aspect: How undo & redo executes
+
+* **Alternative 1 (current choice):** Saves the entire address book.
+** Pros: Easy to implement.
+** Cons: May have performance issues in terms of memory usage.
+* **Alternative 2:** Individual command knows how to undo/redo by itself.
+** Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+** Cons: We must ensure that the implementation of each individual command are correct.
+
+===== Aspect: Data structure to support the undo/redo commands
+
+* **Alternative 1 (current choice):** Use a list to store the history of address book states.
+** Pros: Easy for new Computer Science student undergraduates to understand, who are likely to be the new incoming developers of our project.
+** Cons: Logic is duplicated twice. For example, when a new command is executed, we must remember to update both `HistoryManager` and `VersionedAddressBook`.
+* **Alternative 2:** Use `HistoryManager` for undo/redo
+** Pros: We do not need to maintain a separate list, and just reuse what is already in the codebase.
+** Cons: Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things.
+
 ==== Current Implementation
 
 The undo/redo mechanism is facilitated by `VersionedPlanner`.
@@ -592,9 +699,9 @@ Step 6. The user executes `clear`, which calls `Model#commitPlanner()`. Since th
 ** Cons: Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things.
 // end::undoredo[]
 
-=== Data Encryption / Decription feature
+=== Data Encryption / Decryption feature
 
-The storage file "PlanMySem.txt" is encrypted to prevent easy access of the user's calendar.
+The storageFile file "PlanMySem.txt" is encrypted to prevent easy access of the user's calendar.
 We are encrypting and decrypting the data using the Java Cypher class.
 This feature is implemented through creating a Encryptor that contains encrypt and decrypt methods. The encrypt method takes a String object as an argument and returns a encrypted String object. The decrypt method takes in a String object as an argument and returns the decrypted message as a String object.
 
@@ -602,13 +709,13 @@ The encryption is done using AES/CBC/PKCS5Padding. The key used for encryption/d
 
 A initialization vector (IV) is required for the Cipher Block Chain (CBC) mode of encryption. A random IV is generated and appended at the beginning of the data before being stored. The IV is then retrieved from the same file to decrypt the data.
 
-Encryption of the data is done automatically before the file is saved. In the implmentation, the AdaptedPlanner object is first marshalled into a StringWriter before being encrypted and written into the file. This is to ensure that the data is JAXB formatted and the save algorithm is unaffected.
-Similarly, decryption of the data is done automatically before it is loaded. In the implementation, the file is read and decrypted and parsed into a StringReader object. The StringReader object is then unmarshalled and loaded. This is to ensure that the file is converted back into a JAXB object before being loaded and the load algorithm is unaffected.
+Encryption of the data is done automatically before the file is saved. In the implementation, the AdaptedPlanner object is first marshaled into a StringWriter before being encrypted and written into the file. This is to ensure that the data is JAXB formatted and the save algorithm is unaffected.
+Similarly, decryption of the data is done automatically before it is loaded. In the implementation, the file is read and decrypted and parsed into a StringReader object. The StringReader object is then un-marshaled and loaded. This is to ensure that the file is converted back into a JAXB object before being loaded and the load algorithm is unaffected.
 
 === Data Exporting / Exporting feature
 
 The user can export the current planner into a .ics file to use in external calendar applications. The .ics file will contain the names of the slots in the SUMMARY field and the descriptions in the DESCRIPTION field. This command automatically exports into the main directory and names the file “PlanMySem.ics”. Future updates can include user input to allow saving the file in another directory and naming the file.
-We have chosen to use the iCalendar format due to its popularity and it’s use in applications such as Google Calendar, Microsoft Outlook and Nusmods.
+We have chosen to use the iCalendar format due to its popularity and it’s use in applications such as Google Calendar, Microsoft Outlook and NUSmods.
 
 In our implementation, we have chosen not to export the tags into the .ics file. This is because iCalendar does not have in-built tag fields. This means that other other applications that import .ics will not be able to use the tags.
 
@@ -617,7 +724,7 @@ In our implementation, we have chosen not to export the tags into the .ics file.
 * **Alternative 1 (current choice):** Ignore tags when exporting.
 ** Pros: Easier to implement as iCalendar does not have in-built tag fields.
 ** Cons: Not all the information about the slots will be retained.
-** Reason for choice: We do not have much control over other applications, and importing and exporting .ics within PlanMySem can be done using the storage .txt file.
+** Reason for choice: We do not have much control over other applications, and importing and exporting .ics within *PlanMySem* can be done using the storageFile .txt file.
 * **Alternative 2:** Use the notes field and a tag identifier to save the tags.
 ** Pros: All the information from the semester will be exported.
 ** Cons: Requires other applications to be coded to read these tag identifiers and also to store and use the tags in their functions.
@@ -765,16 +872,12 @@ To run tests in headless mode, open a console and run the command `gradlew clean
 
 //We have two types of tests:
 
-//.  *GUI Tests* - These are tests involving the GUI. They include,
-//.. _System Tests_ that test the entire App by simulating user actions on the GUI. These are in the `systemtests` package.
-//.. _Unit tests_ that test the individual components. These are in `seedu.address.ui` package.
-.  *Non-GUI Tests* - These are tests not involving the GUI. They include,
-..  _Unit tests_ targeting the lowest level methods/classes. +
-e.g. `planmysem.commons.UtilTest`
-..  _Integration tests_ that are checking the integration of multiple code units (those code units are assumed to be working). +
-e.g. `planmysem.storage.StorageManagerTest`
-..  Hybrids of unit and integration tests. These test are checking multiple code units as well as how the are connected together. +
-e.g. `planmysem.logic.LogicTest`, `planmysem.parse,ParserTest`
+.  _Unit tests_ targeting the lowest level methods/classes. +
+e.g. `PlanMySem.commons.UtilTest`
+.  _Integration tests_ that are checking the integration of multiple code units (those code units are assumed to be working). +
+e.g. `PlanMySem.storageFile.StorageManagerTest`
+.  Hybrids of unit and integration tests. These test are checking multiple code units as well as how the are connected together. +
+e.g. `PlanMySem.logicManager.LogicTest`, `PlanMySem.parse,ParserTest`
 
 
 === Troubleshooting Testing
@@ -804,7 +907,7 @@ When a pull request has changes to asciidoc files, you can use https://www.netli
 
 Here are the steps to create a new release.
 
-.  Update the version number in link:{repoURL}/src/planmysem/Main.java[`Main.java`].
+.  Update the version number in link:{repoURL}/src/PlanMySem/Main.java[`Main.java`].
 .  Generate a JAR file <<UsingGradle#creating-the-jar-file, using Gradle>>.
 .  Tag the repo with the version number. e.g. `v0.1`
 .  https://help.github.com/articles/creating-releases/[Create a new release using GitHub] and upload the JAR file you created.
@@ -835,7 +938,7 @@ A project often depends on third-party libraries. For example, Address Book depe
 //[discrete]
 //==== `Logic` component
 //
-//*Scenario:* You are in charge of `logic`. During dog-fooding, your team realize that it is troublesome for the user to type the whole command in order to execute a command. Your team devise some strategies to help cut down the amount of typing necessary, and one of the suggestions was to implement aliases for the command words. Your job is to implement such aliases.
+//*Scenario:* You are in charge of `logicManager`. During dog-fooding, your team realize that it is troublesome for the user to type the whole command in order to execute a command. Your team devise some strategies to help cut down the amount of typing necessary, and one of the suggestions was to implement aliases for the command words. Your job is to implement such aliases.
 //
 //[TIP]
 //Do take a look at <<Design-Logic>> before attempting to modify the `Logic` component.
@@ -844,10 +947,10 @@ A project often depends on third-party libraries. For example, Address Book depe
 //+
 //****
 //* Hints
-//** Just like we store each individual command word constant `COMMAND_WORD` inside `*Command.java` (e.g.  link:{repoURL}/src/main/java/seedu/address/logic/commands/FindCommand.java[`FindCommand#COMMAND_WORD`], link:{repoURL}/src/main/java/seedu/address/logic/commands/DeleteCommand.java[`DeleteCommand#COMMAND_WORD`]), you need a new constant for aliases as well (e.g. `FindCommand#COMMAND_ALIAS`).
-//** link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] is responsible for analyzing command words.
+//** Just like we store each individual command word constant `COMMAND_WORD` inside `*Command.java` (e.g.  link:{repoURL}/src/main/java/seedu/address/logicManager/commands/FindCommand.java[`FindCommand#COMMAND_WORD`], link:{repoURL}/src/main/java/seedu/address/logicManager/commands/DeleteCommand.java[`DeleteCommand#COMMAND_WORD`]), you need a new constant for aliases as well (e.g. `FindCommand#COMMAND_ALIAS`).
+//** link:{repoURL}/src/main/java/seedu/address/logicManager/parser/AddressBookParser.java[`AddressBookParser`] is responsible for analyzing command words.
 //* Solution
-//** Modify the switch statement in link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser#parseCommand(String)`] such that both the proper command word and alias can be used to execute the same intended command.
+//** Modify the switch statement in link:{repoURL}/src/main/java/seedu/address/logicManager/parser/AddressBookParser.java[`AddressBookParser#parseCommand(String)`] such that both the proper command word and alias can be used to execute the same intended command.
 //** Add new tests for each of the aliases that you have added.
 //** Update the user guide to document the new aliases.
 //** See this https://github.com/se-edu/addressbook-level4/pull/785[PR] for the full solution.
@@ -856,7 +959,7 @@ A project often depends on third-party libraries. For example, Address Book depe
 //[discrete]
 //==== `Model` component
 //
-//*Scenario:* You are in charge of `model`. One day, the `logic`-in-charge approaches you for help. He wants to implement a command such that the user is able to remove a particular tag from everyone in the address book, but the model API does not support such a functionality at the moment. Your job is to implement an API method, so that your teammate can use your API to implement his command.
+//*Scenario:* You are in charge of `model`. One day, the `logicManager`-in-charge approaches you for help. He wants to implement a command such that the user is able to remove a particular tag from everyone in the address book, but the model API does not support such a functionality at the moment. Your job is to implement an API method, so that your teammate can use your API to implement his command.
 //
 //[TIP]
 //Do take a look at <<Design-Model>> before attempting to modify the `Model` component.
@@ -866,8 +969,8 @@ A project often depends on third-party libraries. For example, Address Book depe
 //****
 //* Hints
 //** The link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model`] and the link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] API need to be updated.
-//** Think about how you can use SLAP to design the method. Where should we place the main logic of deleting tags?
-//**  Find out which of the existing API methods in  link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] classes can be used to implement the tag removal logic. link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] allows you to update a person, and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] allows you to update the tags.
+//** Think about how you can use SLAP to design the method. Where should we place the main logicManager of deleting tags?
+//**  Find out which of the existing API methods in  link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] classes can be used to implement the tag removal logicManager. link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] allows you to update a person, and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] allows you to update the tags.
 //* Solution
 //** Implement a `removeTag(Tag)` method in link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`]. Loop through each person, and remove the `tag` from each person.
 //** Add a new API method `deleteTag(Tag)` in link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`]. Your link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`] should call `AddressBook#removeTag(Tag)`.
@@ -901,7 +1004,7 @@ A project often depends on third-party libraries. For example, Address Book depe
 //* Solution
 //** You can modify the existing test methods for `PersonCard` 's to include testing the tag's color as well.
 //** See this https://github.com/se-edu/addressbook-level4/pull/798[PR] for the full solution.
-//*** The PR uses the hash code of the tag names to generate a color. This is deliberately designed to ensure consistent colors each time the application runs. You may wish to expand on this design to include additional features, such as allowing users to set their own tag colors, and directly saving the colors to storage, so that tags retain their colors even if the hash code algorithm changes.
+//*** The PR uses the hash code of the tag names to generate a color. This is deliberately designed to ensure consistent colors each time the application runs. You may wish to expand on this design to include additional features, such as allowing users to set their own tag colors, and directly saving the colors to storageFile, so that tags retain their colors even if the hash code algorithm changes.
 //****
 //
 //. Modify link:{repoURL}/src/main/java/seedu/address/commons/events/ui/NewResultAvailableEvent.java[`NewResultAvailableEvent`] such that link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay`] can show a different style on error (currently it shows the same regardless of errors).
@@ -953,7 +1056,7 @@ A project often depends on third-party libraries. For example, Address Book depe
 //[discrete]
 //==== `Storage` component
 //
-//*Scenario:* You are in charge of `storage`. For your next project milestone, your team plans to implement a new feature of saving the address book to the cloud. However, the current implementation of the application constantly saves the address book after the execution of each command, which is not ideal if the user is working on limited internet connection. Your team decided that the application should instead save the changes to a temporary local backup file first, and only upload to the cloud after the user closes the application. Your job is to implement a backup API for the address book storage.
+//*Scenario:* You are in charge of `storageFile`. For your next project milestone, your team plans to implement a new feature of saving the address book to the cloud. However, the current implementation of the application constantly saves the address book after the execution of each command, which is not ideal if the user is working on limited internet connection. Your team decided that the application should instead save the changes to a temporary local backup file first, and only upload to the cloud after the user closes the application. Your job is to implement a backup API for the address book storageFile.
 //
 //[TIP]
 //Do take a look at <<Design-Storage>> before attempting to modify the `Storage` component.
@@ -962,8 +1065,8 @@ A project often depends on third-party libraries. For example, Address Book depe
 //+
 //****
 //* Hint
-//** Add the API method in link:{repoURL}/src/main/java/seedu/address/storage/AddressBookStorage.java[`AddressBookStorage`] interface.
-//** Implement the logic in link:{repoURL}/src/main/java/seedu/address/storage/StorageManager.java[`StorageManager`] and link:{repoURL}/src/main/java/seedu/address/storage/JsonAddressBookStorage.java[`JsonAddressBookStorage`] class.
+//** Add the API method in link:{repoURL}/src/main/java/seedu/address/storageFile/AddressBookStorage.java[`AddressBookStorage`] interface.
+//** Implement the logicManager in link:{repoURL}/src/main/java/seedu/address/storageFile/StorageManager.java[`StorageManager`] and link:{repoURL}/src/main/java/seedu/address/storageFile/JsonAddressBookStorage.java[`JsonAddressBookStorage`] class.
 //* Solution
 //** See this https://github.com/se-edu/addressbook-level4/pull/594[PR] for the full solution.
 //****
@@ -989,17 +1092,17 @@ A project often depends on third-party libraries. For example, Address Book depe
 //==== Step-by-step Instructions
 //
 //===== [Step 1] Logic: Teach the app to accept 'remark' which does nothing
-//Let's start by teaching the application how to parse a `remark` command. We will add the logic of `remark` later.
+//Let's start by teaching the application how to parse a `remark` command. We will add the logicManager of `remark` later.
 //
 //**Main:**
 //
-//. Add a `RemarkCommand` that extends link:{repoURL}/src/main/java/seedu/address/logic/commands/Command.java[`Command`]. Upon execution, it should just throw an `Exception`.
-//. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] to accept a `RemarkCommand`.
+//. Add a `RemarkCommand` that extends link:{repoURL}/src/main/java/seedu/address/logicManager/commands/Command.java[`Command`]. Upon execution, it should just throw an `Exception`.
+//. Modify link:{repoURL}/src/main/java/seedu/address/logicManager/parser/AddressBookParser.java[`AddressBookParser`] to accept a `RemarkCommand`.
 //
 //**Tests:**
 //
 //. Add `RemarkCommandTest` that tests that `execute()` throws an Exception.
-//. Add new test method to link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`], which tests that typing "remark" returns an instance of `RemarkCommand`.
+//. Add new test method to link:{repoURL}/src/test/java/seedu/address/logicManager/parser/AddressBookParserTest.java[`AddressBookParserTest`], which tests that typing "remark" returns an instance of `RemarkCommand`.
 //
 //===== [Step 2] Logic: Teach the app to accept 'remark' arguments
 //Let's teach the application to parse arguments that our `remark` command will accept. E.g. `1 r/Likes to drink coffee.`
@@ -1008,14 +1111,14 @@ A project often depends on third-party libraries. For example, Address Book depe
 //
 //. Modify `RemarkCommand` to take in an `Index` and `String` and print those two parameters as the error message.
 //. Add `RemarkCommandParser` that knows how to parse two arguments, one index and one with prefix 'r/'.
-//. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] to use the newly implemented `RemarkCommandParser`.
+//. Modify link:{repoURL}/src/main/java/seedu/address/logicManager/parser/AddressBookParser.java[`AddressBookParser`] to use the newly implemented `RemarkCommandParser`.
 //
 //**Tests:**
 //
 //. Modify `RemarkCommandTest` to test the `RemarkCommand#equals()` method.
 //. Add `RemarkCommandParserTest` that tests different boundary values
 //for `RemarkCommandParser`.
-//. Modify link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`] to test that the correct command is generated according to the user input.
+//. Modify link:{repoURL}/src/test/java/seedu/address/logicManager/parser/AddressBookParserTest.java[`AddressBookParserTest`] to test that the correct command is generated according to the user input.
 //
 //===== [Step 3] Ui: Add a placeholder for remark in `PersonCard`
 //Let's add a placeholder on all our link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] s to display a remark for each person later.
@@ -1048,10 +1151,10 @@ A project often depends on third-party libraries. For example, Address Book depe
 //
 //. Add `getRemark()` in link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`].
 //. You may assume that the user will not be able to use the `add` and `edit` commands to modify the remarks field (i.e. the person will be created without a remark).
-//. Modify link:{repoURL}/src/main/java/seedu/address/model/util/SampleDataUtil.java/[`SampleDataUtil`] to add remarks for the sample data (delete your `data/addressbook.json` so that the application will load the sample data when you launch it.)
+//. Modify link:{repoURL}/src/main/java/seedu/address/model/util/SampleDataUtil.java/[`SampleDataUtil`] to add remarks for the sample model (delete your `model/addressbook.json` so that the application will load the sample model when you launch it.)
 //
 //===== [Step 6] Storage: Add `Remark` field to `JsonAdaptedPerson` class
-//We now have `Remark` s for `Person` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storage/JsonAdaptedPerson.java[`JsonAdaptedPerson`] to include a `Remark` field so that it will be saved.
+//We now have `Remark` s for `Person` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storageFile/JsonAdaptedPerson.java[`JsonAdaptedPerson`] to include a `Remark` field so that it will be saved.
 //
 //**Main:**
 //
@@ -1080,16 +1183,16 @@ A project often depends on third-party libraries. For example, Address Book depe
 //
 //. Modify link:{repoURL}/src/test/java/seedu/address/ui/testutil/GuiTestAssert.java[`GuiTestAssert#assertCardDisplaysPerson(...)`] so that it will compare the now-functioning remark label.
 //
-//===== [Step 8] Logic: Implement `RemarkCommand#execute()` logic
-//We now have everything set up... but we still can't modify the remarks. Let's finish it up by adding in actual logic for our `remark` command.
+//===== [Step 8] Logic: Implement `RemarkCommand#execute()` logicManager
+//We now have everything set up... but we still can't modify the remarks. Let's finish it up by adding in actual logicManager for our `remark` command.
 //
 //**Main:**
 //
-//. Replace the logic in `RemarkCommand#execute()` (that currently just throws an `Exception`), with the actual logic to modify the remarks of a person.
+//. Replace the logicManager in `RemarkCommand#execute()` (that currently just throws an `Exception`), with the actual logicManager to modify the remarks of a person.
 //
 //**Tests:**
 //
-//. Update `RemarkCommandTest` to test that the `execute()` logic works.
+//. Update `RemarkCommandTest` to test that the `execute()` logicManager works.
 //
 //==== Full Solution
 //
@@ -1264,9 +1367,9 @@ _{More to be added}_
 . Should work on any <<mainstream-os,mainstream OS>> as long as it has Java 9 or higher installed.
 . Should be able to hold up a fully packed schedule, three times over, without a noticeable sluggishness in performance for typical usage.
 . A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-. The system should respond relatively quickly to user commands so as to not make the user wait around; this is an advantage of using PlanMySem.
+. The system should respond relatively quickly to user commands so as to not make the user wait around; this is an advantage of using *PlanMySem*.
 . The system should take up relatively little space on the local machine so as to cater to all students and OS.
-. The system should be easy to use, intuitive and simple, such that any student regardless of past experience with calendar/scheduling softwares is able to use it.
+. The system should be easy to use, intuitive and simple, such that any student regardless of past experience with calendar/scheduling software is able to use it.
 . The system should be flexible to allow all kinds of schedules that target users might have.
 . The data should be encrypted to prevent private data from being accessed.
 
@@ -1279,7 +1382,7 @@ Windows, Linux, Unix, OS-X
 ////
 Should only include this if we actually make any mention to private planner detail.
 [[private-planner-detail]] Private planner detail::
-Any data stored on to the planner is not meant to be shared with others, unless the data is willingly exported.
+Any model stored on to the planner is not meant to be shared with others, unless the model is willingly exported.
 ////
 
 [appendix]

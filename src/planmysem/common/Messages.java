@@ -1,12 +1,14 @@
 package planmysem.common;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javafx.util.Pair;
-import planmysem.data.semester.ReadOnlyDay;
-import planmysem.data.slot.ReadOnlySlot;
+import planmysem.model.semester.ReadOnlyDay;
+import planmysem.model.semester.WeightedName;
+import planmysem.model.slot.ReadOnlySlot;
 
 /**
  * Container for user visible messages.
@@ -35,14 +37,16 @@ public class Messages {
             + "\n\t12-Hour in the form of `hh:mm+AM|PM`. e.g. \"12:30am\""
             + "\n\tOr perhaps type a duration in minutes. e.g. \"60\" to represent 60 minutes";
 
+    public static final String MESSAGE_INVALID_TAG = "Tags cannot be empty !";
+
     public static final String MESSAGE_ILLEGAL_VALUE = "Illegal value detected!";
 
     /**
-     * Craft selected message.
+     * Craft selected message via tags.
      */
     public static String craftSelectedMessage(Set<String> tags) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Selected Slots containing tags: \n");
+        sb.append("Selected Slots containing: \n");
 
         int count = 1;
         for (String tag : tags) {
@@ -52,6 +56,18 @@ public class Messages {
             sb.append("\n");
             count++;
         }
+        sb.append("\nEnter 'list n/{name} OR t/{tag}' to list all slots related to the name/tag\n");
+
+        return sb.toString();
+    }
+
+    /**
+     * Craft selected message via index.
+     */
+    public static String craftSelectedMessage(int index) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Selected index: ");
+        sb.append(index);
 
         return sb.toString();
     }
@@ -69,11 +85,32 @@ public class Messages {
     }
 
     /**
-     * Craft selected message without header.
+     * Craft selected message via weighted Set of Pairs.
      */
-    public static String craftSelectedMessage(Map<LocalDate,
-            Pair<ReadOnlyDay, ReadOnlySlot>> selectedSlots) {
-        return getSelectedMessage(selectedSlots);
+    public static String craftListMessage(List<WeightedName> tries) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Here are the closest matching names/tags: \n");
+
+        int count = 1;
+        for (WeightedName wn : tries) {
+            sb.append("\n");
+            sb.append(count + ".\t");
+            sb.append("Name: ");
+            sb.append(wn.getName());
+            sb.append(",\n\t");
+            sb.append("Date: ");
+            sb.append(wn.getMap().getKey().toString());
+            sb.append(",\n\t");
+            sb.append("Start Time: ");
+            sb.append(wn.getSlot().getStartTime());
+            sb.append("\n\t");
+            sb.append("Tags: ");
+            sb.append(wn.getSlot().getTags());
+            sb.append("\n");
+            count++;
+        }
+        return sb.toString();
     }
 
     /**
