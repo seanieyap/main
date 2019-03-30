@@ -205,7 +205,7 @@ image::ModelClassDiagram.png[width="600"]
 [[Design-Planner]]
 ==== Planner component
 
-*API* : link:{repoURL}/src/planmysem/model/Planner.java[`Planner.java`]
+*API* : link:{repoURL}/src/planmysem/data/Planner.java[`Planner.java`]
 
 The `Planner` component,
 
@@ -244,7 +244,7 @@ Notice how `Slot` does not hold it's end time but rather it holds the `duration`
 .Structure of the Storage Component
 image::StorageClassDiagram.png[width="400"]
 
-*API* : link:{repoURL}/src/planmysem/storageFile/Storage.java[`Storage.java`]
+*API* : link:{repoURL}/src/planmysem/storage/Storage.java[`Storage.java`]
 
 The `Storage` component,
 
@@ -544,7 +544,7 @@ FindCommand will be enhanced by using Levenshtein Distance to generate an ordere
 ** Cons: Large amount of additional operations.
 
 ==== Future Implementation
-
+// to be edited
 The month/week/day view mechanism is facilitated by `PlannerView`.
 It extends `Planner` with different calendar views, stored internally as `monthView`, `weekView` and `dayView`.
 Additionally, it implements the following operations:
