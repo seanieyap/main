@@ -24,6 +24,7 @@ import planmysem.commands.ExitCommand;
 import planmysem.commands.ExportCommand;
 import planmysem.commands.FindCommand;
 import planmysem.commands.HelpCommand;
+import planmysem.commands.ImportCommand;
 import planmysem.commands.IncorrectCommand;
 import planmysem.commands.ListCommand;
 import planmysem.commands.ViewCommand;
@@ -91,6 +92,9 @@ public class Parser {
         case FindCommand.COMMAND_WORD:
         case FindCommand.COMMAND_WORD_SHORT:
             return prepareFind(arguments);
+
+        case ImportCommand.COMMAND_WORD:
+            return new ImportCommand(arguments);
 
         case ListCommand.COMMAND_WORD:
         case ListCommand.COMMAND_WORD_SHORT:
