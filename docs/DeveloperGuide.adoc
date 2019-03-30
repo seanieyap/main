@@ -487,17 +487,13 @@ Additionally, doing these actions when parsing, though bloats code, allows for m
 
 ===== Aspect: Storing and accessing `Slots`
 
-* *Alternative 1 (current choice):* Use of `Map`, such as `HashMap` and `TreeMap` to store `Days` that store `Slots`.
-** Pros: `HashMap` allows for easier and faster, O(1) access time, access of particular `Days` and its `Slots`.
-While `TreeMap` allows for ordering of `Slots` according to it's date.
-** Cons: This requires splitting of the calendar into days, as such there is no easy way to account for `Slots` that occur accross days.
+* *Alternative 1 (current choice):* Use of `Map`, such as `HashMap` to store `Days` that store `Slots`.
+** Pros: `HashMap` allows for easier and faster, O(1) access time, access of particular `Day` according to date.
+** Cons: This requires splitting of the calendar into days, as such there is no easy way to account for `Slots` that occur across days.
 
-* *Alternative 2:* Use of `Lists`.
-** Pros: Allows for easier access by "index".
-** Cons: May cause inflexibility in writing code to account for flexible parsing.
-
-Essentially, in this cause of *PlanMySme*, there is a need to achieve varied and flexible commands and as such,
-there is no use of handling invalid values as these are taken care of when parsing.
+* *Alternative 2:* Store `Slots` in a huge list.
+** Pros: Allows for easier access by "index" and offers flexibility, for example, in the time of slots.
+** Cons: Expensive to access and remove items.
 
 ==== Future Implementation
 
