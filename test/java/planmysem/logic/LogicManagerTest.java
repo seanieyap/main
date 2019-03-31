@@ -37,9 +37,9 @@ public class LogicManagerTest {
     @Before
     public void setUp() throws Exception {
         Clock.set("2019-01-14T10:00:00Z");
-        model = new ModelManager();
         storageFile = new StorageFile(temporaryFolder.newFile("testSaveFile.txt").getPath());
-        logic = new LogicManager(storageFile, model);
+        logic = new LogicManager(storageFile);
+        model = new ModelManager();
     }
 
     @Test

@@ -28,8 +28,7 @@ public class Main extends Application implements Stoppable {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Storage storageFile = new StorageFile();
-        Model modelManager = new ModelManager();
-        Gui gui = new Gui(new LogicManager(storageFile, modelManager), VERSION);
+        Gui gui = new Gui(new LogicManager(storageFile), VERSION);
         gui.start(primaryStage, this);
     }
 
