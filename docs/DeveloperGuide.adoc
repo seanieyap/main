@@ -509,10 +509,6 @@ Additionally, doing these actions when parsing, though bloats code, allows for m
 The find function supports searching using a single keyword. +
 If some part of the name of `Slot` / tags attributed to `Slot` contains the specified keyword,
 a positive match is registered and the designated `Slot` will be added to the output list. +
-Examples: +
-`find n/CS` +
-`CS2101`, `CS2113T`, `SOCSMeet` are considered positive matches. +
-`ST2334`, `Hockey`, `Lunch` are NOT considered positive matches. +
 
 ==== Design Considerations
 
@@ -520,16 +516,12 @@ Examples: +
 * **Alternative 1:** Positive search result by strictly matching the entered keyword
 ** Pros: Easy to implement.
 ** Cons: Search must be exact, typos or an incomplete keyword will yield incorrect results. Nothing different from `List` feature.
-* **Alternative 2 (current choice):** Positive search result as long as name/tag contains the keyword.
-** Pros: Searches can now consider names/tags similar to the keyword.
+* **Alternative 2:** Positive search result as long as name/tag contains the keyword.
+** Pros: Searches will detect names/tags similar to the keyword.
 ** Cons: Output list will be longer. May become excessively long if short keyword is provided.
-* **Alternative 3 (future implementation):** Store the search results in a `treeMap` ordered by their Levenshtein distances from the search keyword
-** Pros: Will also consider searches that are similar to what we want and will account for typos or incomplete keywords
+* **Alternative 3 (current implementation):** Store the search results in a `PriorityQueue` ordered by their <<levenshtein-distance,Levenshtein distances>> from the search keyword.
+** Pros: Will also consider searches that are similar to the desired name/tag and will account for a typo or an incomplete keyword
 ** Cons: Added complexities in finding and searching.
-
-==== Future Implementation
-The find function will be revamped to support search guessing. +
-FindCommand will be enhanced by using Levenshtein Distance to generate an ordered set of `Slot` attributes ordered by similarity.
 
 === View Month/Week/Day feature
 
@@ -1378,6 +1370,11 @@ _{More to be added}_
 
 [[mainstream-os]] Mainstream OS::
 Windows, Linux, Unix, OS-X
+
+[[levenshtein-distance]] Levenshtein Distance::
+The Levenshtein distance is a string metric for measuring difference between two sequences. +
+Informally, the Levenshtein distance between two words is the minimum number of single-character edits (i.e. insertions, deletions or substitutions)
+required to change one word into the other.
 
 ////
 Should only include this if we actually make any mention to private planner detail.

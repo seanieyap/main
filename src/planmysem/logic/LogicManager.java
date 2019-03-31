@@ -27,9 +27,9 @@ public class LogicManager implements Logic {
     private final CommandHistory history;
     private final ParserManager parserManager;
 
-    public LogicManager(Storage storageFile, Model model) {
+    public LogicManager(Storage storageFile) throws Exception {
         this.storageFile = storageFile;
-        this.model = model;
+        this.model = storageFile.load();
         this.history = new CommandHistory();
         this.parserManager = new ParserManager();
     }
