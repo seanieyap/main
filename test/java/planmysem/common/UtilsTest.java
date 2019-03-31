@@ -3,19 +3,24 @@ package planmysem.common;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static planmysem.common.Utils.getDuration;
+import static planmysem.common.Utils.getEndTime;
+import static planmysem.common.Utils.getNearestDayOfWeek;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
-import planmysem.data.exception.IllegalValueException;
-import planmysem.data.tag.Tag;
 
 public class UtilsTest {
+    @Before
+    public void setup() {
+        Clock.set("2019-01-14T10:00:00Z");
+    }
+
     @Test
     public void isAnyNull() {
         // empty list
@@ -123,6 +128,22 @@ public class UtilsTest {
     }
 
     @Test
+    public void parse_date_successful() {
+        assertEquals(Utils.parseDate("01-03-2019"), LocalDate.of(2019, 03, 01));
+        assertEquals(Utils.parseDate("01-04-2019"), LocalDate.of(2019, 04, 01));
+        assertEquals(Utils.parseDate("01-05-2019"), LocalDate.of(2019, 05, 01));
+        assertEquals(Utils.parseDate("01-06-2019"), LocalDate.of(2019, 06, 01));
+        assertEquals(Utils.parseDate("01-06"), LocalDate.of(2019, 06, 01));
+    }
+
+    @Test
+    public void parse_date_unsuccessful() {
+        assertEquals(Utils.parseDate("00-06-2019"), null);
+        assertEquals(Utils.parseDate("01-13-2019"), null);
+        assertEquals(Utils.parseDate("32-12-2019"), null);
+    }
+
+    @Test
     public void parse_time_successful() {
         assertEquals(Utils.parseTime("08:00"), LocalTime.of(8, 0));
         assertEquals(Utils.parseTime("8:00 PM"), LocalTime.of(20, 0));
@@ -130,13 +151,12 @@ public class UtilsTest {
         assertEquals(Utils.parseTime("00:00"), LocalTime.of(0, 0));
         assertEquals(Utils.parseTime("8:00"), LocalTime.of(8, 0));
         assertEquals(Utils.parseTime("8:00 AM"), LocalTime.of(8, 0));
+        assertEquals(Utils.parseTime("8:00 am"), LocalTime.of(8, 0));
+
     }
 
     @Test
     public void parse_time_unsuccessful() {
-        assertEquals(Utils.parseTime("8-00"), null);
-        assertEquals(Utils.parseTime("8:00 am"), null);
-        assertEquals(Utils.parseTime("8:00 pm"), null);
         assertEquals(Utils.parseTime("14:00 am"), null);
         assertEquals(Utils.parseTime("16:00 pm"), null);
         assertEquals(Utils.parseTime("24:00"), null);
@@ -161,46 +181,27 @@ public class UtilsTest {
     }
 
     @Test
-    public void parse_tags_successful() {
-        List<String> listOfTag = new ArrayList<>();
-        listOfTag.add("0");
-        listOfTag.add("tag1");
-        listOfTag.add("tag 2");
-        listOfTag.add("tag 3 super long tag");
+    public void parse_get_duration_successful() {
+        LocalTime startTime = LocalTime.now(Clock.get());
+        LocalTime endTime = startTime.plusMinutes(60);
 
-        Set<String> tagStrings = new HashSet<>(listOfTag);
-
-        Set<Tag> expectedTags = new HashSet<>();
-        Set<Tag> tags = new HashSet<>();
-        try {
-            expectedTags = new HashSet<>(Arrays.asList(new Tag("0"),
-                    new Tag("tag1"), new Tag("tag 2"),
-                    new Tag("tag 3 super long tag")));
-
-            tags = Utils.parseTags(tagStrings);
-        } catch (IllegalValueException ive) {
-        }
-
-        assertEquals(tags, expectedTags);
-
-        try {
-            tags = Utils.parseTags(null);
-        } catch (IllegalValueException ive) {
-        }
-
-        assertEquals(tags, null);
+        assertEquals(getDuration(startTime, endTime), 60);
     }
 
     @Test
-    public void parse_tags_unsuccessful() {
-        Set<Tag> tags = new HashSet<>();
+    public void parse_get_end_time_successful() {
+        LocalTime startTime = LocalTime.now(Clock.get());
+        LocalTime endTime = startTime.plusMinutes(60);
 
-        try {
-            tags = Utils.parseTags(null);
-        } catch (IllegalValueException ive) {
-        }
+        assertEquals(getEndTime(startTime, 60), endTime);
+    }
 
-        assertEquals(tags, null);
+    @Test
+    public void parse_get_nearest_day_of_week_successful() {
+        LocalDate date = LocalDate.of(2019, 1, 1);
+        LocalDate nearestMonday = LocalDate.of(2019, 1, 7);
+
+        assertEquals(getNearestDayOfWeek(date, 1), nearestMonday);
     }
 
     private void assertAreUnique(Object... objects) {

@@ -1,11 +1,13 @@
 package planmysem.ui;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javafx.util.Pair;
-import planmysem.data.slot.ReadOnlySlot;
+import planmysem.common.Messages;
+import planmysem.model.semester.ReadOnlyDay;
+import planmysem.model.slot.ReadOnlySlot;
 
 /**
  * Used for formatting text for display. e.g. for adding text decorations.
@@ -70,14 +72,15 @@ public class Formatter {
     /**
      * Formats the given list of slots for displaying to the user.
      */
-    public String formatSlots(List<Pair<LocalDate, ? extends ReadOnlySlot>> slots) {
-        final List<String> formattedSlots = new ArrayList<>();
-
-        for (Pair<LocalDate, ? extends ReadOnlySlot> pair : slots) {
-            formattedSlots.add(pair.getKey().toString() + ": " + pair.getValue().toString());
-        }
-
-        return format(asIndexedList(formattedSlots));
+    public String formatSlots(Map<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> slots) {
+        //        final List<String> formattedSlots = new ArrayList<>();
+        //
+        //        for (Map.Entry<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> entry : slots.entrySet()) {
+        //            formattedSlots.add(pair.getKey().toString() + ": " + pair.getValue().toString());
+        //        }
+        //
+        //        return format(asIndexedList(formattedSlots));
+        return Messages.craftListMessage(slots);
     }
 
 }

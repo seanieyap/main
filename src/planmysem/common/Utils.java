@@ -13,9 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import planmysem.data.exception.IllegalValueException;
-import planmysem.data.tag.Tag;
-
 /**
  * Utility methods
  */
@@ -25,7 +22,7 @@ public class Utils {
     public static final Pattern DATE_FORMAT_NO_YEAR =
             Pattern.compile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])");
     public static final Pattern TWELVE_HOUR_FORMAT =
-            Pattern.compile("(1[012]|[1-9]):[0-5][0-9](\\s)?(AM|PM)");
+            Pattern.compile("(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)(AM|PM)");
     public static final Pattern TWENTY_FOUR_HOUR_FORMAT =
             Pattern.compile("([01]?[0-9]|2[0-3]):[0-5][0-9]");
     public static final Pattern INTEGER_FORMAT =
@@ -119,10 +116,13 @@ public class Utils {
     }
 
     /**
-     * Parse String LocalDate.
+     * Parse String to LocalDate.
      */
     public static LocalDate parseDate(String date) {
-        if (date != null && DATE_FORMAT.matcher(date).matches()) {
+        if (date == null) {
+            return null;
+        }
+        if (DATE_FORMAT.matcher(date).matches()) {
             return LocalDate.parse(date, DateTimeFormatter.ofPattern("d-MM-yyyy"));
         } else if (DATE_FORMAT_NO_YEAR.matcher(date).matches()) {
             return LocalDate.parse(date + "-" + Year.now().getValue(), DateTimeFormatter.ofPattern("d-MM-yyyy"));
@@ -132,16 +132,26 @@ public class Utils {
     }
 
     /**
+     * Parse LocalDate to String.
+     */
+    public static String parseDate(LocalDate date) {
+        return date.format(DateTimeFormatter.ofPattern("d-MM-yyyy"));
+    }
+
+    /**
      * Parse String to 12 hour or 24 hour time format.
      */
     public static LocalTime parseTime(String time) {
-        LocalTime result = null;
-        if (time != null && TWELVE_HOUR_FORMAT.matcher(time).matches()) {
-            result = LocalTime.parse(time, DateTimeFormatter.ofPattern("h[h]:mm a"));
-        } else if (TWENTY_FOUR_HOUR_FORMAT.matcher(time).matches()) {
-            result = LocalTime.parse(time, DateTimeFormatter.ofPattern("H[H]:mm"));
+        if (time == null) {
+            return null;
         }
-        return result;
+        if (TWELVE_HOUR_FORMAT.matcher(time).matches()) {
+            return LocalTime.parse(time.toUpperCase(), DateTimeFormatter.ofPattern("h[h]:mm a"));
+        } else if (TWENTY_FOUR_HOUR_FORMAT.matcher(time).matches()) {
+            return LocalTime.parse(time, DateTimeFormatter.ofPattern("H[H]:mm"));
+        }
+
+        return null;
     }
 
     /**
@@ -160,41 +170,71 @@ public class Utils {
     }
 
     /**
-     * Convert set of strings into set of tags.
-     *
-     * @throws IllegalValueException if any of the raw values are invalid
-     */
-    public static Set<Tag> parseTags(Set<String> tags) throws IllegalValueException {
-        if (tags == null) {
-            return null;
-        }
-        Set<Tag> tagSet = new HashSet<>();
-        for (String tag : tags) {
-            tagSet.add(new Tag(tag));
-        }
-        return tagSet;
-    }
-
-
-    /**
-     * Get the time difference between two LocalTimes
+     * Get the time difference between two LocalTimes in minutes.
      */
     public static int getDuration(LocalTime startTime, LocalTime endTime) {
         return (int) MINUTES.between(startTime, endTime);
     }
 
     /**
-     * Get the end time of a time after a duration
+     * Get the end time of a time after a duration.
      */
     public static LocalTime getEndTime(LocalTime time, int duration) {
         return time.plusMinutes(duration);
     }
 
     /**
-     * Get the nearest date to a type of day from today
+     * Adapted from:
+     * https://rosettacode.org/wiki/Levenshtein_distance#Java
+     *
+     * Computes Levenshtein Distance from strings
+     */
+    public static int getLevenshteinDistance (String lhsIn, String rhsIn) {
+        String lhs = lhsIn.toLowerCase();
+        String rhs = rhsIn.toLowerCase();
+
+        // the array of distances
+        int[] cost = new int[lhs.length() + 1];
+        int[] newCost = new int[lhs.length() + 1];
+
+        // initial cost in String lhs
+        for (int i = 0; i < lhs.length(); i++) {
+            cost[i] = i;
+        }
+
+        // cost for transforming each letter in String rhs
+        for (int j = 1; j < rhs.length() + 1; j++) {
+            // initial cost in String rhs
+            newCost[0] = j;
+
+            // transformation cost for each letter in String lhs
+            for (int i = 1; i < lhs.length() + 1; i++) {
+                // match current letters in both strings
+                int match = (lhs.charAt(i - 1) == rhs.charAt(j - 1)) ? 0 : 1;
+
+                // cost for each type of transformation
+                int costReplace = cost[i - 1] + match;
+                int costInsert = cost[i] + 1;
+                int costDelete = newCost[i - 1] + 1;
+
+                // keep minimum cost
+                newCost[i] = Math.min(Math.min(costInsert, costDelete), costReplace);
+            }
+
+            // switch cost array with newCost array
+            int[] temp = cost;
+            cost = newCost;
+            newCost = temp;
+        }
+
+        // the distance is the cost for transforming all letters in both strings
+        return cost[lhs.length()];
+    }
+
+    /**
+     * Get the nearest date to a type of day from today.
      */
     public static LocalDate getNearestDayOfWeek(LocalDate date, int day) {
         return date.with(TemporalAdjusters.next(DayOfWeek.of(day)));
     }
-
 }

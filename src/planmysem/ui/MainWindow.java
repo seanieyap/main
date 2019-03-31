@@ -1,33 +1,34 @@
 package planmysem.ui;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.util.Pair;
-import planmysem.commands.CommandResult;
-import planmysem.commands.ExitCommand;
 import planmysem.common.Messages;
-import planmysem.data.slot.ReadOnlySlot;
-import planmysem.logic.Logic;
+import planmysem.logic.LogicManager;
+import planmysem.logic.commands.CommandResult;
+import planmysem.logic.commands.ExitCommand;
+import planmysem.model.semester.ReadOnlyDay;
+import planmysem.model.slot.ReadOnlySlot;
 
 /**
  * Main Window of the GUI.
  */
 public class MainWindow {
 
-    private Logic logic;
+    private LogicManager logicManager;
     private Stoppable mainApp;
     @FXML
     private TextArea outputConsole;
     @FXML
     private TextField commandInput;
 
-    public void setLogic(Logic logic) {
-        this.logic = logic;
+    public void setLogicManager(LogicManager logicManager) {
+        this.logicManager = logicManager;
     }
 
     public void setMainApp(Stoppable mainApp) {
@@ -41,7 +42,7 @@ public class MainWindow {
     private void onCommand() {
         try {
             String userCommandText = commandInput.getText();
-            CommandResult result = logic.execute(userCommandText);
+            CommandResult result = logicManager.execute(userCommandText);
             if (isExitCommand(result)) {
                 exitApp();
                 return;
@@ -84,7 +85,7 @@ public class MainWindow {
      */
     public void displayResult(CommandResult result) {
         clearOutputConsole();
-        final Optional<List<Pair<LocalDate, ? extends ReadOnlySlot>>> resultDays = result.getRelevantSlots();
+        final Optional<Map<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>>> resultDays = result.getRelevantSlots();
         if (resultDays.isPresent()) {
             display(resultDays.get());
         }
@@ -103,8 +104,7 @@ public class MainWindow {
      * Displays the list of slots in the output display area, formatted as an indexed list.
      * Private contact details are hidden.
      */
-    private void display(List<Pair<LocalDate, ? extends ReadOnlySlot>> slots) {
-        // TODO: rename function call when AddressBook is fully removed from project
+    private void display(Map<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> slots) {
         display(new Formatter().formatSlots(slots));
     }
 
@@ -112,6 +112,7 @@ public class MainWindow {
      * Displays the given messages on the output display area, after formatting appropriately.
      */
     private void display(String... messages) {
+        clearOutputConsole();
         outputConsole.setText(outputConsole.getText() + new Formatter().format(messages));
     }
 }
