@@ -56,9 +56,9 @@ public class ImportCommand extends Command {
 
         try {
             String sCurrentLine = br.readLine();
-            while (!(sCurrentLine.equals("END:VCALENDAR"))) {
+            while (!("END:VCALENDAR".equals(sCurrentLine))) {
                 sCurrentLine = br.readLine();
-                if (sCurrentLine.equals("BEGIN:VEVENT")) {
+                if ("BEGIN:VEVENT".equals(sCurrentLine)) {
                     LocalDate date = null;
                     String name = null;
                     String location = null;
@@ -67,7 +67,7 @@ public class ImportCommand extends Command {
                     int duration = 0;
                     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
 
-                    while (!(sCurrentLine.equals("END:VEVENT"))) {
+                    while (!("END:VEVENT".equals(sCurrentLine))) {
                         sCurrentLine = br.readLine();
                         String[] sSplit = sCurrentLine.split(":");
                         switch (sSplit[0]) {
