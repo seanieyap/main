@@ -5,7 +5,19 @@ import static planmysem.common.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import planmysem.logic.commands.*;
+import planmysem.logic.commands.AddCommand;
+import planmysem.logic.commands.ClearCommand;
+import planmysem.logic.commands.Command;
+import planmysem.logic.commands.DeleteCommand;
+import planmysem.logic.commands.EditCommand;
+import planmysem.logic.commands.ExitCommand;
+import planmysem.logic.commands.ExportCommand;
+import planmysem.logic.commands.FindCommand;
+import planmysem.logic.commands.HelpCommand;
+import planmysem.logic.commands.HistoryCommand;
+import planmysem.logic.commands.ImportCommand;
+import planmysem.logic.commands.ListCommand;
+import planmysem.logic.commands.ViewCommand;
 import planmysem.logic.parser.exceptions.ParseException;
 
 /**
