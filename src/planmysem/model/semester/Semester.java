@@ -114,7 +114,7 @@ public class Semester implements ReadOnlySemester {
         acadYear = semesterDetails[2];
         noOfWeeks = Integer.parseInt(semesterDetails[3]);
         startDate = LocalDate.parse(semesterDetails[4]);
-        endDate = LocalDate.parse(semesterDetails[5]);
+        endDate = LocalDate.parse(semesterDetails[5]).plusDays(1);
 
         // Initialise HashMap and Sets of all days in current semester
         datesList = startDate.datesUntil(endDate).collect(Collectors.toList());
@@ -394,37 +394,6 @@ public class Semester implements ReadOnlySemester {
     }
 
     /**
-     * Removes the equivalent Day from the list.
-     *
-     * @throws DateNotFoundException if no such Day could be found in the list.
-     */
-    public void remove(ReadOnlyDay day) throws DateNotFoundException {
-        if (!contains(day)) {
-            throw new DateNotFoundException();
-        }
-        days.remove(day);
-    }
-
-    /**
-     * Removes the equivalent Day from the list.
-     *
-     * @throws DateNotFoundException if no such Day could be found in the list.
-     */
-    public void remove(LocalDate date) throws DateNotFoundException {
-        if (!contains(date)) {
-            throw new DateNotFoundException();
-        }
-        days.remove(date);
-    }
-
-    /**
-     * Clears all Days from the address book.
-     */
-    public void clearDays() {
-        days.clear();
-    }
-
-    /**
      * Clears all Days from the address book.
      */
     public void clearSlots() {
@@ -467,7 +436,10 @@ public class Semester implements ReadOnlySemester {
     @Override
     public void setDays(HashMap<LocalDate, Day> days) {
         this.days.clear();
-        this.days.putAll(days);
+
+        for (Map.Entry<LocalDate, Day> entry : days.entrySet()) {
+            this.days.put(entry.getKey(), new Day(entry.getValue()));
+        }
     }
 
     @Override
