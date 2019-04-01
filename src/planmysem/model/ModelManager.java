@@ -47,6 +47,7 @@ public class ModelManager implements Model {
         }
     }
 
+    @Override
     public void setLastShownList(Map<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> list) {
         lastShownList.clear();
 
@@ -61,7 +62,6 @@ public class ModelManager implements Model {
     public void clearLastShownList() {
         lastShownList.clear();
     }
-
 
     @Override
     public void commit() {
@@ -127,6 +127,11 @@ public class ModelManager implements Model {
     @Override
     public Map<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> getSlots(Set<String> tags) {
         return versionedPlanner.getSlots(tags);
+    }
+
+    @Override
+    public boolean slotExists(LocalDate date, ReadOnlySlot slot) {
+        return getDay(date).contains(slot);
     }
 
     @Override

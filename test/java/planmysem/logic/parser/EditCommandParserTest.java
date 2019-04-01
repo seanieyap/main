@@ -1,6 +1,9 @@
 package planmysem.logic.parser;
 
 import static planmysem.common.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static planmysem.common.Messages.MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL;
+import static planmysem.common.Messages.MESSAGE_INVALID_TIME;
+import static planmysem.common.Messages.MESSAGE_NOTHING_TO_EDIT;
 import static planmysem.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static planmysem.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -129,7 +132,8 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_InvalidStartTime_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL,
+                EditCommand.MESSAGE_USAGE, MESSAGE_INVALID_TIME);
 
         assertParseFailure(parser,
                 "1 nst/25:00",
@@ -139,10 +143,33 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_InvalidEndTime_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL,
+                EditCommand.MESSAGE_USAGE, MESSAGE_INVALID_TIME);
 
         assertParseFailure(parser,
                 "1 net/25:00",
+                expectedMessage
+        );
+    }
+
+
+    @Test
+    public void parse_NothingToEdit_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL,
+                EditCommand.MESSAGE_USAGE, MESSAGE_NOTHING_TO_EDIT);
+
+        assertParseFailure(parser,
+                "1 nnt/",
+                expectedMessage
+        );
+
+        assertParseFailure(parser,
+                "1 nl/",
+                expectedMessage
+        );
+
+        assertParseFailure(parser,
+                "t/test ndes/",
                 expectedMessage
         );
     }

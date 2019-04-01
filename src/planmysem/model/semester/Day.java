@@ -98,11 +98,4 @@ public class Day implements ReadOnlyDay {
         // use this method for custom fields hashing instead of implementing your own
         return Objects.hash(dayOfWeek, type, slots);
     }
-
-    /**
-     * Signals that an operation targeting a specified slot in the list would fail because
-     * there is no such matching slot in the list.
-     */
-    public static class SlotNotFoundException extends Exception {
-    }
 }

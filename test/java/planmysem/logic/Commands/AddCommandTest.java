@@ -1,6 +1,5 @@
 package planmysem.logic.Commands;
 
-import static java.util.Objects.requireNonNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -153,6 +152,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean slotExists(LocalDate date, ReadOnlySlot slot) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public Day addSlot(LocalDate date, Slot slot) throws Semester.DateNotFoundException {
             throw new AssertionError("This method should not be called.");
         }
@@ -222,18 +226,6 @@ public class AddCommandTest {
         @Override
         public boolean equals(Object obj) {
             throw new AssertionError("This method should not be called.");
-        }
-    }
-
-    /**
-     * A Model stub that contains a single slot.
-     */
-    private class ModelStubWithSlot extends ModelStub {
-        private final Slot slot;
-
-        ModelStubWithSlot(Slot slot) {
-            requireNonNull(slot);
-            this.slot = slot;
         }
     }
 

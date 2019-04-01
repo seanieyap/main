@@ -2,8 +2,10 @@ package planmysem.logic.Commands;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static planmysem.common.Messages.MESSAGE_INVALID_SLOT_DISPLAYED_INDEX;
 import static planmysem.logic.Commands.CommandTestUtil.assertCommandFailure;
 import static planmysem.logic.Commands.CommandTestUtil.assertCommandSuccess;
+import static planmysem.logic.commands.DeleteCommand.MESSAGE_SLOT_NOT_IN_PLANNER;
 import static planmysem.logic.commands.DeleteCommand.MESSAGE_SUCCESS;
 import static planmysem.logic.commands.DeleteCommand.MESSAGE_SUCCESS_NO_CHANGE;
 
@@ -169,10 +171,22 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_InvalidSlot_throwsCommandException() {
+        DeleteCommand deleteCommand = new DeleteCommand(1);
+
+        String expectedMessage = MESSAGE_SLOT_NOT_IN_PLANNER;
+
+        // removed slots with of index 1 in lastShownSlot, so the exception will occur
+        model.removeSlot(pair4);
+
+        assertCommandFailure(deleteCommand, model, commandHistory, expectedMessage);
+    }
+
+    @Test
     public void execute_InvalidIndex_throwsCommandException() {
         DeleteCommand deleteCommand = new DeleteCommand(5);
 
-        String expectedMessage = Messages.MESSAGE_INVALID_SLOT_DISPLAYED_INDEX;
+        String expectedMessage = MESSAGE_INVALID_SLOT_DISPLAYED_INDEX;
 
         assertCommandFailure(deleteCommand, model, commandHistory, expectedMessage);
     }
