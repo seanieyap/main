@@ -1,7 +1,7 @@
 package planmysem.logic.Commands;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static planmysem.common.Messages.MESSAGE_INVALID_SLOT_DISPLAYED_INDEX;
 import static planmysem.logic.Commands.CommandTestUtil.assertCommandFailure;
 import static planmysem.logic.Commands.CommandTestUtil.assertCommandSuccess;
@@ -17,12 +17,10 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javafx.util.Pair;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import planmysem.common.Clock;
 import planmysem.common.Messages;
 import planmysem.logic.CommandHistory;
@@ -186,7 +184,6 @@ public class DeleteCommandTest {
     @Test
     public void execute_invalidIndex_throwsCommandException() {
         DeleteCommand deleteCommand = new DeleteCommand(5);
-
         String expectedMessage = MESSAGE_INVALID_SLOT_DISPLAYED_INDEX;
 
         assertCommandFailure(deleteCommand, model, commandHistory, expectedMessage);
@@ -197,20 +194,20 @@ public class DeleteCommandTest {
         DeleteCommand deleteFirstCommand = new DeleteCommand(1);
 
         // same object -> returns true
-        assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
+        assertEquals(deleteFirstCommand, deleteFirstCommand);
 
         // same values -> returns true
         DeleteCommand deleteFirstCommandCopy = new DeleteCommand(1);
-        assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
+        assertEquals(deleteFirstCommand, deleteFirstCommandCopy);
 
         // different types -> returns false
-        assertFalse(deleteFirstCommand.equals(1));
+        assertNotEquals(deleteFirstCommand, 1);
 
         // null -> returns false
-        assertFalse(deleteFirstCommand.equals(null));
+        assertNotEquals(deleteFirstCommand, null);
 
         // different command -> returns false
         DeleteCommand deleteSecondCommand = new DeleteCommand(2);
-        assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
+        assertNotEquals(deleteFirstCommand, deleteSecondCommand);
     }
 }

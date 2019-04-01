@@ -9,6 +9,7 @@ import static planmysem.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 import org.junit.Before;
@@ -36,7 +37,7 @@ public class EditCommandParserTest {
                         -1,
                         "COM2 04-01",
                         null,
-                        new HashSet<>(Arrays.asList("CS2113T")),
+                        new HashSet<>(Collections.singletonList("CS2113T")),
                         new HashSet<>()
                 )
         );
@@ -65,7 +66,7 @@ public class EditCommandParserTest {
                         "COM2 04-01",
                         "So tough",
                         new HashSet<>(Arrays.asList("CS2113T", "Tutorial", "Hard")),
-                        new HashSet<>(Arrays.asList("new tag"))
+                        new HashSet<>(Collections.singletonList("new tag"))
                 )
         );
     }

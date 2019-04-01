@@ -5,6 +5,7 @@ import static planmysem.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static planmysem.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 import org.junit.Before;
@@ -27,7 +28,7 @@ public class DeleteCommandParserTest {
         assertParseSuccess(parser,
                 "t/CS2113T",
                 new DeleteCommand(
-                        new HashSet<>(Arrays.asList("CS2113T")
+                        new HashSet<>(Collections.singletonList("CS2113T")
                         )
                 )
         );

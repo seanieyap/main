@@ -1,6 +1,8 @@
 package planmysem.logic;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 import static planmysem.common.Messages.MESSAGE_INVALID_SLOT_DISPLAYED_INDEX;
 
 import java.io.File;
@@ -90,7 +92,6 @@ public class LogicManagerTest {
         assertEquals(logic.getLastShownSlots(), lastShownSlots);
     }
 
-
     @Test
     public void getHistory() throws Exception {
         ObservableList<String> expectedHistory =
@@ -111,6 +112,14 @@ public class LogicManagerTest {
         expectedHistory.add("d 1");
 
         assertEquals(logic.getHistory(), expectedHistory);
+        assertEquals(logic.getHistory().hashCode(), expectedHistory.hashCode());
+
+        // equal same object
+        assertEquals(logic.getHistory(), logic.getHistory());
+        assertEquals(logic.getHistory().hashCode(), logic.getHistory().hashCode());
+
+        // equal null
+        assertNotEquals(logic.getHistory(), null);
     }
 
 
@@ -127,33 +136,6 @@ public class LogicManagerTest {
         assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS_NONE, model);
         assertHistoryCorrect(listCommand);
     }
-    //
-    //    @Test
-    //    public void execute_storageThrowsIoException_throwsCommandException() throws Exception {
-    //        // Setup LogicManager with JsonAddressBookIoExceptionThrowingStub
-    //        JsonAddressBookStorage addressBookStorage =
-    //                new JsonAddressBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
-    //        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
-    //        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
-    //        logic = new LogicManager(model, storage);
-    //
-    //        // Execute add command
-    //        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
-    //                + ADDRESS_DESC_AMY;
-    //        Person expectedPerson = new PersonBuilder(AMY).withTags().build();
-    //        ModelManager expectedModel = new ModelManager();
-    //        expectedModel.addPerson(expectedPerson);
-    //        expectedModel.commitAddressBook();
-    //        String expectedMessage = LogicManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
-    //        assertCommandBehavior(CommandException.class, addCommand, expectedMessage, expectedModel);
-    //        assertHistoryCorrect(addCommand);
-    //    }
-    //
-    //    @Test
-    //    public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
-    //        thrown.expect(UnsupportedOperationException.class);
-    //        logic.getFilteredPersonList().remove(0);
-    //    }
 
     /**
      * Executes the command, confirms that no exceptions are thrown and that the result message is correct.
@@ -200,7 +182,7 @@ public class LogicManagerTest {
 
         try {
             CommandResult result = logic.execute(inputCommand);
-            assertEquals(expectedException, null);
+            assertNull(expectedException);
             assertEquals(expectedMessage, result.getFeedbackToUser());
         } catch (CommandException | ParseException e) {
             assertEquals(expectedException, e.getClass());

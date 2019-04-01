@@ -100,13 +100,10 @@ public class SemesterTest {
     @Test
     public void execute_generateSemester() {
         TestDataHelper helper = new TestDataHelper();
-        Semester generatedSemester;
-        Semester expectedSemester;
 
         // Assert Semester One generation
-        generatedSemester = Semester.generateSemester(LocalDate.of(2018, 8, 6));
-        LocalDate semOneDate = LocalDate.of(2018, 8, 6);
-        expectedSemester = helper.generateSemesterFromDate(semOneDate, "Sem 1");
+        Semester generatedSemester = Semester.generateSemester(LocalDate.of(2018, 8, 6));
+        Semester expectedSemester = helper.generateSemesterFromDate(LocalDate.of(2018, 8, 6), "Sem 1");
         assertEquals(generatedSemester, expectedSemester);
 
         expectedSemester = Semester.generateSemester(LocalDate.of(2018, 10, 6));
@@ -190,7 +187,7 @@ public class SemesterTest {
                 noOfWeeks = 18;
                 acadYear = "AY" + givenYear + "/" + (givenYear + 1);
                 endDate = startDate.with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfStartDate + 18 - 1);
-                endDate = endDate.with(WeekFields.ISO.dayOfWeek(), 7).plusDays(1);
+                endDate = endDate.with(WeekFields.ISO.dayOfWeek(), 7);
 
                 weekNames.put(weekOfStartDate, "Orientation Week");
                 int week = 1;
@@ -211,7 +208,7 @@ public class SemesterTest {
                 noOfWeeks = 17;
                 acadYear = "AY" + (givenYear - 1) + "/" + givenYear;
                 endDate = startDate.with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfStartDate + 17 - 1);
-                endDate = endDate.with(WeekFields.ISO.dayOfWeek(), 7).plusDays(1);
+                endDate = endDate.with(WeekFields.ISO.dayOfWeek(), 7);
 
                 int week = 1;
                 for (int i = weekOfStartDate; i < weekOfStartDate + 6; i++) {
@@ -230,24 +227,24 @@ public class SemesterTest {
             }
 
             // Initialises HashMap and Sets of all days in current semester
-            List<LocalDate> datesList = startDate.datesUntil(endDate).collect(Collectors.toList());
+            List<LocalDate> datesList = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
             for (LocalDate date: datesList) {
                 int weekOfYear = date.get(WeekFields.ISO.weekOfWeekBasedYear());
                 String weekType = weekNames.get(weekOfYear);
                 days.put(date, new Day(date.getDayOfWeek(), weekType));
                 switch (weekType) {
-                case "Recess Week":
-                    recessDays.add(date);
-                    break;
-                case "Reading Week":
-                    readingDays.add(date);
-                    break;
-                case "Examination Week":
-                    examDays.add(date);
-                    break;
-                default:
-                    normalDays.add(date);
-                    break;
+                    case "Recess Week":
+                        recessDays.add(date);
+                        break;
+                    case "Reading Week":
+                        readingDays.add(date);
+                        break;
+                    case "Examination Week":
+                        examDays.add(date);
+                        break;
+                    default:
+                        normalDays.add(date);
+                        break;
                 }
             }
 

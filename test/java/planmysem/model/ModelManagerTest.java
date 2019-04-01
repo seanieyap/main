@@ -2,6 +2,7 @@ package planmysem.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -53,6 +54,10 @@ public class ModelManagerTest {
         LocalDate date = LocalDate.of(2019, 1, 15);
         modelManager.addSlot(date, slot);
         modelManager.commit();
+
+        // test canUndo()
+        assertTrue(modelManager.canUndo());
+
         modelManager.undo();
 
         ModelManager expectedModelManager = new ModelManager();
@@ -60,7 +65,6 @@ public class ModelManagerTest {
         assertEquals(modelManager.getPlanner().getSemester(),
                 expectedModelManager.getPlanner().getSemester());
     }
-
 
     @Test
     public void redo() throws Semester.DateNotFoundException {
@@ -70,6 +74,10 @@ public class ModelManagerTest {
         modelManager.addSlot(date, slot);
         modelManager.commit();
         modelManager.undo();
+
+        // test canRedo()
+        assertTrue(modelManager.canRedo());
+
         modelManager.redo();
 
         ModelManager expectedModelManager = new ModelManager();

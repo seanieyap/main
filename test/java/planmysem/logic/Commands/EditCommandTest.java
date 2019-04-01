@@ -1,7 +1,7 @@
 package planmysem.logic.Commands;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static planmysem.logic.Commands.CommandTestUtil.assertCommandFailure;
 import static planmysem.logic.Commands.CommandTestUtil.assertCommandSuccess;
 import static planmysem.logic.commands.EditCommand.MESSAGE_SUCCESS;
@@ -10,19 +10,17 @@ import static planmysem.logic.commands.EditCommand.MESSAGE_SUCCESS_NO_CHANGE;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 import javafx.util.Pair;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import planmysem.common.Clock;
 import planmysem.common.Messages;
 import planmysem.logic.CommandHistory;
@@ -126,7 +124,7 @@ public class EditCommandTest {
         String description = "new description";
         LocalTime startTime = LocalTime.of(8, 0);
         int duration = 60;
-        Set<String> tags = new HashSet<>(Arrays.asList("tag1"));
+        Set<String> tags = new HashSet<>(Collections.singletonList("tag1"));
 
         EditCommand editCommand = new EditCommand(
                 name,
@@ -173,7 +171,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_invalidTag_throwsCommandException() {
-        Set<String> selectTags = new HashSet<>(Arrays.asList("tag does not exist"));
+        Set<String> selectTags = new HashSet<>(Collections.singletonList("tag does not exist"));
 
         // values to edit
         String name = "new name";
@@ -181,7 +179,7 @@ public class EditCommandTest {
         String description = "new description";
         LocalTime startTime = LocalTime.of(8, 0);
         int duration = 60;
-        Set<String> tags = new HashSet<>(Arrays.asList("tag1"));
+        Set<String> tags = new HashSet<>(Collections.singletonList("tag1"));
 
         EditCommand editCommand = new EditCommand(
                 name,
@@ -208,7 +206,7 @@ public class EditCommandTest {
         LocalDate date = LocalDate.of(2019, 2, 2);
         LocalTime startTime = LocalTime.of(8, 0);
         int duration = 60;
-        Set<String> tags = new HashSet<>(Arrays.asList("tag1"));
+        Set<String> tags = new HashSet<>(Collections.singletonList("tag1"));
 
         EditCommand editCommand = new EditCommand(
                 5,
@@ -239,7 +237,7 @@ public class EditCommandTest {
         LocalDate date = LocalDate.of(2019, 2, 2);
         LocalTime startTime = LocalTime.of(8, 0);
         int duration = 60;
-        Set<String> tags = new HashSet<>(Arrays.asList("tag1"));
+        Set<String> tags = new HashSet<>(Collections.singletonList("tag1"));
 
         EditCommand editCommand = new EditCommand(
                 1,
@@ -287,7 +285,7 @@ public class EditCommandTest {
         LocalDate date = LocalDate.of(2019, 2, 2);
         LocalTime startTime = LocalTime.of(8, 0);
         int duration = 60;
-        Set<String> tags = new HashSet<>(Arrays.asList("tag1"));
+        Set<String> tags = new HashSet<>(Collections.singletonList("tag1"));
 
         EditCommand editCommand = new EditCommand(
                 1,
@@ -332,11 +330,11 @@ public class EditCommandTest {
                 60,
                 "location",
                 "description",
-                new HashSet<>(Arrays.asList("tag1"))
+                new HashSet<>(Collections.singletonList("tag1"))
         );
 
         // same object -> returns true
-        assertTrue(editFirstCommand.equals(editFirstCommand));
+        assertEquals(editFirstCommand, editFirstCommand);
 
         // same values -> returns true
         EditCommand editFirstCommandCopy = new EditCommand(
@@ -347,15 +345,15 @@ public class EditCommandTest {
                 60,
                 "location",
                 "description",
-                new HashSet<>(Arrays.asList("tag1"))
+                new HashSet<>(Collections.singletonList("tag1"))
         );
-        assertTrue(editFirstCommand.equals(editFirstCommandCopy));
+        assertEquals(editFirstCommand, editFirstCommandCopy);
 
         // different types -> returns false
-        assertFalse(editFirstCommand.equals(1));
+        assertNotEquals(editFirstCommand, 1);
 
         // null -> returns false
-        assertFalse(editFirstCommand.equals(null));
+        assertNotEquals(editFirstCommand, null);
 
         // different command -> returns false
         EditCommand deleteSecondCommand = new EditCommand(
@@ -366,8 +364,8 @@ public class EditCommandTest {
                 60,
                 "location",
                 "description",
-                new HashSet<>(Arrays.asList("tag1"))
+                new HashSet<>(Collections.singletonList("tag1"))
         );
-        assertFalse(editFirstCommand.equals(deleteSecondCommand));
+        assertNotEquals(editFirstCommand, deleteSecondCommand);
     }
 }

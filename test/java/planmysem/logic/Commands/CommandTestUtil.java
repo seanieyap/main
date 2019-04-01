@@ -19,7 +19,7 @@ import planmysem.model.slot.ReadOnlySlot;
 /**
  * Contains helper methods for testing commands.
  */
-public class CommandTestUtil {
+class CommandTestUtil {
 
     /**
      * Executes the given {@code command}, confirms that <br>
@@ -27,7 +27,7 @@ public class CommandTestUtil {
      * - the {@code actualModel} matches {@code expectedModel} <br>
      * - the {@code actualCommandHistory} remains unchanged.
      */
-    public static void assertCommandSuccess(Command command, Model actualModel, CommandHistory actualCommandHistory,
+    static void assertCommandSuccess(Command command, Model actualModel, CommandHistory actualCommandHistory,
                                             CommandResult expectedCommandResult, Model expectedModel) {
         CommandHistory expectedCommandHistory = new CommandHistory(actualCommandHistory);
         try {
@@ -44,7 +44,7 @@ public class CommandTestUtil {
      * Convenience wrapper to {@link #assertCommandSuccess(Command, Model, CommandHistory, CommandResult, Model)}
      * that takes a string {@code expectedMessage}.
      */
-    public static void assertCommandSuccess(Command command, Model actualModel, CommandHistory actualCommandHistory,
+    static void assertCommandSuccess(Command command, Model actualModel, CommandHistory actualCommandHistory,
             String expectedMessage, Model expectedModel) {
         CommandResult expectedCommandResult = new CommandResult(expectedMessage);
         assertCommandSuccess(command, actualModel, actualCommandHistory, expectedCommandResult, expectedModel);
@@ -57,7 +57,7 @@ public class CommandTestUtil {
      * - the planner, last shown list in {@code actualModel} remain unchanged <br>
      * - {@code actualCommandHistory} remains unchanged.
     */
-    public static void assertCommandFailure(Command command, Model actualModel, CommandHistory actualCommandHistory,
+    static void assertCommandFailure(Command command, Model actualModel, CommandHistory actualCommandHistory,
             String expectedMessage) {
         Planner expectedPlanner = new Planner(actualModel.getPlanner());
         actualModel.getDays();

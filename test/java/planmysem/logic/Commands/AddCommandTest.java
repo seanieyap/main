@@ -1,7 +1,6 @@
 package planmysem.logic.Commands;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static planmysem.logic.commands.AddCommand.MESSAGE_SUCCESS;
 import static planmysem.logic.commands.AddCommand.craftSuccessMessage;
@@ -15,13 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import javafx.util.Pair;
 
+import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import planmysem.common.Clock;
 import planmysem.logic.CommandHistory;
 import planmysem.logic.commands.AddCommand;
@@ -39,11 +37,10 @@ import planmysem.testutil.SlotBuilder;
 
 
 public class AddCommandTest {
-
-    private static final CommandHistory EMPTY_COMMAND_HISTORY = new CommandHistory();
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    private static final CommandHistory EMPTY_COMMAND_HISTORY = new CommandHistory();
 
     private CommandHistory commandHistory = new CommandHistory();
 
@@ -101,22 +98,22 @@ public class AddCommandTest {
         AddCommand addCommand1 = new AddCommand(slot1, recurrence);
 
         // same object -> returns true
-        assertTrue(addCommand1.equals(addCommand1));
+        assertEquals(addCommand1, addCommand1);
 
         // same values -> returns true
         AddCommand addCommand1Copy = new AddCommand(slot1, recurrence);
-        assertTrue(addCommand1.equals(addCommand1Copy));
+        assertEquals(addCommand1, addCommand1Copy);
 
         // different types -> returns false
-        assertFalse(addCommand1.equals(1));
+        assertNotEquals(addCommand1, 1);
 
         // null -> returns false
-        assertFalse(addCommand1.equals(null));
+        assertNotEquals(addCommand1, null);
 
         // different command -> returns false
         Slot slot2 = new SlotBuilder().generateSlot(2);
         AddCommand addCommand2 = new AddCommand(slot2, recurrence);
-        assertFalse(addCommand1.equals(addCommand2));
+        assertNotEquals(addCommand1, addCommand2);
     }
 
 

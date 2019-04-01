@@ -6,18 +6,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import planmysem.logic.commands.AddCommand;
 import planmysem.logic.commands.ClearCommand;
 import planmysem.logic.commands.DeleteCommand;
 import planmysem.logic.commands.EditCommand;
 import planmysem.logic.commands.ExitCommand;
+import planmysem.logic.commands.ExportCommand;
 import planmysem.logic.commands.HelpCommand;
+import planmysem.logic.commands.ImportCommand;
 import planmysem.model.recurrence.Recurrence;
 import planmysem.model.slot.Slot;
 
@@ -139,7 +141,7 @@ public class ParserManagerTest {
                 -1,
                 "COM2 04-01",
                 null,
-                new HashSet<>(Arrays.asList("CS2113T")),
+                new HashSet<>(Collections.singletonList("CS2113T")),
                 new HashSet<>()
         ), command);
     }
@@ -162,15 +164,26 @@ public class ParserManagerTest {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
     }
-    //
-    //    @Test
-    //    public void parseCommand_find() throws Exception {
-    //        List<String> keywords = Arrays.asList("foo", "bar", "baz");
-    //        FindCommand command = (FindCommand) parser.parseCommand(
-    //                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
-    //        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
-    //    }
-    //
+
+    @Test
+    public void parseCommand_export() throws Exception {
+        assertTrue(parser.parseCommand(ExportCommand.COMMAND_WORD) instanceof ExportCommand);
+        assertTrue(parser.parseCommand(ExportCommand.COMMAND_WORD + " 3") instanceof ExportCommand);
+    }
+
+    @Test
+    public void parseCommand_import() throws Exception {
+        assertTrue(parser.parseCommand(ImportCommand.COMMAND_WORD + " /test/data/ImportExportTest/importTest.ics\"") instanceof ImportCommand);
+    }
+
+//    @Test
+//    public void parseCommand_find() throws Exception {
+//        List<String> keywords = Arrays.asList("foo", "bar", "baz");
+//        FindCommand command = (FindCommand) parser.parseCommand(
+//                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
+//        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
+//    }
+
 
     //
     //    @Test
