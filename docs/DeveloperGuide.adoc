@@ -900,7 +900,7 @@ image::UndoRedoActivityDiagram.png[width="650"]
 
 === Data Encryption / Decryption feature
 
-The storageFile file "PlanMySem.txt" is encrypted to prevent easy access of the user's calendar.
+The storage file "PlanMySem.txt" is encrypted to prevent easy access of the user's calendar.
 We are encrypting and decrypting the data using the Java Cypher class.
 This feature is implemented through creating a Encryptor that contains encrypt and decrypt methods. The encrypt method takes a String object as an argument and returns a encrypted String object. The decrypt method takes in a String object as an argument and returns the decrypted message as a String object.
 
@@ -929,7 +929,7 @@ In our implementation, we have chosen not to export the tags into the .ics file.
 * **Alternative 1 (current choice):** Ignore tags when exporting.
 ** Pros: Easier to implement as iCalendar does not have in-built tag fields.
 ** Cons: Not all the information about the slots will be retained.
-** Reason for choice: We do not have much control over other applications, and importing and exporting .ics within *PlanMySem* can be done using the storageFile .txt file.
+** Reason for choice: We do not have much control over other applications, and importing and exporting .ics within *PlanMySem* can be done using the storage .txt file.
 * **Alternative 2:** Use the notes field and a tag identifier to save the tags.
 ** Pros: All the information from the semester will be exported.
 ** Cons: Requires other applications to be coded to read these tag identifiers and also to store and use the tags in their functions.
@@ -1111,7 +1111,7 @@ To run tests in headless mode, open a console and run the command `gradlew clean
 .  _Unit tests_ targeting the lowest level methods/classes. +
 e.g. `PlanMySem.commons.UtilTest`
 .  _Integration tests_ that are checking the integration of multiple code units (those code units are assumed to be working). +
-e.g. `PlanMySem.storageFile.StorageManagerTest`
+e.g. `PlanMySem.storage.StorageManagerTest`
 .  Hybrids of unit and integration tests. These test are checking multiple code units as well as how the are connected together. +
 e.g. `PlanMySem.logicManager.LogicTest`, `PlanMySem.parse,ParserTest`
 {zwsp}
@@ -1264,7 +1264,7 @@ For example, Gradle can download the dependencies automatically, which is better
 //* Solution
 //** You can modify the existing test methods for `PersonCard` 's to include testing the tag's color as well.
 //** See this https://github.com/se-edu/addressbook-level4/pull/798[PR] for the full solution.
-//*** The PR uses the hash code of the tag names to generate a color. This is deliberately designed to ensure consistent colors each time the application runs. You may wish to expand on this design to include additional features, such as allowing users to set their own tag colors, and directly saving the colors to storageFile, so that tags retain their colors even if the hash code algorithm changes.
+//*** The PR uses the hash code of the tag names to generate a color. This is deliberately designed to ensure consistent colors each time the application runs. You may wish to expand on this design to include additional features, such as allowing users to set their own tag colors, and directly saving the colors to storage, so that tags retain their colors even if the hash code algorithm changes.
 //****
 //
 //. Modify link:{repoURL}/src/main/java/seedu/address/commons/events/ui/NewResultAvailableEvent.java[`NewResultAvailableEvent`] such that link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay`] can show a different style on error (currently it shows the same regardless of errors).
@@ -1316,7 +1316,7 @@ For example, Gradle can download the dependencies automatically, which is better
 //[discrete]
 //==== `Storage` component
 //
-//*Scenario:* You are in charge of `storageFile`. For your next project milestone, your team plans to implement a new feature of saving the address book to the cloud. However, the current implementation of the application constantly saves the address book after the execution of each command, which is not ideal if the user is working on limited internet connection. Your team decided that the application should instead save the changes to a temporary local backup file first, and only upload to the cloud after the user closes the application. Your job is to implement a backup API for the address book storageFile.
+//*Scenario:* You are in charge of `storage`. For your next project milestone, your team plans to implement a new feature of saving the address book to the cloud. However, the current implementation of the application constantly saves the address book after the execution of each command, which is not ideal if the user is working on limited internet connection. Your team decided that the application should instead save the changes to a temporary local backup file first, and only upload to the cloud after the user closes the application. Your job is to implement a backup API for the address book storage.
 //
 //[TIP]
 //Do take a look at <<Design-Storage>> before attempting to modify the `Storage` component.
@@ -1325,8 +1325,8 @@ For example, Gradle can download the dependencies automatically, which is better
 //+
 //****
 //* Hint
-//** Add the API method in link:{repoURL}/src/main/java/seedu/address/storageFile/AddressBookStorage.java[`AddressBookStorage`] interface.
-//** Implement the logicManager in link:{repoURL}/src/main/java/seedu/address/storageFile/StorageManager.java[`StorageManager`] and link:{repoURL}/src/main/java/seedu/address/storageFile/JsonAddressBookStorage.java[`JsonAddressBookStorage`] class.
+//** Add the API method in link:{repoURL}/src/main/java/seedu/address/storage/AddressBookStorage.java[`AddressBookStorage`] interface.
+//** Implement the logicManager in link:{repoURL}/src/main/java/seedu/address/storage/StorageManager.java[`StorageManager`] and link:{repoURL}/src/main/java/seedu/address/storage/JsonAddressBookStorage.java[`JsonAddressBookStorage`] class.
 //* Solution
 //** See this https://github.com/se-edu/addressbook-level4/pull/594[PR] for the full solution.
 //****
@@ -1414,7 +1414,7 @@ For example, Gradle can download the dependencies automatically, which is better
 //. Modify link:{repoURL}/src/main/java/seedu/address/model/util/SampleDataUtil.java/[`SampleDataUtil`] to add remarks for the sample model (delete your `model/addressbook.json` so that the application will load the sample model when you launch it.)
 //
 //===== [Step 6] Storage: Add `Remark` field to `JsonAdaptedPerson` class
-//We now have `Remark` s for `Person` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storageFile/JsonAdaptedPerson.java[`JsonAdaptedPerson`] to include a `Remark` field so that it will be saved.
+//We now have `Remark` s for `Person` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storage/JsonAdaptedPerson.java[`JsonAdaptedPerson`] to include a `Remark` field so that it will be saved.
 //
 //**Main:**
 //

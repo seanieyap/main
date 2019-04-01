@@ -35,9 +35,9 @@ public class ModelManagerTest {
     public void clearLastShownList() {
         ModelManager modelManager = new ModelManager();
         List<Pair<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>>> lastShownSlots = new ArrayList<>();
+        Day day = new Day(DayOfWeek.TUESDAY, "Week 1");
         lastShownSlots.add(new Pair<>(LocalDate.of(2019, 1, 15),
-                new Pair<>(new Day(DayOfWeek.TUESDAY, "Week 1"),
-                        new SlotBuilder().slotOne())));
+                new Pair<>(day, new SlotBuilder().slotOne())));
 
         modelManager.setLastShownList(lastShownSlots);
         assertEquals(modelManager.lastShownList, lastShownSlots);
@@ -78,53 +78,6 @@ public class ModelManagerTest {
         assertEquals(modelManager.getPlanner().getSemester(),
                 expectedModelManager.getPlanner().getSemester());
     }
-
-    //
-    //    @Test
-    //    public void undo() throws Semester.DateNotFoundException {
-    //        VersionedPlanner versionedPlanner = new VersionedPlanner(new Planner());
-    //        Slot slot = new SlotBuilder().slotOne();
-    //        LocalDate date = LocalDate.of(2019, 1, 15);
-    //        versionedPlanner.addSlot(date, slot);
-    //        versionedPlanner.commit();
-    //        versionedPlanner.undo();
-    //
-    //        VersionedPlanner expectedPlanner = new VersionedPlanner(new Planner());
-    //
-    //        assertEquals(versionedPlanner.getSemester(), expectedPlanner.getSemester());
-    //    }
-    //
-    //    @Test
-    //    public void undo_throwsNoUndoableStateException() {
-    //        VersionedPlanner versionedPlanner = new VersionedPlanner(new Planner());
-    //
-    //        thrown.expect(VersionedPlanner.NoUndoableStateException.class);
-    //        versionedPlanner.undo();
-    //    }
-    //
-    //    @Test
-    //    public void redo() throws Semester.DateNotFoundException {
-    //        VersionedPlanner versionedPlanner = new VersionedPlanner(new Planner());
-    //        Slot slot = new SlotBuilder().slotOne();
-    //        LocalDate date = LocalDate.of(2019, 1, 15);
-    //        versionedPlanner.addSlot(date, slot);
-    //        versionedPlanner.commit();
-    //        versionedPlanner.undo();
-    //        versionedPlanner.redo();
-    //
-    //        VersionedPlanner expectedPlanner = new VersionedPlanner(new Planner());
-    //        expectedPlanner.addSlot(date, slot);
-    //
-    //        assertEquals(versionedPlanner.getSemester(), expectedPlanner.getSemester());
-    //    }
-    //
-    //    @Test
-    //    public void redo_throwsNoRedoableStateException() {
-    //        VersionedPlanner versionedPlanner = new VersionedPlanner(new Planner());
-    //
-    //        thrown.expect(VersionedPlanner.NoRedoableStateException.class);
-    //        versionedPlanner.redo();
-    //    }
 
     @Test
     public void equals() {

@@ -3,6 +3,15 @@ package planmysem.logic;
 import static org.junit.Assert.assertEquals;
 import static planmysem.common.Messages.MESSAGE_INVALID_SLOT_DISPLAYED_INDEX;
 
+import java.io.File;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,7 +25,12 @@ import planmysem.logic.commands.exceptions.CommandException;
 import planmysem.logic.parser.exceptions.ParseException;
 import planmysem.model.Model;
 import planmysem.model.ModelManager;
+import planmysem.model.semester.Day;
+import planmysem.model.semester.ReadOnlyDay;
+import planmysem.model.slot.ReadOnlySlot;
+import planmysem.model.slot.Slot;
 import planmysem.storage.StorageFile;
+import planmysem.testutil.SlotBuilder;
 
 
 public class LogicManagerTest {
@@ -39,6 +53,66 @@ public class LogicManagerTest {
         logic = new LogicManager(storageFile);
         model = new ModelManager();
     }
+
+
+    @Test
+    public void execute_throwsStorageOperationException() throws CommandException, ParseException {
+        // delete save file
+        File file = new File(temporaryFolder.getRoot().getPath() + "\\" + testFileName);
+        file.setReadOnly();
+
+        Slot slot = new SlotBuilder().slotOne();
+        String cmd = SlotBuilder.generateAddCommand(slot, 2, "");
+
+        thrown.expect(CommandException.class);
+        logic.execute(cmd);
+    }
+
+    @Test
+    public void getStorageFilePath() {
+        assertEquals(logic.getStorageFilePath(), storageFile.getPath());
+    }
+
+    @Test
+    public void getLastShownSlots() throws CommandException, ParseException {
+        Slot slot = new SlotBuilder().slotOne();
+        String cmd = SlotBuilder.generateAddCommand(slot, 2, "");
+        logic.execute(cmd);
+        logic.execute("list n/CS2113T Tutorial");
+
+        List<Pair<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>>> lastShownSlots
+                = new ArrayList<>();
+        Day day = new Day(DayOfWeek.TUESDAY, "Week 1");
+        day.addSlot(slot);
+        lastShownSlots.add(new Pair<>(LocalDate.of(2019, 1, 15),
+                new Pair<>(day, new SlotBuilder().slotOne())));
+
+        assertEquals(logic.getLastShownSlots(), lastShownSlots);
+    }
+
+
+    @Test
+    public void getHistory() throws Exception {
+        ObservableList<String> expectedHistory =
+                FXCollections.observableArrayList();
+
+        Slot slot = new SlotBuilder().slotOne();
+        String cmd = SlotBuilder.generateAddCommand(slot, 2, "");
+        logic.execute(cmd);
+        expectedHistory.add(cmd);
+
+        logic.execute("list n/CS2113T Tutorial");
+        expectedHistory.add("list n/CS2113T Tutorial");
+
+        logic.execute("view week");
+        expectedHistory.add("view week");
+
+        logic.execute("d 1");
+        expectedHistory.add("d 1");
+
+        assertEquals(logic.getHistory(), expectedHistory);
+    }
+
 
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
