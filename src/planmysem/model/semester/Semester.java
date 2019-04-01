@@ -107,7 +107,7 @@ public class Semester implements ReadOnlySemester {
         Set<LocalDate> normalDays = new HashSet<>();
         Set<LocalDate> examDays = new HashSet<>();
 
-        acadCalMap = generateAcadCalMap(currentDate);
+        acadCalMap = generateAcademicCalMap(currentDate);
         acadCal = acadCalMap;
         semesterDetails = getSemesterDetails(currentDate, acadCalMap);
         acadSem = semesterDetails[1];
@@ -148,7 +148,7 @@ public class Semester implements ReadOnlySemester {
      * @param date used to determine academic year
      * @return details of academic calendar
      */
-    private static HashMap<Integer, String> generateAcadCalMap(LocalDate date) {
+    private static HashMap<Integer, String> generateAcademicCalMap(LocalDate date) {
         HashMap<Integer, String> acadCalMap = new HashMap<>();
         LocalDate semOneStartDate = date;
         LocalDate semTwoEndDate = date;
