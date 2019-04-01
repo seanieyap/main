@@ -683,7 +683,7 @@ the user.
 
 Given below is the Sequence Diagram upon executing the `view month` command.
 
-.Interactions between components for the `view month` Command +
+.Interactions between components for the `view month` Command
 image::ViewMonthSequenceDiagram.png[width="800"]
 {zwsp}
 
@@ -698,7 +698,7 @@ broken down into 2 parts:
 2. Print all days of the month using a loop.
    * Append academic week after each Saturday or last day of month.
 
-.View of months in current semester with academic weeks indicated. +
+.View of months in current semester with academic weeks indicated.
 image::Ui.png[width="800"]
 {zwsp}
 
