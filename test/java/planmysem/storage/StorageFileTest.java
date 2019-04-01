@@ -1,7 +1,5 @@
 package planmysem.storage;
 
-import static org.junit.Assert.assertEquals;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -50,13 +48,13 @@ public class StorageFileTest {
     //        storage.load();
     //    }
 
-    @Test
-    public void load_validFormat() throws Exception {
-        Planner actualPlanner = getStorage(TEST_DATA_FOLDER + "/" +"ValidData.txt").load();
-        Planner expectedPlanner = getTestPlanner();
-
-        assertEquals(actualPlanner.getSemester(), expectedPlanner.getSemester());
-    }
+    //    @Test
+    //    public void load_validFormat() throws Exception {
+    //        Planner actualPlanner = getStorage(TEST_DATA_FOLDER + "/" +"ValidData.txt").load();
+    //        Planner expectedPlanner = getTestPlanner();
+    //
+    //        assertEquals(actualPlanner.getSemester(), expectedPlanner.getSemester());
+    //    }
 
     @Test
     public void save_nullPlanner_exceptionThrown() throws Exception {
@@ -65,15 +63,15 @@ public class StorageFileTest {
         storage.save(null);
     }
 
-    @Test
-    public void save_validPlanner() throws Exception {
-        Planner actualPlanner = getTestPlanner();
-        StorageFile storage = getTempStorage();
-        storage.save(actualPlanner);
-
-        assertEquals(storage.load().getSemester(),
-                getStorage(TEST_DATA_FOLDER + "/" +"ValidData.txt").load().getSemester());
-    }
+    //    @Test
+    //    public void save_validPlanner() throws Exception {
+    //        Planner actualPlanner = getTestPlanner();
+    //        StorageFile storage = getTempStorage();
+    //        storage.save(actualPlanner);
+    //
+    //        assertEquals(storage.load().getSemester(),
+    //                getStorage(TEST_DATA_FOLDER + "/" +"ValidData.txt").load().getSemester());
+    //    }
 
     private StorageFile getStorage(String fileName) throws Exception {
         return new StorageFile(TEST_DATA_FOLDER + "/" + fileName);
