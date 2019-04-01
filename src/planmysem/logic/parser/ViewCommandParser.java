@@ -3,11 +3,9 @@ package planmysem.logic.parser;
 import static planmysem.common.Messages.MESSAGE_ILLEGAL_WEEK_VALUE;
 import static planmysem.common.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static planmysem.common.Messages.MESSAGE_INVALID_DATE;
-import static planmysem.common.Utils.getNearestDayOfWeek;
 
 import java.time.LocalDate;
 
-import planmysem.common.Clock;
 import planmysem.common.Utils;
 import planmysem.logic.commands.ViewCommand;
 import planmysem.logic.parser.exceptions.ParseException;
@@ -93,9 +91,6 @@ public class ViewCommandParser implements Parser<ViewCommand> {
                 }
                 if (day == -1 && date == null) {
                     throw new ParseException(String.format(MESSAGE_INVALID_DATE, ViewCommand.MESSAGE_USAGE));
-                }
-                if (day != -1) {
-                    date = getNearestDayOfWeek(LocalDate.now(Clock.get()), day);
                 }
 
                 return new ViewCommand(viewArgs);

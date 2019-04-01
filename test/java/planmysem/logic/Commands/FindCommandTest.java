@@ -212,7 +212,6 @@ public class FindCommandTest {
         CommandResult commandResult = new FindCommand(slotBuilder.generateSlot(1).getName(), null).execute(model, commandHistory);
 
         List<WeightedName> selectedSlots = new ArrayList<>();
-        int lengthOfKeyword = slotBuilder.generateSlot(1).getName().length();
         Queue<WeightedName> weightedNames = new PriorityQueue<>(new Comparator<>() {
             @Override
             public int compare(WeightedName p1, WeightedName p2) {
@@ -231,14 +230,16 @@ public class FindCommandTest {
 
         for (Map.Entry<LocalDate, Day> entry : model.getDays().entrySet()) {
             for (Slot slot : entry.getValue().getSlots()) {
+                if (slot.getName().length() + 3 < slotBuilder.generateSlot(1).getName().length()) {
+                    return;
+                }
                 int dist = Utils.getLevenshteinDistance(slotBuilder.generateSlot(1).getName(), slot.getName());
                 WeightedName distNameTrie = new WeightedName(entry, slot, dist);
                 weightedNames.add(distNameTrie);
             }
         }
 
-        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10
-                && (Math.abs(weightedNames.peek().getDist() - lengthOfKeyword) < 3 )) {
+        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10 ) {
             selectedSlots.add(weightedNames.poll());
         }
         assertEquals(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
@@ -253,7 +254,6 @@ public class FindCommandTest {
         CommandResult commandResult = new FindCommand(null, tagToTest).execute(model, commandHistory);
 
         List<WeightedName> selectedSlots = new ArrayList<>();
-        int lengthOfKeyword = slotBuilder.generateSlot(1).getName().length();
         Queue<WeightedName> weightedNames = new PriorityQueue<>(new Comparator<>() {
             @Override
             public int compare(WeightedName p1, WeightedName p2) {
@@ -274,6 +274,9 @@ public class FindCommandTest {
             for (Slot slot : entry.getValue().getSlots()) {
                 Set<String> tagSet = slot.getTags();
                 for (String tag : tagSet) {
+                    if (tag.length() + 3 < tagToTest.length()) {
+                        return;
+                    }
                     int dist = Utils.getLevenshteinDistance(tagToTest, tag);
                     WeightedName distNameTrie = new WeightedName(entry, slot, dist);
                     weightedNames.add(distNameTrie);
@@ -281,8 +284,7 @@ public class FindCommandTest {
             }
         }
 
-        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10
-                && (Math.abs(weightedNames.peek().getDist() - lengthOfKeyword) < 3 )) {
+        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10) {
             selectedSlots.add(weightedNames.poll());
         }
             assertEquals(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
@@ -296,7 +298,6 @@ public class FindCommandTest {
         CommandResult commandResult = new FindCommand(nameToTest, null).execute(model, commandHistory);
 
         List<WeightedName> selectedSlots = new ArrayList<>();
-        int lengthOfKeyword = nameToTest.length();
         Queue<WeightedName> weightedNames = new PriorityQueue<>(new Comparator<>() {
             @Override
             public int compare(WeightedName p1, WeightedName p2) {
@@ -315,14 +316,16 @@ public class FindCommandTest {
 
         for (Map.Entry<LocalDate, Day> entry : model.getDays().entrySet()) {
             for (Slot slot : entry.getValue().getSlots()) {
+                if (slot.getName().length() + 3 < nameToTest.length()) {
+                    return;
+                }
                 int dist = Utils.getLevenshteinDistance(nameToTest, slot.getName());
                 WeightedName distNameTrie = new WeightedName(entry, slot, dist);
                 weightedNames.add(distNameTrie);
             }
         }
 
-        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10
-                && (Math.abs(weightedNames.peek().getDist() - lengthOfKeyword) < 3 )) {
+        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10) {
             selectedSlots.add(weightedNames.poll());
         }
         assertEquals(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
@@ -338,7 +341,6 @@ public class FindCommandTest {
         CommandResult commandResult = new FindCommand(null, tagToTest).execute(model, commandHistory);
 
         List<WeightedName> selectedSlots = new ArrayList<>();
-        int lengthOfKeyword = tagToTest.length();
         Queue<WeightedName> weightedNames = new PriorityQueue<>(new Comparator<>() {
             @Override
             public int compare(WeightedName p1, WeightedName p2) {
@@ -359,6 +361,9 @@ public class FindCommandTest {
             for (Slot slot : entry.getValue().getSlots()) {
                 Set<String> tagSet = slot.getTags();
                 for (String tag : tagSet) {
+                    if (tag.length() + 3 < tagToTest.length()) {
+                        return;
+                    }
                     int dist = Utils.getLevenshteinDistance(tagToTest, tag);
                     WeightedName distNameTrie = new WeightedName(entry, slot, dist);
                     weightedNames.add(distNameTrie);
@@ -366,8 +371,7 @@ public class FindCommandTest {
             }
         }
 
-        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10
-                && (Math.abs(weightedNames.peek().getDist() - lengthOfKeyword) < 3 )) {
+        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10) {
             selectedSlots.add(weightedNames.poll());
         }
         assertEquals(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
@@ -380,7 +384,6 @@ public class FindCommandTest {
 
         CommandResult commandResult = new FindCommand(null, tagToTest).execute(model, commandHistory);
         List<WeightedName> selectedSlots = new ArrayList<>();
-        int lengthOfKeyword = tagToTest.length();
         Queue<WeightedName> weightedNames = new PriorityQueue<>(new Comparator<>() {
             @Override
             public int compare(WeightedName p1, WeightedName p2) {
@@ -401,6 +404,9 @@ public class FindCommandTest {
             for (Slot slot : entry.getValue().getSlots()) {
                 Set<String> tagSet = slot.getTags();
                 for (String tag : tagSet) {
+                    if (tag.length() + 3 < tagToTest.length()) {
+                        return;
+                    }
                     int dist = Utils.getLevenshteinDistance(tagToTest, tag);
                     WeightedName distNameTrie = new WeightedName(entry, slot, dist);
                     weightedNames.add(distNameTrie);
@@ -408,8 +414,7 @@ public class FindCommandTest {
             }
         }
 
-        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10
-                && (Math.abs(weightedNames.peek().getDist() - lengthOfKeyword) < 3 )) {
+        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10) {
             selectedSlots.add(weightedNames.poll());
         }
         assertEquals(MESSAGE_SUCCESS_NONE, commandResult.getFeedbackToUser());
