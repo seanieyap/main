@@ -1,7 +1,7 @@
 package planmysem.model.Semester;
 
-import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.time.LocalDate;
 
@@ -14,11 +14,10 @@ public class SemesterTest {
 
     @Test
     public void equals() {
-        assertTrue(Semester.generateSemester(LocalDate.now(Clock.get()))
-            .equals(Semester.generateSemester(LocalDate.now(Clock.get()))));
-
-        assertFalse(Semester.generateSemester(LocalDate.now(Clock.get()))
-                .equals(Semester.generateSemester(LocalDate.of(1999, 1, 1))));
+        assertEquals(Semester.generateSemester(LocalDate.now(Clock.get())),
+                Semester.generateSemester(LocalDate.now(Clock.get())));
+        assertNotEquals(Semester.generateSemester(LocalDate.now(Clock.get())),
+                Semester.generateSemester(LocalDate.of(1999, 1, 1)));
 
     }
 }

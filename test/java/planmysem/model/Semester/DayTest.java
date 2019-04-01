@@ -1,11 +1,13 @@
 package planmysem.model.Semester;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Test;
 import planmysem.model.semester.Day;
@@ -30,8 +32,8 @@ public class DayTest {
     public void getDayOfWeek() {
         Day day = new Day(DayOfWeek.of(1), "Week 1");
 
-        assertTrue(day.getDayOfWeek() == DayOfWeek.of(1));
-        assertFalse(day.getDayOfWeek() == DayOfWeek.of(2));
+        assertEquals(day.getDayOfWeek(), DayOfWeek.of(1));
+        assertNotEquals(day.getDayOfWeek(), DayOfWeek.of(2));
     }
 
     @Test
@@ -39,41 +41,43 @@ public class DayTest {
         DayOfWeek dayOfWeek = DayOfWeek.of(1);
         Day day = new Day(dayOfWeek, "Week 1");
 
-        assertTrue(day.getDay() == dayOfWeek.toString());
+        assertEquals(day.getDay(), dayOfWeek.toString());
 
         DayOfWeek dayOfWeek2 = DayOfWeek.of(2);
-        assertFalse(day.getDay() == dayOfWeek2.toString());
+        assertNotEquals(day.getDay(), dayOfWeek2.toString());
     }
 
     @Test
     public void getType() {
         Day day = new Day(DayOfWeek.of(1), "Week 1");
 
-        assertTrue(day.getType() == "Week 1");
-        assertFalse(day.getType() == "Week 2");
+        assertEquals(day.getType(), "Week 1");
+        assertNotEquals(day.getType(), "Week 2");
     }
 
     @Test
     public void getSlots() {
         Day day = new Day(DayOfWeek.of(1), "Week 1");
 
-        assertTrue(day.getSlots().equals(new ArrayList<>()));
+        assertEquals(day.getSlots(), new ArrayList<>());
 
         Slot slot = new SlotBuilder().slotOne();
         day.addSlot(slot);
-        assertTrue(day.getSlots().equals(Arrays.asList(slot)));
+        assertEquals(day.getSlots(), Collections.singletonList(slot));
     }
 
     @Test
     public void equals() {
-        assertTrue(new Day(DayOfWeek.of(1), "Week 1")
-                .equals(new Day(DayOfWeek.of(1), "Week 1")));
-        assertTrue(new Day(DayOfWeek.of(1), "Week 2")
-                .equals(new Day(DayOfWeek.of(1), "Week 2")));
+        assertEquals(new Day(DayOfWeek.of(1), "Week 1"),
+                new Day(DayOfWeek.of(1), "Week 1"));
+        assertEquals(new Day(DayOfWeek.of(1), "Week 2"),
+                new Day(DayOfWeek.of(1), "Week 2"));
+        assertEquals(new Day(DayOfWeek.of(2), "Week 2"),
+                new Day(DayOfWeek.of(2), "Week 2"));
 
-        assertFalse(new Day(DayOfWeek.of(1), "Week 1")
-                .equals(new Day(DayOfWeek.of(1), "Week 2")));
-        assertFalse(new Day(DayOfWeek.of(1), "Week 1")
-                .equals(new Day(DayOfWeek.of(2), "Week 1")));
+        assertNotEquals(new Day(DayOfWeek.of(2), "Week 2"),
+                new Day(DayOfWeek.of(3), "Week 2"));
+        assertNotEquals(new Day(DayOfWeek.of(2), "Week 2"),
+                new Day(DayOfWeek.of(2), "Week 3"));
     }
 }
