@@ -13,6 +13,7 @@ import java.util.HashSet;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import planmysem.common.Clock;
 import planmysem.logic.commands.EditCommand;
 
@@ -45,7 +46,7 @@ public class EditCommandParserTest {
                 "t/CS2113T t/Tutorial nst/08:00 net/09:00 t/Hard",
                 new EditCommand(
                         null,
-                        LocalTime.of(8,0),
+                        LocalTime.of(8, 0),
                         60,
                         null,
                         null,
@@ -131,7 +132,7 @@ public class EditCommandParserTest {
     }
 
     @Test
-    public void parse_InvalidStartTime_failure() {
+    public void parse_invalidStartTime_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL,
                 EditCommand.MESSAGE_USAGE, MESSAGE_INVALID_TIME);
 
@@ -142,7 +143,7 @@ public class EditCommandParserTest {
     }
 
     @Test
-    public void parse_InvalidEndTime_failure() {
+    public void parse_invalidEndTime_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL,
                 EditCommand.MESSAGE_USAGE, MESSAGE_INVALID_TIME);
 
@@ -154,7 +155,7 @@ public class EditCommandParserTest {
 
 
     @Test
-    public void parse_NothingToEdit_failure() {
+    public void parse_nothingToEdit_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT_ADDITIONAL,
                 EditCommand.MESSAGE_USAGE, MESSAGE_NOTHING_TO_EDIT);
 

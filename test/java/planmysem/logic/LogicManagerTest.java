@@ -3,8 +3,6 @@ package planmysem.logic;
 import static org.junit.Assert.assertEquals;
 import static planmysem.common.Messages.MESSAGE_INVALID_SLOT_DISPLAYED_INDEX;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,7 +20,6 @@ import planmysem.storage.StorageFile;
 
 
 public class LogicManagerTest {
-    private static final IOException DUMMY_IO_EXCEPTION = new IOException("dummy exception");
     private static final String testFileName = "testSaveFile.txt";
 
     @Rule
@@ -56,33 +53,33 @@ public class LogicManagerTest {
         assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS_NONE, model);
         assertHistoryCorrect(listCommand);
     }
-//
-//    @Test
-//    public void execute_storageThrowsIoException_throwsCommandException() throws Exception {
-//        // Setup LogicManager with JsonAddressBookIoExceptionThrowingStub
-//        JsonAddressBookStorage addressBookStorage =
-//                new JsonAddressBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
-//        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
-//        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
-//        logic = new LogicManager(model, storage);
-//
-//        // Execute add command
-//        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
-//                + ADDRESS_DESC_AMY;
-//        Person expectedPerson = new PersonBuilder(AMY).withTags().build();
-//        ModelManager expectedModel = new ModelManager();
-//        expectedModel.addPerson(expectedPerson);
-//        expectedModel.commitAddressBook();
-//        String expectedMessage = LogicManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
-//        assertCommandBehavior(CommandException.class, addCommand, expectedMessage, expectedModel);
-//        assertHistoryCorrect(addCommand);
-//    }
-//
-//    @Test
-//    public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
-//        thrown.expect(UnsupportedOperationException.class);
-//        logic.getFilteredPersonList().remove(0);
-//    }
+    //
+    //    @Test
+    //    public void execute_storageThrowsIoException_throwsCommandException() throws Exception {
+    //        // Setup LogicManager with JsonAddressBookIoExceptionThrowingStub
+    //        JsonAddressBookStorage addressBookStorage =
+    //                new JsonAddressBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
+    //        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
+    //        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+    //        logic = new LogicManager(model, storage);
+    //
+    //        // Execute add command
+    //        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
+    //                + ADDRESS_DESC_AMY;
+    //        Person expectedPerson = new PersonBuilder(AMY).withTags().build();
+    //        ModelManager expectedModel = new ModelManager();
+    //        expectedModel.addPerson(expectedPerson);
+    //        expectedModel.commitAddressBook();
+    //        String expectedMessage = LogicManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
+    //        assertCommandBehavior(CommandException.class, addCommand, expectedMessage, expectedModel);
+    //        assertHistoryCorrect(addCommand);
+    //    }
+    //
+    //    @Test
+    //    public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
+    //        thrown.expect(UnsupportedOperationException.class);
+    //        logic.getFilteredPersonList().remove(0);
+    //    }
 
     /**
      * Executes the command, confirms that no exceptions are thrown and that the result message is correct.

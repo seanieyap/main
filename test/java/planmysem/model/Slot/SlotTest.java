@@ -11,6 +11,7 @@ import java.util.HashSet;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import planmysem.model.slot.Slot;
 import planmysem.testutil.SlotBuilder;
 
@@ -125,6 +126,8 @@ public class SlotTest {
     public void equals() {
         assertEquals(slot, slot);
         assertEquals(slotNull, slotNull);
+        assertEquals(slot.hashCode(), slot.hashCode());
+        assertEquals(slotNull.hashCode(), slotNull.hashCode());
 
         assertNotEquals(slot, slotNull);
     }

@@ -17,10 +17,12 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javafx.util.Pair;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
 import planmysem.common.Clock;
 import planmysem.common.Messages;
 import planmysem.logic.CommandHistory;
@@ -33,6 +35,9 @@ import planmysem.model.slot.ReadOnlySlot;
 import planmysem.testutil.SlotBuilder;
 
 public class DeleteCommandTest {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
     private Model model;
     private Model expectedModel;
     private Pair<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> pair1;
@@ -40,11 +45,7 @@ public class DeleteCommandTest {
     private Pair<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> pair3;
     private Pair<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> pair4;
     private CommandHistory commandHistory = new CommandHistory();
-
     private SlotBuilder slotBuilder = new SlotBuilder();
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setup() throws Exception {
@@ -156,7 +157,7 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_InvalidTag_throwsCommandException() {
+    public void execute_invalidTag_throwsCommandException() {
         Set<String> tags = pair4.getValue().getValue().getTags();
         DeleteCommand deleteCommand = new DeleteCommand(tags);
 
@@ -171,7 +172,7 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_InvalidSlot_throwsCommandException() {
+    public void execute_invalidSlot_throwsCommandException() {
         DeleteCommand deleteCommand = new DeleteCommand(1);
 
         String expectedMessage = MESSAGE_SLOT_NOT_IN_PLANNER;
@@ -183,7 +184,7 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_InvalidIndex_throwsCommandException() {
+    public void execute_invalidIndex_throwsCommandException() {
         DeleteCommand deleteCommand = new DeleteCommand(5);
 
         String expectedMessage = MESSAGE_INVALID_SLOT_DISPLAYED_INDEX;

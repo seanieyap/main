@@ -39,17 +39,6 @@ public class Semester implements ReadOnlySemester {
     private final Set<LocalDate> examDays = new HashSet<>();
 
     /**
-     * Constructs empty semester.
-     */
-    public Semester() {
-        this.name = null;
-        this.academicYear = null;
-        this.startDate = null;
-        this.endDate = null;
-        this.noOfWeeks = 0;
-    }
-
-    /**
      * Constructs a semester with the given Days.
      */
     public Semester(String name, String academicYear, HashMap<LocalDate, Day> days, LocalDate startDate,

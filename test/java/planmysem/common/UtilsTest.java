@@ -181,7 +181,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void parse_get_duration_successful() {
+    public void parse_getDuration_successful() {
         LocalTime startTime = LocalTime.now(Clock.get());
         LocalTime endTime = startTime.plusMinutes(60);
 
@@ -189,7 +189,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void parse_get_end_time_successful() {
+    public void parse_getEndTime_successful() {
         LocalTime startTime = LocalTime.now(Clock.get());
         LocalTime endTime = startTime.plusMinutes(60);
 
@@ -197,7 +197,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void parse_get_nearest_day_of_week_successful() {
+    public void parse_getNearestDayOfWeek_successful() {
         LocalDate date = LocalDate.of(2019, 1, 1);
         LocalDate nearestMonday = LocalDate.of(2019, 1, 7);
 

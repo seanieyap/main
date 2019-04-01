@@ -2,6 +2,7 @@ package planmysem.model.semester;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import planmysem.model.slot.ReadOnlySlot;
@@ -32,7 +33,7 @@ public class Day implements ReadOnlyDay {
         this.type = weekType;
     }
 
-    public Day(DayOfWeek dayOfWeek, String weekType, ArrayList<Slot> slots) {
+    public Day(DayOfWeek dayOfWeek, String weekType, List<Slot> slots) {
         this.dayOfWeek = dayOfWeek;
         this.type = weekType;
 

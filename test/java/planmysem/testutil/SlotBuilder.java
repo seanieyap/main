@@ -12,15 +12,18 @@ import planmysem.model.slot.Slot;
 /**
  * A utility class to generate test data.
  */
-public class SlotBuilder{
+public class SlotBuilder {
 
+    /**
+     * Generates a generic slot.
+     */
     public Slot slotOne() {
         String name = "CS2113T Tutorial";
         String location = "COM2 04-11";
         String description = "Topic: Sequence Diagram";
         LocalTime startTime = LocalTime.parse("08:00");
         LocalTime endTime = LocalTime.parse("09:00");
-        Set<String> tags = new HashSet<>(Arrays.asList( "CS2113T", "Tutorial"));
+        Set<String> tags = new HashSet<>(Arrays.asList("CS2113T", "Tutorial"));
         return new Slot(name, location, description, startTime, endTime, tags);
     }
 
@@ -38,6 +41,9 @@ public class SlotBuilder{
         );
     }
 
+    /**
+     * Generates a generic recurrence object.
+     */
     public Recurrence recurrenceOne() {
         return new Recurrence(
                 new HashSet<>(Arrays.asList("CS2113T", "Tutorial")),

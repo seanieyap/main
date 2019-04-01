@@ -15,12 +15,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import javafx.util.Pair;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
 import planmysem.common.Clock;
 import planmysem.logic.CommandHistory;
 import planmysem.logic.commands.AddCommand;
@@ -36,14 +37,15 @@ import planmysem.model.slot.ReadOnlySlot;
 import planmysem.model.slot.Slot;
 import planmysem.testutil.SlotBuilder;
 
+
 public class AddCommandTest {
 
     private static final CommandHistory EMPTY_COMMAND_HISTORY = new CommandHistory();
 
-    private CommandHistory commandHistory = new CommandHistory();
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    private CommandHistory commandHistory = new CommandHistory();
 
     @Before
     public void setup() {
@@ -79,7 +81,7 @@ public class AddCommandTest {
     }
 
     @Test
-    public void execute_InvalidDate_throwsCommandException() throws Exception {
+    public void execute_invalidDate_throwsCommandException() throws Exception {
         ModelStubNeverSlotAdded modelStub = new ModelStubNeverSlotAdded();
         Slot validSlot = new SlotBuilder().slotOne();
         Recurrence validRecurrence = new SlotBuilder().recurrenceOne();
@@ -92,7 +94,7 @@ public class AddCommandTest {
     }
 
     @Test
-    public void equals() throws Exception {
+    public void equals() {
         Slot slot1 = new SlotBuilder().generateSlot(1);
         Recurrence recurrence = new SlotBuilder().recurrenceOne();
 
@@ -128,15 +130,6 @@ public class AddCommandTest {
         }
 
         @Override
-        public void clearLastShownList() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void commit() {
-        }
-
-        @Override
         public void setLastShownList(List<Pair<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>>> list) {
             throw new AssertionError("This method should not be called.");
         }
@@ -144,6 +137,15 @@ public class AddCommandTest {
         @Override
         public void setLastShownList(Map<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> list) {
             throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void clearLastShownList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void commit() {
         }
 
         @Override
@@ -233,7 +235,7 @@ public class AddCommandTest {
      * A Model stub that always accept the slot being added.
      */
     private class ModelStubAcceptingSlotAdded extends ModelStub {
-        Map<LocalDate, Day> days = new TreeMap<>();
+        private Map<LocalDate, Day> days = new TreeMap<>();
 
         @Override
         public Day addSlot(LocalDate date, Slot slot) {
@@ -266,6 +268,4 @@ public class AddCommandTest {
             return new Planner();
         }
     }
-
-
 }

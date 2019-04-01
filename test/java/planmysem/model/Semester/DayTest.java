@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.junit.Test;
+
 import planmysem.model.semester.Day;
 import planmysem.model.slot.Slot;
 import planmysem.testutil.SlotBuilder;
@@ -18,7 +19,17 @@ import planmysem.testutil.SlotBuilder;
 public class DayTest {
 
     @Test
-    public void contains() {
+    public void initTest() {
+        Slot slot = new SlotBuilder().slotOne();
+        Day day = new Day(DayOfWeek.of(1),
+                "Week 1",
+               Collections.singletonList(slot));
+
+        assertEquals(day.getSlots(), Collections.singletonList(slot));
+    }
+
+    @Test
+    public void containsTest() {
         Day day = new Day(DayOfWeek.of(1), "Week 1");
         Slot slot = new SlotBuilder().slotOne();
 
@@ -29,7 +40,7 @@ public class DayTest {
     }
 
     @Test
-    public void getDayOfWeek() {
+    public void getDayOfWeekTest() {
         Day day = new Day(DayOfWeek.of(1), "Week 1");
 
         assertEquals(day.getDayOfWeek(), DayOfWeek.of(1));
@@ -37,7 +48,7 @@ public class DayTest {
     }
 
     @Test
-    public void getDay() {
+    public void getDayTest() {
         DayOfWeek dayOfWeek = DayOfWeek.of(1);
         Day day = new Day(dayOfWeek, "Week 1");
 
@@ -48,7 +59,7 @@ public class DayTest {
     }
 
     @Test
-    public void getType() {
+    public void getTypeTest() {
         Day day = new Day(DayOfWeek.of(1), "Week 1");
 
         assertEquals(day.getType(), "Week 1");
@@ -56,7 +67,7 @@ public class DayTest {
     }
 
     @Test
-    public void getSlots() {
+    public void getSlotsTest() {
         Day day = new Day(DayOfWeek.of(1), "Week 1");
 
         assertEquals(day.getSlots(), new ArrayList<>());
@@ -67,7 +78,7 @@ public class DayTest {
     }
 
     @Test
-    public void equals() {
+    public void equalsTest() {
         assertEquals(new Day(DayOfWeek.of(1), "Week 1"),
                 new Day(DayOfWeek.of(1), "Week 1"));
         assertEquals(new Day(DayOfWeek.of(1), "Week 2"),
@@ -79,5 +90,10 @@ public class DayTest {
                 new Day(DayOfWeek.of(3), "Week 2"));
         assertNotEquals(new Day(DayOfWeek.of(2), "Week 2"),
                 new Day(DayOfWeek.of(2), "Week 3"));
+
+        // test hashcode
+        assertEquals(new Day(DayOfWeek.of(1), "Week 1").hashCode(),
+                new Day(DayOfWeek.of(1), "Week 1").hashCode());
+
     }
 }
