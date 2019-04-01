@@ -23,7 +23,7 @@ public class ExportCommandTest {
     @Test
     public void execute_export_success() throws IOException {
         IcsSemester semester = new IcsSemester(model.getPlanner().getSemester());
-        String expectedIcs = readFile("test/data/ImportExportTest/exportTest.ics");
+        String expectedIcs = new String("BEGIN:VCALENDAR\r\nVERSION:2.0\r\nEND:VCALENDAR\r\n");
         String actualIcs = semester.toString();
         Assert.assertEquals(actualIcs, expectedIcs);
     }
