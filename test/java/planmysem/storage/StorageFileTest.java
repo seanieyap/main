@@ -52,7 +52,7 @@ public class StorageFileTest {
 
     @Test
     public void load_validFormat() throws Exception {
-        Planner actualPlanner = getStorage("ValidData.txt").load();
+        Planner actualPlanner = getStorage(TEST_DATA_FOLDER + "/" +"ValidData.txt").load();
         Planner expectedPlanner = getTestPlanner();
 
         assertEquals(actualPlanner.getSemester(), expectedPlanner.getSemester());
@@ -72,7 +72,7 @@ public class StorageFileTest {
         storage.save(actualPlanner);
 
         assertEquals(storage.load().getSemester(),
-                getStorage("ValidData.txt").load().getSemester());
+                getStorage(TEST_DATA_FOLDER + "/" +"ValidData.txt").load().getSemester());
     }
 
     private StorageFile getStorage(String fileName) throws Exception {

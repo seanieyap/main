@@ -20,6 +20,8 @@ import planmysem.logic.commands.ExitCommand;
 import planmysem.logic.commands.ExportCommand;
 import planmysem.logic.commands.HelpCommand;
 import planmysem.logic.commands.ImportCommand;
+import planmysem.logic.commands.ListCommand;
+import planmysem.logic.commands.ViewCommand;
 import planmysem.model.recurrence.Recurrence;
 import planmysem.model.slot.Slot;
 
@@ -174,6 +176,16 @@ public class ParserManagerTest {
     @Test
     public void parseCommand_import() throws Exception {
         assertTrue(parser.parseCommand(ImportCommand.COMMAND_WORD + " /test/data/ImportExportTest/importTest.ics\"") instanceof ImportCommand);
+    }
+
+    @Test
+    public void parseCommand_view() throws Exception {
+        //assertTrue(parser.parseCommand(ViewCommand.COMMAND_WORD) instanceof ViewCommand);
+        ViewCommand command = (ViewCommand) parser.parseCommand(ViewCommand.COMMAND_WORD + " month");
+        assertEquals(new ViewCommand(new String[]{"month"}), command);
+
+        ViewCommand commandShort = (ViewCommand) parser.parseCommand(ViewCommand.COMMAND_WORD_SHORT + " month");
+        assertEquals(new ViewCommand(new String[]{"month"}), commandShort);
     }
 
 //    @Test
