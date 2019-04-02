@@ -573,6 +573,8 @@ These are some possible enhancements:
 
 {zwsp}
 
+[[Slot Management]]
+
 === Slot Management
 
 _Slot_ Management involves mainly the interaction between the users and their _slots_.
