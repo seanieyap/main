@@ -12,8 +12,6 @@ import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
