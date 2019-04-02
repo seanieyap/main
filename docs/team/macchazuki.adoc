@@ -95,10 +95,6 @@ Exporting will REMOVE all tags in the planner.
 
 |===
 
-include::../UserGuide.adoc[tag=importICS]
-
-include::../UserGuide.adoc[tag=dataencryption]
-
 == Contributions to the Developer Guide
 
 |===
@@ -136,11 +132,6 @@ Cons: Not all the information about the slots will be retained.
 
 Cons: Requires other applications to be coded to read these tag identifiers and also to store and use the tags in their functions.
 |===
-
-include::../DeveloperGuide.adoc[tag=import]
-
-include::../DeveloperGuide.adoc[tag=dataencryption]
-
 
 == PROJECT: PlanMySem
 
