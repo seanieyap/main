@@ -19,6 +19,49 @@ endif::[]
 
 By: `T08-3`      Since: `Jan 2019`      Licence: `MIT`
 
+
+== Introduction
+Welcome to *PlanMySem*!
+
+*PlanMySem* is a text-based (Command Line Interface) scheduling/calendar application that caters to NUS students and staff who prefer to use a desktop application for managing their schedule/calendar.
+*PlanMySem* automatically creates a planner that is synchronised according to the NUS academic calendar for the current semester and enables easy creation, editing and deleting of items.
+Special weeks such as recess week and reading week are taken into account within our unique recursion system.
+Items can then be efficiently managed via the intuitive tagging system.
+
+*PlanMySem* is optimized for those who prefer to work with a Command Line Interface (CLI) and/or are learning to work more efficiently with CLI tools. Additionally, unlike traditional calendar/scheduling applications, *PlanMySem* utilizes minimal resources on the user’s machine while still allowing the user to view their schedules swiftly and efficiently.
+{zwsp}
+
+{zwsp}
+
+[[about]]
+== About this Developer Guide
+This developer guide provides a detailed documentation on the implementation of all the various features *PlanMySem*
+offers. To navigate between the different sections, you could use the table of contents above.
+
+For ease of communication, this document will refer to lessons/activities/events/appointments that you might add into
+the planner as _slots_.
+
+Additionally, throughout this developer guide, there will be various icons used as described below.
+
+[TIP]
+This is a tip. Follow these suggested tips to make your life much simpler when using *PlanMySem*!
+
+[NOTE]
+This is a note. These are things for you to take note of when using *PlanMySem*.
+
+[IMPORTANT]
+This is a sign-post dictating important information. These are information that you will surely need to know to use
+*PlanMySem* efficiently.
+
+[CAUTION]
+This is a sign-post informing caution. Please take note of these items and exercise some care.
+
+[WARNING]
+This is a rule. Ensure that you follow these rules to ensure proper usage of *PlanMySem*.
+{zwsp}
+
+{zwsp}
+
 == Setting up
 
 === Prerequisites
@@ -54,10 +97,9 @@ Do not disable them. If you have disabled them, go to `File` > `Settings` > `Plu
 . Open the `StorageFile` file and check for any code errors
 . Open a console and run the command `gradlew processResources` (Mac/Linux: `./gradlew processResources`). It should finish with the `BUILD SUCCESSFUL` message. +
 This will generate all resources required by the application and tests.
-. Open link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow.java`] and check for any code errors
+. Open link:{repoURL}/src/planmysem/ui/MainWindow.java[`MainWindow.java`] and check for any code errors
 .. Due to an ongoing https://youtrack.jetbrains.com/issue/IDEA-189060[issue] with some of the newer versions of IntelliJ, code errors may be detected even if the project can be built and run successfully
 .. To resolve this, place your cursor over any of the code section highlighted in red. Press kbd:[ALT + ENTER], and select `Add '--add-modules=...' to module compiler options` for each error
-. Repeat this for the test folder as well (e.g. check link:{repoURL}/src/test/java/seedu/address/ui/HelpWindowTest.java[`HelpWindowTest.java`] for code errors, and if so, resolve it the same way)
 {zwsp}
 
 {zwsp}
@@ -135,6 +177,7 @@ When you are ready to start coding,
 
 .Architecture Diagram
 image::Architecture.png[width="800"]
+{zwsp}
 
 The *_Architecture Diagram_* given above explains the high-level design of the App. Given below is a quick overview of each component.
 
@@ -160,7 +203,7 @@ Each of the four components
 * Defines its _API_ in an `interface` with the same name as the Component.
 * Exposes its functionality using a `{Component Name}Manager` class.
 
-For example, the `Logic` component (see the class diagram given below) defines it's API in the `Logic.java` interface and exposes its functionality using the `Logic.java` class.
+For example, the `Logic` component (see the class diagram given below) defines its API in the `Logic.java` interface and exposes its functionality using the `Logic.java` class.
 
 .Class Diagram of overall application.
 image::OverallClassDiagram.png[width="800"]
@@ -175,6 +218,7 @@ The _Sequence Diagram_ below shows how the components interact with each other f
 
 .Component interactions for `delete 1` command
 image::SDforDeleteSlot.png[width="800"]
+{zwsp}
 
 The sections below give more details of each component.
 {zwsp}
@@ -185,7 +229,8 @@ The sections below give more details of each component.
 === UI component
 
 .Structure of the UI Component
-image::UiClassDiagram.png[width="800"]
+image::UiClassDiagram.png[width="400"]
+{zwsp}
 
 *API* : link:{repoURL}/src/planmysem/ui/Ui.java[`Ui.java`]
 
@@ -193,7 +238,7 @@ The UI consists of a `MainWindow` that is made up of just `commandInput` and `ou
 This application is mainly a text-based application, hence here are not much componenets here.
 
 The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder.
-For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
+For example, the layout of the link:{repoURL}/src/planmysem/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
 The `UI` component,
 
@@ -209,6 +254,7 @@ The `UI` component,
 [[fig-LogicClassDiagram]]
 .Structure of the Logic Component
 image::LogicClassDiagram.png[width="800"]
+{zwsp}
 
 *API* :
 link:{repoURL}/src/planmysem/logic/Logic.java[`Logic.java`]
@@ -231,7 +277,8 @@ image::SDforDeleteSlot.png[width="800"]
 === Model component
 
 .Overall structure of the Model Component
-image::ModelClassDiagram.png[width="600"]
+image::ModelClassDiagram.png[width="400"]
+{zwsp}
 
 *API* : link:{repoURL}/src/planmysem/model/Model.java[`Model.java`]
 {zwsp}
@@ -278,7 +325,7 @@ The `Slot` component,
 * stores the data of the slot details as well as start time and duration.
 
 [NOTE]
-Notice how `Slot` does not hold it's end time but rather it holds the `duration`. This is simply our design choice as it is meaningless to save both variables.
+Notice how `Slot` does not hold its end time but rather it holds the `duration`. This is simply our design choice as it is meaningless to save both variables.
 {zwsp}
 
 {zwsp}
@@ -288,13 +335,14 @@ Notice how `Slot` does not hold it's end time but rather it holds the `duration`
 
 .Structure of the Storage Component
 image::StorageClassDiagram.png[width="400"]
+{zwsp}
 
 *API* : link:{repoURL}/src/planmysem/storage/Storage.java[`Storage.java`]
 
 The `Storage` component,
 
 * can save `UserPref` objects in json format and read it back.
-* can save the Address Book data in json format and read it back.
+* can save the Planner data in json format and read it back.
 {zwsp}
 
 {zwsp}
@@ -312,9 +360,9 @@ Classes used by multiple components are in the `PlanMySem.common` package.
 This section describes some noteworthy details on how certain features are implemented.
 
 [[Planner-Initialization]]
-=== Initialization of the Planner and it's Semester
+=== Initialization of the Planner and its Semester
 
-The `Planner` and it's `Semester` has to be initialized for *PlanMySem* to work as all other features of *PlanMySem* would
+The `Planner` and its `Semester` has to be initialized for *PlanMySem* to work as all other features of *PlanMySem* would
 interact with this `Semester` object. The initialization is automated and dynamic to ensure sustainability.
 {zwsp}
 
@@ -322,7 +370,7 @@ interact with this `Semester` object. The initialization is automated and dynami
 
 ==== Current Implementation
 
-Upon launching *PlanMySem*, the initialization of the `Planner` and it's `Semester` would be implemented via two steps:
+Upon launching *PlanMySem*, the initialization of the `Planner` and its `Semester` would be implemented via two steps:
 
 1. Automatically generate the academic calendar from the current date.
 2. Setup current `Semester` from the academic calendar.
@@ -570,7 +618,7 @@ E.g. `name`, `location` amd `description` are not wrapped but "primitive".
 ** Pros: Less errors in handling invalid values.
 ** Cons: May cause inflexibility in writing code to account for flexible parsing.
 
-In summary, in this cause of *PlanMySme*, there is a need to achieve varied and flexible commands and as such,
+In summary, in this cause of *PlanMySem*, there is a need to achieve varied and flexible commands and as such,
 it is not necessary to handle invalid values with the innate `Model` objects as these are taken care of when parsing.
 
 Additionally, doing these actions when parsing, though bloats code, allows for more varied responses to the user and improves user experience.
@@ -655,6 +703,7 @@ will be polled into the output list. +
 
 {zwsp}
 
+[[view]]
 === View Month/Week/Day feature
 
 This feature presents the planner in different formats. This section will detail how this feature is implemented.
@@ -677,22 +726,20 @@ the user.
 
 Given below is the Sequence Diagram upon executing the `view month` command.
 
-.Interactions between components for the `view month` Command +
+.Interactions between components for the `view month` Command
 image::ViewMonthSequenceDiagram.png[width="800"]
+{zwsp}
 
 The 3 general types of view (month, week, day) are generated by the methods `displayMonthView()`, `displayWeekView()`,
 `displayDetailedWeekView()` and `displayDayView()` from the `ViewCommand` class.
 
 `displayMonthView()` displays all the months of the current semester in a monthly calendar format. Each academic week
-of the semester is also indicated in the display as seen in the figure below. The implementation of this function can be
+of the semester is also indicated in the display. The implementation of this function can be
 broken down into 2 parts:
 
 1. Print month header and calculate required amount of whitespace before the 1st of the month.
 2. Print all days of the month using a loop.
    * Append academic week after each Saturday or last day of month.
-
-.View of months in current semester with academic weeks indicated. +
-image::Ui.png[width="800"]
 
 `displayWeekView()` displays the weekly calendar format of a specified week. The implementation of this function can be
 broken down into the following steps:
@@ -757,14 +804,17 @@ Given below is an example usage scenario and how the undo/redo mechanism behaves
 Step 1. The user launches the application for the first time. The `VersionedPlanner` will be initialized with the initial planner state, and the `currentStatePointer` pointing to that single planner state.
 
 image::UndoRedoStartingStateListDiagram.png[width="800"]
+{zwsp}
 
 Step 2. The user executes `delete 5` command to delete the 5th `Slot` in the planner. The `delete` command calls `Model#commitPlanner()`, causing the modified state of the planner after the `delete 5` command executes to be saved in the `plannerStateList`, and the `currentStatePointer` is shifted to the newly inserted planner state.
 
 image::UndoRedoNewCommand1StateListDiagram.png[width="800"]
+{zwsp}
 
 Step 3. The user executes `add n/CS2113T ...` to add a new slot. The `add` command also calls `Model#commitPlanner()`, causing another modified planner state to be saved into the `plannerStateList`.
 
 image::UndoRedoNewCommand2StateListDiagram.png[width="800"]
+{zwsp}
 
 [NOTE]
 If a command fails its execution, it will not call `Model#commitPlanner()`, so the planner state will not be saved into the `plannerStateList`.
@@ -772,6 +822,7 @@ If a command fails its execution, it will not call `Model#commitPlanner()`, so t
 Step 4. The user now decides that adding the `Slot` was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undo()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous planner state, and restores the planner to that state.
 
 image::UndoRedoExecuteUndoStateListDiagram.png[width="800"]
+{zwsp}
 
 [NOTE]
 If the `currentStatePointer` is at index 0, pointing to the initial planner state, then there are no previous planner states to restore. The `undo` command uses `Model#canUndo()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the undo.
@@ -788,10 +839,12 @@ If the `currentStatePointer` is at index `plannerStateList.size() - 1`, pointing
 Step 5. The user then decides to execute the command `list`. Commands that do not modify the planner, such as `list`, will usually not call `Model#commitPlanner()`, `Model#undoPlanner()` or `Model#redoPlanner()`. Thus, the `plannerStateList` remains unchanged.
 
 image::UndoRedoNewCommand3StateListDiagram.png[width="800"]
+{zwsp}
 
 Step 6. The user executes `clear`, which calls `Model#commitPlanner()`. Since the `currentStatePointer` is not pointing at the end of the `plannerStateList`, all planner states after the `currentStatePointer` will be purged. We designed it this way because it no longer makes sense to redo the `add n/David ...` command. This is the behavior that most modern desktop applications follow.
 
 image::UndoRedoNewCommand4StateListDiagram.png[width="800"]
+{zwsp}
 
 The following activity diagram summarizes what happens when a user executes a new command:
 
@@ -886,7 +939,7 @@ image::UndoRedoActivityDiagram.png[width="650"]
 
 === Data Encryption / Decryption feature
 
-The storageFile file "PlanMySem.txt" is encrypted to prevent easy access of the user's calendar.
+The storage file "PlanMySem.txt" is encrypted to prevent easy access of the user's calendar.
 We are encrypting and decrypting the data using the Java Cypher class.
 This feature is implemented through creating a Encryptor that contains encrypt and decrypt methods. The encrypt method takes a String object as an argument and returns a encrypted String object. The decrypt method takes in a String object as an argument and returns the decrypted message as a String object.
 
@@ -915,7 +968,7 @@ In our implementation, we have chosen not to export the tags into the .ics file.
 * **Alternative 1 (current choice):** Ignore tags when exporting.
 ** Pros: Easier to implement as iCalendar does not have in-built tag fields.
 ** Cons: Not all the information about the slots will be retained.
-** Reason for choice: We do not have much control over other applications, and importing and exporting .ics within *PlanMySem* can be done using the storageFile .txt file.
+** Reason for choice: We do not have much control over other applications, and importing and exporting .ics within *PlanMySem* can be done using the storage .txt file.
 * **Alternative 2:** Use the notes field and a tag identifier to save the tags.
 ** Pros: All the information from the semester will be exported.
 ** Cons: Requires other applications to be coded to read these tag identifiers and also to store and use the tags in their functions.
@@ -1097,7 +1150,7 @@ To run tests in headless mode, open a console and run the command `gradlew clean
 .  _Unit tests_ targeting the lowest level methods/classes. +
 e.g. `PlanMySem.commons.UtilTest`
 .  _Integration tests_ that are checking the integration of multiple code units (those code units are assumed to be working). +
-e.g. `PlanMySem.storageFile.StorageManagerTest`
+e.g. `PlanMySem.storage.StorageManagerTest`
 .  Hybrids of unit and integration tests. These test are checking multiple code units as well as how the are connected together. +
 e.g. `PlanMySem.logicManager.LogicTest`, `PlanMySem.parse,ParserTest`
 {zwsp}
@@ -1156,7 +1209,10 @@ Here are the steps to create a new release.
 
 === Managing Dependencies
 
-A project often depends on third-party libraries. For example, Address Book depends on the https://github.com/FasterXML/jackson[Jackson library] for JSON parsing. Managing these _dependencies_ can be automated using Gradle. For example, Gradle can download the dependencies automatically, which is better than these alternatives:
+Projects often depends on third-party libraries.
+For example, *PlanMySem* depends on the https://github.com/FasterXML/jackson[Jackson library] for JSON parsing.
+Managing these _dependencies_ can be automated using Gradle.
+For example, Gradle can download the dependencies automatically, which is better than these alternatives:
 
 [loweralpha]
 . Include those libraries in the repo (this bloats the repo size)
@@ -1247,7 +1303,7 @@ A project often depends on third-party libraries. For example, Address Book depe
 //* Solution
 //** You can modify the existing test methods for `PersonCard` 's to include testing the tag's color as well.
 //** See this https://github.com/se-edu/addressbook-level4/pull/798[PR] for the full solution.
-//*** The PR uses the hash code of the tag names to generate a color. This is deliberately designed to ensure consistent colors each time the application runs. You may wish to expand on this design to include additional features, such as allowing users to set their own tag colors, and directly saving the colors to storageFile, so that tags retain their colors even if the hash code algorithm changes.
+//*** The PR uses the hash code of the tag names to generate a color. This is deliberately designed to ensure consistent colors each time the application runs. You may wish to expand on this design to include additional features, such as allowing users to set their own tag colors, and directly saving the colors to storage, so that tags retain their colors even if the hash code algorithm changes.
 //****
 //
 //. Modify link:{repoURL}/src/main/java/seedu/address/commons/events/ui/NewResultAvailableEvent.java[`NewResultAvailableEvent`] such that link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay`] can show a different style on error (currently it shows the same regardless of errors).
@@ -1299,7 +1355,7 @@ A project often depends on third-party libraries. For example, Address Book depe
 //[discrete]
 //==== `Storage` component
 //
-//*Scenario:* You are in charge of `storageFile`. For your next project milestone, your team plans to implement a new feature of saving the address book to the cloud. However, the current implementation of the application constantly saves the address book after the execution of each command, which is not ideal if the user is working on limited internet connection. Your team decided that the application should instead save the changes to a temporary local backup file first, and only upload to the cloud after the user closes the application. Your job is to implement a backup API for the address book storageFile.
+//*Scenario:* You are in charge of `storage`. For your next project milestone, your team plans to implement a new feature of saving the address book to the cloud. However, the current implementation of the application constantly saves the address book after the execution of each command, which is not ideal if the user is working on limited internet connection. Your team decided that the application should instead save the changes to a temporary local backup file first, and only upload to the cloud after the user closes the application. Your job is to implement a backup API for the address book storage.
 //
 //[TIP]
 //Do take a look at <<Design-Storage>> before attempting to modify the `Storage` component.
@@ -1308,8 +1364,8 @@ A project often depends on third-party libraries. For example, Address Book depe
 //+
 //****
 //* Hint
-//** Add the API method in link:{repoURL}/src/main/java/seedu/address/storageFile/AddressBookStorage.java[`AddressBookStorage`] interface.
-//** Implement the logicManager in link:{repoURL}/src/main/java/seedu/address/storageFile/StorageManager.java[`StorageManager`] and link:{repoURL}/src/main/java/seedu/address/storageFile/JsonAddressBookStorage.java[`JsonAddressBookStorage`] class.
+//** Add the API method in link:{repoURL}/src/main/java/seedu/address/storage/AddressBookStorage.java[`AddressBookStorage`] interface.
+//** Implement the logicManager in link:{repoURL}/src/main/java/seedu/address/storage/StorageManager.java[`StorageManager`] and link:{repoURL}/src/main/java/seedu/address/storage/JsonAddressBookStorage.java[`JsonAddressBookStorage`] class.
 //* Solution
 //** See this https://github.com/se-edu/addressbook-level4/pull/594[PR] for the full solution.
 //****
@@ -1397,7 +1453,7 @@ A project often depends on third-party libraries. For example, Address Book depe
 //. Modify link:{repoURL}/src/main/java/seedu/address/model/util/SampleDataUtil.java/[`SampleDataUtil`] to add remarks for the sample model (delete your `model/addressbook.json` so that the application will load the sample model when you launch it.)
 //
 //===== [Step 6] Storage: Add `Remark` field to `JsonAdaptedPerson` class
-//We now have `Remark` s for `Person` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storageFile/JsonAdaptedPerson.java[`JsonAdaptedPerson`] to include a `Remark` field so that it will be saved.
+//We now have `Remark` s for `Person` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storage/JsonAdaptedPerson.java[`JsonAdaptedPerson`] to include a `Remark` field so that it will be saved.
 //
 //**Main:**
 //
@@ -1469,11 +1525,11 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 |Priority |As a ... |I want to ... |So that I can...
 |`* * *` |new user |see usage instructions |refer to instructions if I do not know how to use the app
 |`* * *` |new user |initialize the calendar by year and semester |align the planner with the school's academic calendar
-|`* * *` |user |add a slot |store all my slots in the calendar*
-|`* * *` |user |delete a slot |remove all slots from my calendar that have been cancelled*
-|`* * *` |user |edit a slot |edit slots from my calendar that have been postponed/ brought forward/ changed*
-|`* * *` |user |list all slots |view all slots on the planner which I have activities on*
-|`* * *` |user |recurse a slot |easily create all the relevant time slots for a module to recur every week*
+|`* * *` |user |add a slot |store all my slots in the calendar
+|`* * *` |user |delete a slot |remove all slots from my calendar that have been cancelled
+|`* * *` |user |edit a slot |edit slots from my calendar that have been postponed/ brought forward/ changed
+|`* * *` |user |list all slots |view all slots on the planner which I have activities on
+|`* * *` |user |recurse a slot |easily create all the relevant time slots for a module to recur every week
 |`* * *` |user |view all slots on a certain day |conveniently view my planner for the day
 |`* * *` |user |view all slots on a certain week |conveniently view my planner for the week
 |`* * *` |user |view all slots on a certain month |conveniently view my planner for the month
@@ -1482,7 +1538,7 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 |`* * *` |user |redo a command |easily revert my `undo` command in case I mistakenly undo too far
 |`* *` |user |view the planner in a graphic calendar format|easily view my schedule for the day/week/month/semester
 |`* *` |user |view a slot |view the details of a specific activity I am looking for
-|`* *` |user |remove tags on a time slot |remove unused/ unnecessary tags from an activity*
+|`* *` |user |remove tags on a time slot |remove unused/ unnecessary tags from an activity
 |`* *` |user |edit tags |rename tags
 |`* *` |user |list all tags |view all existing tags
 |`* *` |user |view color coded categories |easily view the different types of categories
@@ -1705,7 +1761,6 @@ These instructions only provide a starting point for testers to work on; testers
 {zwsp}
 
 {zwsp}
-
 
 === Saving data
 

@@ -22,7 +22,7 @@ By: `Team T08-3`      Since: `Jan 2019`      Licence: `MIT`
 == Introduction
 Welcome to *PlanMySem*!
 
-*PlanMySem* is a text-based (Command Line Interface) scheduling/calendar application that targets NUS students and staff who prefer to use a desktop application for managing their schedule/calendar.
+*PlanMySem* is a text-based (Command Line Interface) scheduling/calendar application that caters to NUS students and staff who prefer to use a desktop application for managing their schedule/calendar.
 *PlanMySem* automatically creates a planner that is synchronised according to the NUS academic calendar for the current semester and enables easy creation, editing and deleting of items.
 Special weeks such as recess week and reading week are taken into account within our unique recursion system.
 Items can then be efficiently managed via the intuitive tagging system.
@@ -32,6 +32,7 @@ Items can then be efficiently managed via the intuitive tagging system.
 
 {zwsp}
 
+[[about]]
 == About this User Guide
 This user guide provides a quick start guide for you to easily setup and install *PlanMySem*, documentation of all the various features *PlanMySem* offers, frequently asked questions and a summary of the available commands. To navigate between the different sections, you could use the table of contents above.
 
@@ -307,13 +308,16 @@ Delete the second _slot_ shown via the `list` command.
 
 [[list]]
 === Listing Slots: `list` / `l`
-Lists all _slots_ whose name directly matches the specified keyword (not case-sensitive). +
+Lists all _slots_ whose name/tag directly matches the specified keyword (not case-sensitive). +
 Format: `list n/NAME`
 
 Examples:
 
 * `list n/CS2113T` +
 List all _slots_ that is named `CS2113T` in the planner.
+
+* `list t/Tutorial` +
+List all _slots_ that contains tags named `Tutorial` in the planner.
 
 [#img-list]
 .[.underline]#Output after entering `list n/CS2113T`#
@@ -324,13 +328,20 @@ image::List_Command_Output_1.png[width="790"]
 
 [[find]]
 === Locating Slots: `find` / `f`
-Find all _slots_ whose part of their name contains the specified keyword and displays them as a list. +
+Find all _slots_ whose name closely matches the specified keyword and displays them as a list. +
 Format: `find n/KEYWORD`
+
+[NOTE]
+The `find` command will attempt to return the closest matching `Slot` in the event that a match is not found.
+Do not be surprised to _eg. enter `find n/ABC` and get a `Slot` named `XYZ`_ in return.
 
 Example:
 
 * `find n/CS` +
-Find all _slots_ whose name contains `CS` (eg. CS2101, CS2113T, SOCSMeet)
+Find all _slots_ whose name closely matches `CS` (eg. CS2101, CS2113T, SOCSMeet)
+
+* `find t/Tut` +
+Find all _slots_ that contains tags whose names closely matches `Tut` (eg. Tutorial, Tutorship)
 
 [#img-find]
 .[.underline]#Output after entering `find n/CS`#
@@ -383,7 +394,7 @@ image::Ui.png[width="790"]
 {zwsp}
 
 [[history]]
-=== Listing previous input commands : `history` `[coming in v2.0]`
+=== Listing previous input commands : `history`
 Lists all the commands that you have entered in reverse chronological order. +
 Format: `history`
 {zwsp}
@@ -391,7 +402,7 @@ Format: `history`
 {zwsp}
 
 [[undo]]
-=== Undoing previous command : `undo` `[coming in v2.0]`
+=== Undoing previous command : `undo`
 Restores the planner to the state before the previous command was executed. +
 Format: `undo`
 
@@ -402,7 +413,7 @@ The `clear` command cannot be undone.
 {zwsp}
 
 [[redo]]
-=== Redoing the previously undone command : `redo` `[coming in v2.0]`
+=== Redoing the previously undone command : `redo`
 Reverses the most recent `undo` command. +
 Format: `redo`
 {zwsp}
@@ -417,7 +428,7 @@ Planner data is automatically encrypted before saving and decrypted before loadi
 {zwsp}
 
 [[import]]
-=== Importing .ics formatted files 'import filename'
+=== Importing .ics formatted files `import`
 You can import an .ics file into the planner.
 Format: `import filename`
 [NOTE]

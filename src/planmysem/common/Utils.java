@@ -63,7 +63,7 @@ public class Utils {
             return -1;
         }
         String day = unknown.trim().toLowerCase();
-        int result = -1;
+        int result;
         switch (day) {
         case "monday":
         case "mon":
@@ -132,13 +132,6 @@ public class Utils {
     }
 
     /**
-     * Parse LocalDate to String.
-     */
-    public static String parseDate(LocalDate date) {
-        return date.format(DateTimeFormatter.ofPattern("d-MM-yyyy"));
-    }
-
-    /**
      * Parse String to 12 hour or 24 hour time format.
      */
     public static LocalTime parseTime(String time) {
@@ -203,7 +196,7 @@ public class Utils {
         }
 
         // cost for transforming each letter in String rhs
-        for (int j = 1; j < rhs.length() + 1; j++) {
+        for (int j = 1; j < rhs.length() + 1 && j < 20; j++) {
             // initial cost in String rhs
             newCost[0] = j;
 

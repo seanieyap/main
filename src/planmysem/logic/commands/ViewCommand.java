@@ -1,11 +1,14 @@
 package planmysem.logic.commands;
 
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
+import static planmysem.common.Messages.MESSAGE_DATE_OUT_OF_BOUNDS;
 import static planmysem.common.Utils.getNearestDayOfWeek;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -53,49 +56,47 @@ public class ViewCommand extends Command {
             + "\n\t\tExample 3: " + COMMAND_WORD
             + " day";
 
-    private final String viewArgs;
+    private final String[] viewArgs;
 
-    public ViewCommand(String viewArgs) {
+    public ViewCommand(String[] viewArgs) {
         this.viewArgs = viewArgs;
     }
 
     @Override
     public CommandResult execute(Model model, CommandHistory commandHistory) {
-        String viewType;
-        String viewSpecifier;
-        String detailFlag = null;
         final Semester currentSemester = model.getPlanner().getSemester();
-        String output = null;
+        String viewType = viewArgs[0];
+        String output = "";
 
-        if ("month".equals(viewArgs)) {
+        switch (viewType) {
+        case "month":
             output = displayMonthView(currentSemester);
-        } else if ("week".equals(viewArgs)) {
-            output = displayWeekView(currentSemester, null);
-        } else if ("day".equals(viewArgs)) {
-            output = displayDayView(currentSemester, null);
-        } else {
-            viewType = viewArgs.split(" ")[0];
-            viewSpecifier = viewArgs.split(" ")[1];
-            viewSpecifier = viewSpecifier.substring(0, 1).toUpperCase() + viewSpecifier.substring(1).toLowerCase();
+            break;
 
-            if (viewArgs.split(" ").length == 3) {
-                detailFlag = viewArgs.split(" ")[2];
+        case "week":
+            if ((viewArgs.length == 3 && "Details".equals(viewArgs[2]))
+                    || (viewArgs.length == 2 && "Details".equals(viewArgs[1]))) {
+                output = displayDetailedWeekView(currentSemester, viewArgs[1]);
+                break;
             }
 
-            switch (viewType) {
-            case "week":
-                if ("Details".matches(viewSpecifier) || detailFlag != null) {
-                    output = displayDetailedWeekView(currentSemester, viewSpecifier);
-                } else {
-                    output = displayWeekView(currentSemester, viewSpecifier);
-                }
-                break;
-            case "day":
-                output = displayDayView(currentSemester, viewSpecifier);
-                break;
-            default:
-                break;
+            if (viewArgs.length == 2) {
+                output = displayWeekView(currentSemester, viewArgs[1]);
+            } else {
+                output = displayWeekView(currentSemester, null);
             }
+            break;
+
+        case "day":
+            if (viewArgs.length == 2) {
+                output = displayDayView(currentSemester, viewArgs[1]);
+            } else {
+                output = displayDayView(currentSemester, null);
+            }
+            break;
+
+        default:
+            break;
         }
 
         return new CommandResult(output);
@@ -109,59 +110,66 @@ public class ViewCommand extends Command {
         LocalDate semesterStartDate = currentSemester.getStartDate();
         LocalDate semesterEndDate = currentSemester.getEndDate();
         int year = semesterStartDate.getYear();
-        LocalDate firstDayOfMonth = semesterStartDate.withDayOfMonth(1);
-        int spaces = firstDayOfMonth.getDayOfWeek().getValue();
+        LocalDate firstDay = semesterStartDate.with(firstDayOfYear());
+        int spaces = firstDay.getDayOfWeek().getValue();
+        int firstMonthOfSem = semesterStartDate.getMonthValue();
         int lastMonthOfSem = semesterEndDate.getMonthValue();
         StringBuilder sb = new StringBuilder();
 
         String[] months = {"", "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"};
+        String[] monthOutput = new String[12];
 
         int[] days = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-        for (int m = 1; m <= lastMonthOfSem; m++) {
+        for (int m = 1; m <= 12; m++) {
+            StringBuilder monthBuilder = new StringBuilder();
             // Set number of days in February to 29 if it is a leap year.
             if ((((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) && m == 2) {
                 days[m] = 29;
             }
 
             // Print calendar header.
-            sb.append("          " + months[m] + " " + year + "\n");
-            sb.append("_____________________________________\n");
-            sb.append("   Sun  Mon Tue   Wed Thu   Fri  Sat\n");
+            monthBuilder.append("          " + months[m] + " " + year + "\n");
+            monthBuilder.append("_____________________________________\n");
+            monthBuilder.append("   Sun  Mon Tue   Wed Thu   Fri  Sat\n");
 
             // Print spaces required for the start of a month.
             spaces = (days[m - 1] + spaces) % 7;
             for (int i = 0; i < spaces; i++) {
-                sb.append("     ");
+                monthBuilder.append("     ");
             }
             // Print the days in the month.
             for (int i = 1; i <= days[m]; i++) {
-                sb.append(String.format("  %3d", i));
+                monthBuilder.append(String.format("  %3d", i));
                 if (((i + spaces) % 7 == 0)) {
                     Day tempDay = allDays.get(LocalDate.of(year, m, i));
                     String weekType = "";
                     if (tempDay != null) {
                         weekType = tempDay.getType();
                     }
-                    sb.append("   | " + weekType + "\n");
-                }
-                if (i == days[m]) {
+                    monthBuilder.append("   | " + weekType + "\n");
+                } else if (i == days[m]) {
                     LocalDate tempDate = LocalDate.of(year, m, i);
                     Day tempDay = allDays.get(tempDate);
                     String weekType = "";
                     int extraSpaces = 6 - (tempDate.getDayOfWeek().getValue() % 7);
                     for (int j = 0; j < extraSpaces; j++) {
-                        sb.append("     ");
+                        monthBuilder.append("     ");
                     }
                     if (tempDay != null) {
                         weekType = tempDay.getType();
                     }
-                    sb.append("   | " + weekType + "\n");
+                    monthBuilder.append("   | " + weekType + "\n");
                 }
             }
 
-            sb.append("\n");
+            monthBuilder.append("\n");
+            monthOutput[m - 1] = monthBuilder.toString();
+        }
+
+        for (int m = firstMonthOfSem - 1; m < lastMonthOfSem; m++) {
+            sb.append(monthOutput[m]);
         }
 
         return sb.toString();
@@ -179,9 +187,9 @@ public class ViewCommand extends Command {
         StringBuilder sb = new StringBuilder();
 
         if (week == null) {
-            week = allDays.get(LocalDate.now()).getType() + " of " + currentSemester.getName();
+            week = allDays.get(LocalDate.now(Clock.get())).getType() + " of " + currentSemester.getName();
 
-            weekStart = LocalDate.now().with(WeekFields.ISO.dayOfWeek(), 1);
+            weekStart = LocalDate.now(Clock.get()).with(WeekFields.ISO.dayOfWeek(), 1);
             weekEnd = weekStart.plusDays(7);
             datesList = weekStart.datesUntil(weekEnd).collect(Collectors.toList());
         } else {
@@ -207,14 +215,14 @@ public class ViewCommand extends Command {
                 }
             }
 
-            weekStart = LocalDate.now().with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfYear[0]);
+            weekStart = LocalDate.now(Clock.get()).with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfYear[0]);
             weekStart = weekStart.with(WeekFields.ISO.dayOfWeek(), 1);
             weekEnd = weekStart.with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfYear[0] + 1);
             datesList = weekStart.datesUntil(weekEnd).collect(Collectors.toList());
         }
 
         // Print academic week header.
-        int width = 92;
+        int width = 120;
         sb.append(centerAlignText(width, week) + "\n");
 
         // Print formatted week view.
@@ -240,10 +248,10 @@ public class ViewCommand extends Command {
         int[] weekOfYear = {0, 0};
         StringBuilder sb = new StringBuilder();
 
-        if (week == null || "Details".matches(week)) {
-            sb.append(allDays.get(LocalDate.now()).getType() + " of " + currentSemester.getName() + "\n");
+        if ("Details".equals(week)) {
+            sb.append(allDays.get(LocalDate.now(Clock.get())).getType() + " of " + currentSemester.getName() + "\n");
 
-            weekStart = LocalDate.now().with(WeekFields.ISO.dayOfWeek(), 1);
+            weekStart = LocalDate.now(Clock.get()).with(WeekFields.ISO.dayOfWeek(), 1);
             weekEnd = weekStart.plusDays(7);
             datesList = weekStart.datesUntil(weekEnd).collect(Collectors.toList());
         } else {
@@ -269,7 +277,7 @@ public class ViewCommand extends Command {
                 }
             }
 
-            weekStart = LocalDate.now().with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfYear[0]);
+            weekStart = LocalDate.now(Clock.get()).with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfYear[0]);
             weekStart = weekStart.with(WeekFields.ISO.dayOfWeek(), 1);
             weekEnd = weekStart.with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfYear[0] + 1);
             if (weekOfYear[1] != 0) {
@@ -298,7 +306,7 @@ public class ViewCommand extends Command {
         // Parse different formats of given day/date.
         LocalDate givenDate;
         if (dateOrDay == null) {
-            givenDate = LocalDate.now();
+            givenDate = LocalDate.now(Clock.get());
         } else {
             int day = -1;
             givenDate = Utils.parseDate(dateOrDay);
@@ -312,7 +320,13 @@ public class ViewCommand extends Command {
                 givenDate = getNearestDayOfWeek(LocalDate.now(Clock.get()), day);
             }
         }
-        sb.append(givenDate.getDayOfWeek().name() + " , " + givenDate + "\n\n");
+
+        if (givenDate.isAfter(currentSemester.getStartDate().minusDays(1))
+                && givenDate.isBefore(currentSemester.getEndDate().plusDays(1))) {
+            sb.append(givenDate.getDayOfWeek().name() + " , " + givenDate + "\n\n");
+        } else {
+            return MESSAGE_DATE_OUT_OF_BOUNDS;
+        }
 
         // Retrieve all slots for given day/date in sorted order.
         ArrayList<Slot> allSlotsInDay = allDays.get(givenDate).getSlots();
@@ -370,14 +384,14 @@ public class ViewCommand extends Command {
         StringBuilder sb = new StringBuilder();
 
         // Print line divider.
-        int width = 92;
+        int width = 120;
         for (int i = 0; i < width; i++) {
             sb.append("-");
         }
         sb.append("\n");
 
         // Print days of week header.
-        width = 12;
+        width = 16;
         sb.append("|" + centerAlignText(width, "Monday") + "|");
         sb.append(centerAlignText(width, "Tuesday") + "|");
         sb.append(centerAlignText(width, "Wednesday") + "|");
@@ -392,7 +406,7 @@ public class ViewCommand extends Command {
         }
         sb.append("\n");
 
-        width = 92;
+        width = 120;
         for (int i = 0; i < width; i++) {
             sb.append("-");
         }
@@ -413,7 +427,7 @@ public class ViewCommand extends Command {
         }
 
         // Print all slots for each day.
-        width = 12;
+        width = 16;
         while (!slotsInDayList.get(0).isEmpty() || !slotsInDayList.get(1).isEmpty()
                 || !slotsInDayList.get(2).isEmpty() || !slotsInDayList.get(3).isEmpty()
                 || !slotsInDayList.get(4).isEmpty() || !slotsInDayList.get(5).isEmpty()
@@ -431,12 +445,17 @@ public class ViewCommand extends Command {
                     slotTitleLine.append(centerAlignText(width, "") + "|");
                 } else {
                     Slot slot = allSlotsInDay.get(0);
-                    slotTimingLine.append("*" + slot.getStartTime());
-                    slotTimingLine.append("-");
-                    slotTimingLine.append(Utils.getEndTime(slot.getStartTime(), slot.getDuration()) + "|");
+                    String slotTiming = "* " + slot.getStartTime() + " - "
+                            + Utils.getEndTime(slot.getStartTime(), slot.getDuration()) + " |";
+                    slotTimingLine.append(slotTiming);
 
-                    String shortTitle = slot.getName().substring(0, 10) + "..";
-                    slotTitleLine.append(shortTitle + "|");
+                    String shortTitle;
+                    if (slot.getName().length() < 15) {
+                        shortTitle = slot.getName();
+                    } else {
+                        shortTitle = slot.getName().substring(0, 14) + "..";
+                    }
+                    slotTitleLine.append(centerAlignText(width, shortTitle) + "|");
 
                     allSlotsInDay.remove(0);
                 }
@@ -447,11 +466,18 @@ public class ViewCommand extends Command {
         }
 
         // Print closing border.
-        width = 92;
+        width = 120;
         for (int i = 0; i < width; i++) {
             sb.append("-");
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof ViewCommand // instanceof handles nulls
+                && Arrays.equals(viewArgs, ((ViewCommand) other).viewArgs));
     }
 }
