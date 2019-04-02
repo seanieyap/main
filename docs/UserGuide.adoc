@@ -428,7 +428,7 @@ Planner data is automatically encrypted before saving and decrypted before loadi
 {zwsp}
 
 [[import]]
-=== Importing .ics formatted files
+=== Importing .ics formatted files `import`
 You can import an .ics file into the planner.
 Format: `import filename`
 [NOTE]
@@ -599,7 +599,7 @@ Commands to view _slots_:
 {zwsp}
 
 === Import/Exporting the Planner
-Commands to view _slots_:
+Commands:
 [width="100%",cols="20%,<30%,<20%,<30",options="header"]
 |=======================================================================
 |Task |Purpose |Command |Example
@@ -607,7 +607,7 @@ Commands to view _slots_:
 |_<<export, Export your planner>>_ |Export all your slots into a .ics file|
 `export` | `export`
 |_<<import, Import into your planner>>_ |Import into your planner from a .ics file |
-`import` | `import`
+`import` | `import PlanMySem.ics`
 |=======================================================================
 {zwsp}
 
