@@ -197,15 +197,15 @@ Format: `add n/NAME d/DATE_OR_DAY_OF_WEEK st/START_TIME et/END_TIME_OR_DURATION 
 
 Examples:
 
-* `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial` +
-Add a _slot_, named "CS2113T Tutorial" on the coming monday, from 0800hrs to 0900hrs with the tags "CS2113T" and "Tutorial".
+* `add n/CS2113T Tutorial d/mon st/8:00 am et/9:00 am des/Topic: Sequence Diagram t/CS2113T t/Tutorial` +
+Add a single _slot_, named "CS2113T Tutorial" on the coming monday, from 0800hrs to 0900hrs with the tags "CS2113T" and "Tutorial".
 
 [#img-add]
 .[.underline]#Output after entering `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial`#
 image::Add_Command_Output_1.png[width="790"]
 
 * `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial r/recess r/reading` +
-Do the same but additionally, recurse the _slot_ on recess and reading week.
+Do the same but additionally, recurse the _slot_ on both recess and reading week.
 
 * `add n/CS2113T Tutorial d/mon st/08:00 et/09:00 des/Topic: Sequence Diagram t/CS2113T t/Tutorial r/normal` +
 Do the same but recurse the _slot_ on "normal", instructional, weeks.
