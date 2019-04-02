@@ -25,7 +25,7 @@
 <li><a href="#undo">4.9. Undoing previous command : <code>undo</code></a></li>
 <li><a href="#redo">4.10. Redoing the previously undone command : <code>redo</code></a></li>
 <li><a href="#encrypt">4.11. Encrypting/decrypting data files</a></li>
-<li><a href="#import">4.12. Importing .ics formatted files</a></li>
+<li><a href="#import">4.12. Importing .ics formatted files <code>import</code></a></li>
 <li><a href="#export">4.13. Exporting .ics formatted files: <code>export</code></a></li>
 </ul>
 </li>
@@ -639,7 +639,7 @@ Delete the second <em>slot</em> shown via the <code>list</code> command.
 <div class="sect2">
 <h3 id="list"><a class="link" href="#list">4.5. Listing Slots: <code>list</code> / <code>l</code></a></h3>
 <div class="paragraph">
-<p>Lists all <em>slots</em> whose name directly matches the specified keyword (not case-sensitive).<br>
+<p>Lists all <em>slots</em> whose name/tag directly matches the specified keyword (not case-sensitive).<br>
 Format: <code>list n/NAME</code></p>
 </div>
 <div class="paragraph">
@@ -650,6 +650,10 @@ Format: <code>list n/NAME</code></p>
 <li>
 <p><code>list n/CS2113T</code><br>
 List all <em>slots</em> that is named <code>CS2113T</code> in the planner.</p>
+</li>
+<li>
+<p><code>list t/Tutorial</code><br>
+List all <em>slots</em> that contains tags named <code>Tutorial</code> in the planner.</p>
 </li>
 </ul>
 </div>
@@ -669,8 +673,21 @@ List all <em>slots</em> that is named <code>CS2113T</code> in the planner.</p>
 <div class="sect2">
 <h3 id="find"><a class="link" href="#find">4.6. Locating Slots: <code>find</code> / <code>f</code></a></h3>
 <div class="paragraph">
-<p>Find all <em>slots</em> whose part of their name contains the specified keyword and displays them as a list.<br>
+<p>Find all <em>slots</em> whose name closely matches the specified keyword and displays them as a list.<br>
 Format: <code>find n/KEYWORD</code></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>find</code> command will attempt to return the closest matching <code>Slot</code> in the event that a match is not found.
+Do not be surprised to <em>eg. enter <code>find n/ABC</code> and get a <code>Slot</code> named `XYZ`</em> in return.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Example:</p>
@@ -679,7 +696,11 @@ Format: <code>find n/KEYWORD</code></p>
 <ul>
 <li>
 <p><code>find n/CS</code><br>
-Find all <em>slots</em> whose name contains <code>CS</code> (eg. CS2101, CS2113T, SOCSMeet)</p>
+Find all <em>slots</em> whose name closely matches <code>CS</code> (eg. CS2101, CS2113T, SOCSMeet)</p>
+</li>
+<li>
+<p><code>find t/Tut</code><br>
+Find all <em>slots</em> that contains tags whose names closely matches <code>Tut</code> (eg. Tutorial, Tutorship)</p>
 </li>
 </ul>
 </div>
@@ -739,9 +760,16 @@ E.g. <code>view week details</code> will allow you to view details of all <em>sl
 <td class="content">
 You may omit <code>[WEEK]</code>/<code>[DATE_OR_DAY_OF_WEEK]</code> to view the calendar with respect to the current date!<br>
 E.g. <code>view week</code> will allow you to view the current week and <code>view day</code> will allow you to view the current day!
+The expected output after successfully running <code>view week</code> is shown in the figure below.
 </td>
 </tr>
 </table>
+</div>
+<div id="img-view" class="imageblock">
+<div class="content">
+<img src="images/Ui.png" alt="Ui" width="790">
+</div>
+<div class="title">Figure 8. <span class="underline">Output after entering <code>view week</code></span></div>
 </div>
 <div class="paragraph">
 <p>Examples:</p>
@@ -774,18 +802,10 @@ View planner for recess week of the academic calendar.</p>
 </li>
 <li>
 <p><code>view month</code><br>
-View planner for the months of the current academic semester.</p>
+View planner for the months of the current academic semester.
+&#8203;</p>
 </li>
 </ul>
-</div>
-<div id="img-view" class="imageblock">
-<div class="content">
-<img src="images/Ui.png" alt="Ui" width="790">
-</div>
-<div class="title">Figure 8. <span class="underline">Output after entering <code>view month</code></span></div>
-</div>
-<div class="paragraph">
-<p>&#8203;</p>
 </div>
 <div class="paragraph">
 <p>&#8203;</p>
@@ -847,7 +867,7 @@ Format: <code>redo</code>
 </div>
 </div>
 <div class="sect2">
-<h3 id="import"><a class="link" href="#import">4.12. Importing .ics formatted files</a></h3>
+<h3 id="import"><a class="link" href="#import">4.12. Importing .ics formatted files <code>import</code></a></h3>
 <div class="paragraph">
 <p>You can import an .ics file into the planner.
 Format: <code>import filename</code></p>
@@ -1178,7 +1198,7 @@ Commands to view <em>slots</em>:</p>
 </div>
 <div class="paragraph">
 <p>=== Import/Exporting the Planner
-Commands to view <em>slots</em>:</p>
+Commands:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
@@ -1206,7 +1226,7 @@ Commands to view <em>slots</em>:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em><a href="#import">Import into your planner</a></em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Import into your planner from a .ics file</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>import</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>import</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>import PlanMySem.ics</code></p></td>
 </tr>
 </tbody>
 </table>
@@ -1220,4 +1240,4 @@ Commands to view <em>slots</em>:</p>
 </div>
 </div>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2019-04-02 15:49:19 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2019-04-02 16:09:03 UTC</div></div></div></body></html>
