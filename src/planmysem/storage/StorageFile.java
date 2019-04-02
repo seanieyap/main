@@ -12,6 +12,8 @@ import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -120,8 +122,8 @@ public class StorageFile implements Storage {
              * 'normal' situation (i.e. not truly exceptional) we should not use an exception to handle it.
              */
 
-            // create empty file if not found or is empty
-        } catch (FileNotFoundException | NullPointerException ex) {
+            // create empty planner if not found or is empty.
+        } catch (FileNotFoundException | NullPointerException e) {
             final Planner empty = new Planner();
             save(empty);
             return empty;
