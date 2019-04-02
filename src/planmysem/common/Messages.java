@@ -83,7 +83,7 @@ public class Messages {
     /**
      * Craft selected message via weighted Set of Pairs.
      */
-    public static String craftListMessage(List<WeightedName> tries) {
+    public static String craftListMessageWeighted(List<WeightedName> tries) {
         StringBuilder sb = new StringBuilder();
 
         //sb.append("Here are the closest matching names/tags: \n");
@@ -117,6 +117,33 @@ public class Messages {
 
         int count = 1;
         for (Map.Entry<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> entry : selectedSlots.entrySet()) {
+            sb.append("\n");
+            sb.append(count + ".\t");
+            sb.append("Name: ");
+            sb.append(entry.getValue().getValue().getName());
+            sb.append(",\n\t");
+            sb.append("Date: ");
+            sb.append(entry.getKey().toString());
+            sb.append(",\n\t");
+            sb.append("Start Time: ");
+            sb.append(entry.getValue().getValue().getStartTime());
+            sb.append("\n\t");
+            sb.append("Tags: ");
+            sb.append(entry.getValue().getValue().getTags());
+            sb.append("\n");
+            count++;
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Craft list message.
+     */
+    public static String craftListMessage(List<Pair<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>>> selectedSlots) {
+        StringBuilder sb = new StringBuilder();
+
+        int count = 1;
+        for (Pair<LocalDate, Pair<ReadOnlyDay, ReadOnlySlot>> entry : selectedSlots) {
             sb.append("\n");
             sb.append(count + ".\t");
             sb.append("Name: ");

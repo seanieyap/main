@@ -243,7 +243,7 @@ public class FindCommandTest {
             selectedSlots.add(weightedNames.poll());
         }
         assertEquals(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
-                Messages.craftListMessage(selectedSlots)), commandResult.getFeedbackToUser());
+                Messages.craftListMessageWeighted(selectedSlots)), commandResult.getFeedbackToUser());
     }
 
     @Test
@@ -288,7 +288,7 @@ public class FindCommandTest {
             selectedSlots.add(weightedNames.poll());
         }
             assertEquals(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
-                    Messages.craftListMessage(selectedSlots)), commandResult.getFeedbackToUser());
+                    Messages.craftListMessageWeighted(selectedSlots)), commandResult.getFeedbackToUser());
     }
 
     @Test
@@ -329,7 +329,7 @@ public class FindCommandTest {
             selectedSlots.add(weightedNames.poll());
         }
         assertEquals(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
-                Messages.craftListMessage(selectedSlots)), commandResult.getFeedbackToUser());
+                Messages.craftListMessageWeighted(selectedSlots)), commandResult.getFeedbackToUser());
     }
 
     @Test
@@ -375,7 +375,7 @@ public class FindCommandTest {
             selectedSlots.add(weightedNames.poll());
         }
         assertEquals(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
-                Messages.craftListMessage(selectedSlots)), commandResult.getFeedbackToUser());
+                Messages.craftListMessageWeighted(selectedSlots)), commandResult.getFeedbackToUser());
     }
 
     @Test
