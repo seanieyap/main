@@ -69,14 +69,6 @@ This section shows a summary of my coding, documentation, and other helpful cont
         *** Highlights: The implementation of this feature required taking care of numerous cases in an effective manner. It
             was a tedious and slow process but necessary.
 
-    ** Feature 2: I implemented a new parsing system to replace the existing system for both prefixed parameters and keywords.
-        *** What it does: It parses commands input by the user and determines the user intention, hence determining what action
-            is to be taken by the application.
-        *** Justification: A new parser with flexible reading of prefixed parameters allows for unordered parameters instead of fixed ordering
-            in the old parse. This way, new parser allow for greater ease of use and overall user experience.
-        *** Highlights: The implementation of this feature required taking care of numerous cases in an effective manner. It
-            was a tedious and slow process but necessary.
-
 * *Minor enhancement*:
     ** Mini-Feature 1: I implemented a new clock system to manage dates and time more efficiently as with the nature of a planner application, the application is very time sensitive.
 
