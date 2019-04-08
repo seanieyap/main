@@ -9,8 +9,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -28,7 +31,8 @@ import planmysem.model.slot.Slot;
 public class ImportCommand extends Command {
     public static final String COMMAND_WORD = "import";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports a .ics file into the Planner."
-            + "\n\tParameters: filename"
+            + "\n\tParameters: "
+            + "\n\t\tMandatory: fn/FILENAME"
             + "\n\tExample: " + COMMAND_WORD + " my_outlook_calendar.ics";
     public static final String MESSAGE_SUCCESS = "File imported.\n";
     public static final String MESSAGE_FILE_NOT_FOUND = "File not found.\n";
@@ -38,7 +42,11 @@ public class ImportCommand extends Command {
     private int failedImports = 0;
 
     public ImportCommand(String fileName) {
-        this.fileName = fileName.replaceAll("\\s", "");
+        if (!fileName.endsWith(".ics")) {
+            this.fileName = fileName.concat(".ics");
+        } else {
+            this.fileName = fileName;
+        }
     }
 
     @Override
@@ -47,7 +55,6 @@ public class ImportCommand extends Command {
         try {
             fileReader = new FileReader(this.fileName);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             return new CommandResult(MESSAGE_FILE_NOT_FOUND);
         }
         BufferedReader br = new BufferedReader(fileReader);
@@ -63,12 +70,19 @@ public class ImportCommand extends Command {
                     String location = null;
                     String description = null;
                     LocalTime startTime = null;
+                    Set<String> tags = new HashSet<>();
                     int duration = 0;
                     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
 
                     while (!("END:VEVENT".equals(sCurrentLine))) {
                         sCurrentLine = br.readLine();
                         String[] sSplit = sCurrentLine.split(":");
+                        System.out.println((sSplit[0]));
+                        if (sSplit[0].contains(";")) {
+                            String[] buffer = sSplit[0].split(";");
+                            sSplit[0] = buffer[0];
+                            System.out.println(sSplit[0]);
+                        }
                         switch (sSplit[0]) {
                         case "SUMMARY":
                             name = sSplit[1];
@@ -93,13 +107,18 @@ public class ImportCommand extends Command {
                             description = sSplit[1];
                             break;
 
+                        case "X-TAGS":
+                            String[] tagArray = sSplit[1].split(",");
+                            tags.addAll(Arrays.asList(tagArray));
+                            break;
+
                         default:
                             break;
 
                         }
                     }
 
-                    Slot slot = new Slot(name, location, description, startTime, duration, null);
+                    Slot slot = new Slot(name, location, description, startTime, duration, tags);
                     Recurrence recurrence = new Recurrence(null, date);
                     Set<LocalDate> dates = recurrence.generateDates(model.getPlanner().getSemester());
                     Map<LocalDate, Day> days = new TreeMap<>();
@@ -113,13 +132,13 @@ public class ImportCommand extends Command {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException | DateTimeParseException e) {
             return new CommandResult(MESSAGE_ERROR_IN_READING_FILE);
         }
         if (this.failedImports == 0) {
             return new CommandResult(MESSAGE_SUCCESS);
         } else {
-            return new CommandResult(MESSAGE_SUCCESS + this.failedImports + " events failed to import.\n");
+            return new CommandResult(MESSAGE_SUCCESS + this.failedImports + " events are not within this semester.\n");
         }
     }
 }
