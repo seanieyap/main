@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javafx.util.Pair;
 
@@ -46,11 +47,15 @@ public class FindCommand extends Command {
             String n2 = p2.getName();
             int d1 = p1.getDist();
             int d2 = p2.getDist();
+            LocalDate date1 = p1.getDate();
+            LocalDate date2 = p2.getDate();
 
             if (d1 != d2) {
-                return d1 - d2;
+                return d1 - d2; //order by distance
+            } else if (!n1.equalsIgnoreCase(n2)) {
+                return n1.compareTo(n2); //order by name
             } else {
-                return n1.compareTo(n2);
+                return date1.compareTo(date2); //order by date
             }
         }
     });
@@ -72,7 +77,9 @@ public class FindCommand extends Command {
                 } else {
                     Set<String> tagSet = slot.getTags();
                     for (String tag : tagSet) {
-                        generateDiscoveredNames(keyword, tag, entry, slot);
+                        if (tagSet.contains(tag)) {
+                            generateDiscoveredNames(keyword, tag, entry, slot);
+                        }
                     }
                 }
             }
@@ -82,7 +89,7 @@ public class FindCommand extends Command {
             return new CommandResult(MESSAGE_SUCCESS_NONE);
         }
 
-        while (!weightedNames.isEmpty() && weightedNames.peek().getDist() < 10) {
+        while (!weightedNames.isEmpty()) {
             selectedSlots.add(weightedNames.poll());
         }
 
@@ -95,7 +102,7 @@ public class FindCommand extends Command {
         model.setLastShownList(lastShownList);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, selectedSlots.size(),
-                Messages.craftListMessage(selectedSlots)));
+                Messages.craftListMessageWeighted(selectedSlots)));
     }
 
     /**
@@ -104,12 +111,12 @@ public class FindCommand extends Command {
     */
     private void generateDiscoveredNames(String keyword, String compareString,
                                          Map.Entry<LocalDate, Day> entry, Slot slot) {
-        if (compareString.length() + 3 < keyword.length()) {
+        if (!Pattern.matches(".*" + keyword + ".*", compareString)) {
             return;
         }
 
         int dist = Utils.getLevenshteinDistance(keyword, compareString);
-        WeightedName distNameTrie = new WeightedName(entry, slot, dist);
+        WeightedName distNameTrie = new WeightedName(entry, slot, entry.getKey(), dist);
 
         weightedNames.add(distNameTrie);
     }

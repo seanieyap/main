@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,16 +18,10 @@ import java.util.regex.Pattern;
  * Utility methods
  */
 public class Utils {
-    public static final Pattern DATE_FORMAT =
-            Pattern.compile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)");
-    public static final Pattern DATE_FORMAT_NO_YEAR =
-            Pattern.compile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])");
-    public static final Pattern TWELVE_HOUR_FORMAT =
-            Pattern.compile("(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)(AM|PM)");
-    public static final Pattern TWENTY_FOUR_HOUR_FORMAT =
-            Pattern.compile("([01]?[0-9]|2[0-3]):[0-5][0-9]");
     public static final Pattern INTEGER_FORMAT =
             Pattern.compile("\\d+");
+
+    private static final int MAXIMUM_DISTANCE = 20;
 
     /**
      * Checks whether any of the given items are null.
@@ -72,7 +67,7 @@ public class Utils {
             break;
 
         case "tuesday":
-        case "tues":
+        case "tue":
         case "2":
             result = 2;
             break;
@@ -84,7 +79,7 @@ public class Utils {
             break;
 
         case "thursday":
-        case "thurs":
+        case "thu":
         case "4":
             result = 4;
             break;
@@ -122,13 +117,26 @@ public class Utils {
         if (date == null) {
             return null;
         }
-        if (DATE_FORMAT.matcher(date).matches()) {
-            return LocalDate.parse(date, DateTimeFormatter.ofPattern("d-MM-yyyy"));
-        } else if (DATE_FORMAT_NO_YEAR.matcher(date).matches()) {
-            return LocalDate.parse(date + "-" + Year.now().getValue(), DateTimeFormatter.ofPattern("d-MM-yyyy"));
+
+        LocalDate result;
+
+        // with year
+        try {
+            result = LocalDate.parse(date, DateTimeFormatter.ofPattern("d-MM-yyyy"));
+        } catch (DateTimeParseException dtpe) {
+            result = null;
         }
 
-        return null;
+        // without year
+        if (result == null) {
+            try {
+                result = LocalDate.parse(date + "-" + Year.now().getValue(), DateTimeFormatter.ofPattern("d-MM-yyyy"));
+            } catch (DateTimeParseException dtpe) {
+                result = null;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -138,13 +146,34 @@ public class Utils {
         if (time == null) {
             return null;
         }
-        if (TWELVE_HOUR_FORMAT.matcher(time).matches()) {
-            return LocalTime.parse(time.toUpperCase(), DateTimeFormatter.ofPattern("h[h]:mm a"));
-        } else if (TWENTY_FOUR_HOUR_FORMAT.matcher(time).matches()) {
-            return LocalTime.parse(time, DateTimeFormatter.ofPattern("H[H]:mm"));
+
+        LocalTime result;
+
+        // Twelve hour format
+        try {
+            result = LocalTime.parse(time.toUpperCase(), DateTimeFormatter.ofPattern("h[h]:mma"));
+        } catch (DateTimeParseException dtpe) {
+            result = null;
         }
 
-        return null;
+        if (result == null) {
+            try {
+                result = LocalTime.parse(time.toUpperCase(), DateTimeFormatter.ofPattern("h[h]:mm a"));
+            } catch (DateTimeParseException dtpe) {
+                result = null;
+            }
+        }
+
+        if (result == null) {
+            // Twenty-four hour format
+            try {
+                result = LocalTime.parse(time, DateTimeFormatter.ofPattern("H[H]:mm"));
+            } catch (DateTimeParseException dtpe) {
+                result = null;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -196,7 +225,7 @@ public class Utils {
         }
 
         // cost for transforming each letter in String rhs
-        for (int j = 1; j < rhs.length() + 1 && j < 20; j++) {
+        for (int j = 1; j < rhs.length() + 1 && j < MAXIMUM_DISTANCE; j++) {
             // initial cost in String rhs
             newCost[0] = j;
 

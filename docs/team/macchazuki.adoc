@@ -45,6 +45,7 @@ An in-depth analysis of how the planner stores slots was necessary in order to e
 ** Justification: This feature improves the product because the user's schedule data will not be able to easily obtained by others.
 ** Highlights: This enhancement works with existing as well as future commands. In particular, this enhancement works hand-in-hand with the import and export functions. As we have decided to encrypt the raw data file, the user will not be able to obtain the raw data of his planner. +
 As a result, the export function allows the user to obtain a read-able text file when he wishes to. +
+This enhancement also allows the user to obtain a readable file as the data will be encrypted (discussed later). +
 An in-depth analysis of how the planner data is stored was necessary to identify where encryption and decryption should be done on the data. Also, a general understanding of ciphers and data encryption was necessary in implementation of this enhancement.
 
 * *Code contributed*: [https://github.com/CS2113-AY1819S2-T08-3/main/tree/master/src/planmysem/storage]
