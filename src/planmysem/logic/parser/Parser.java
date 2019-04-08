@@ -28,6 +28,7 @@ public interface Parser<T extends Command> {
     String PREFIX_NEW_LOCATION = "nl";
     String PREFIX_NEW_DESCRIPTION = "ndes";
     String PREFIX_NEW_TAG = "nt";
+    String PREFIX_FILE_NAME = "fn";
     String PREFIX_OPTION = "o";
 
     /**
