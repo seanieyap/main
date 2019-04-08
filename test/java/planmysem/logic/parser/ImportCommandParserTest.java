@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import planmysem.common.Clock;
-import planmysem.logic.commands.ExportCommand;
+
 import planmysem.logic.commands.ImportCommand;
 
 public class ImportCommandParserTest {
@@ -32,6 +32,11 @@ public class ImportCommandParserTest {
 
         assertParseFailure(parser,
                 "n/WrongPara",
+                expectedMessage
+        );
+
+        assertParseFailure(parser,
+                "",
                 expectedMessage
         );
 

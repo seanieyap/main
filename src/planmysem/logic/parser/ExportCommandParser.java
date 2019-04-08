@@ -25,12 +25,14 @@ public class ExportCommandParser implements Parser<ExportCommand> {
         HashMap<String, Set<String>> arguments = getParametersWithArguments(args);
         String fileName = getFirstInSet(arguments.get(PREFIX_FILE_NAME));
 
-        if (fileName != null) {
-            return new ExportCommand(fileName);
-        } else if (trimArg.equals("")) {
-            return new ExportCommand("PlanMySem");
+        if (fileName == null || fileName.equals("")) {
+            if (trimArg.equals("")) {
+                return new ExportCommand("PlanMySem");
+            } else {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE));
+            }
         } else {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE));
+            return new ExportCommand(fileName);
         }
     }
 }

@@ -25,7 +25,7 @@ public class ExportCommandParserTest {
                 new ExportCommand("test"));
 
         //default is PlanMySem
-        assertParseSuccess(parser, "", new ExportCommand("test"));
+        assertParseSuccess(parser, "", new ExportCommand("PlanMySem"));
     }
 
     @Test

@@ -24,7 +24,6 @@ public class ExportCommand extends Command {
 
     public ExportCommand(String fileName) {
         this.fileName = fileName;
-        System.out.println(fileName);
     }
 
     @Override
@@ -39,5 +38,12 @@ public class ExportCommand extends Command {
         }
 
         return new CommandResult(MESSAGE_EXPORT_ACKNOWLEDGEMENT);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof ExportCommand // instanceof handles nulls
+                && fileName.equals(((ExportCommand) other).fileName));
     }
 }

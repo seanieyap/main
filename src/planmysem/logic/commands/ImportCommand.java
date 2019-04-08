@@ -141,6 +141,14 @@ public class ImportCommand extends Command {
             return new CommandResult(MESSAGE_SUCCESS + this.failedImports + " events are not within this semester.\n");
         }
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof ImportCommand // instanceof handles nulls
+                && fileName.equals(((ImportCommand) other).fileName));
+    }
+
 }
 
 
