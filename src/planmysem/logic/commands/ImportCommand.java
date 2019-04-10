@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 
 import java.util.Arrays;
@@ -71,12 +70,6 @@ public class ImportCommand extends Command {
                     while (!("END:VEVENT".equals(sCurrentLine))) {
                         sCurrentLine = br.readLine();
                         String[] sSplit = sCurrentLine.split(":");
-                        System.out.println((sSplit[0]));
-                        if (sSplit[0].contains(";")) {
-                            String[] buffer = sSplit[0].split(";");
-                            sSplit[0] = buffer[0];
-                            System.out.println(sSplit[0]);
-                        }
                         switch (sSplit[0]) {
                         case "SUMMARY":
                             name = sSplit[1];

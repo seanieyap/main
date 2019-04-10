@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
+import planmysem.common.Clock;
 import planmysem.logic.CommandHistory;
 import planmysem.logic.commands.ImportCommand;
 import planmysem.model.Model;
@@ -24,6 +25,8 @@ public class ImportCommandTest {
 
     @Before
     public void setup() throws Exception {
+
+        Clock.set("2019-01-14T10:00:00Z");
 
         // Create typical planner
         model = new ModelManager();
