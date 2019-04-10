@@ -1,4 +1,8 @@
 package planmysem.logic.Commands;
+
+import static planmysem.logic.Commands.CommandTestUtil.assertCommandFailure;
+import static planmysem.logic.Commands.CommandTestUtil.assertCommandSuccess;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,15 +14,14 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.junit.rules.TemporaryFolder;
+
 import planmysem.common.Clock;
+
 import planmysem.logic.CommandHistory;
 import planmysem.logic.commands.ExportCommand;
 import planmysem.logic.commands.exceptions.CommandException;
 import planmysem.model.Model;
 import planmysem.model.ModelManager;
-
-import static planmysem.logic.Commands.CommandTestUtil.assertCommandFailure;
-import static planmysem.logic.Commands.CommandTestUtil.assertCommandSuccess;
 
 public class ExportCommandTest {
 
