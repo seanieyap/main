@@ -3,7 +3,6 @@ package planmysem.logic.Commands;
 import static planmysem.logic.Commands.CommandTestUtil.assertCommandFailure;
 import static planmysem.logic.Commands.CommandTestUtil.assertCommandSuccess;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,7 +18,6 @@ import planmysem.common.Clock;
 
 import planmysem.logic.CommandHistory;
 import planmysem.logic.commands.ExportCommand;
-import planmysem.logic.commands.exceptions.CommandException;
 import planmysem.model.Model;
 import planmysem.model.ModelManager;
 
@@ -29,23 +27,22 @@ public class ExportCommandTest {
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
     private CommandHistory commandHistory = new CommandHistory();
-
+    private String tempFolderPath;
     @Before
     public void setup() {
         Clock.set("2019-01-14T10:00:00Z");
+        tempFolderPath = tempFolder.getRoot().getPath();
     }
 
     @Test
-    public void execute_export_success() throws IOException, CommandException {
-        File testFolder = tempFolder.newFolder("test");
+    public void execute_export_success() throws IOException {
         Model model = new ModelManager();
         Model expectedModel = new ModelManager();
-        new ExportCommand(testFolder.getPath() + "\\ExportTest").execute(model, commandHistory);
-        assertCommandSuccess(new ExportCommand(testFolder.getPath() + "\\ExportTest"), model,
+        assertCommandSuccess(new ExportCommand(tempFolderPath + "\\ExportTest"), model,
                 commandHistory, ExportCommand.MESSAGE_SUCCESS, expectedModel);
 
         String expectedIcs = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nEND:VCALENDAR\r\n";
-        String actualIcs = new String(Files.readAllBytes(Paths.get(testFolder.getPath() + "\\ExportTest.ics")));
+        String actualIcs = new String(Files.readAllBytes(Paths.get(tempFolderPath + "\\ExportTest.ics")));
 
         Assert.assertEquals(actualIcs, expectedIcs);
     }
@@ -53,6 +50,7 @@ public class ExportCommandTest {
     @Test
     public void execute_export_fail() {
         Model model = new ModelManager();
-        assertCommandFailure(new ExportCommand("?"), model, commandHistory, ExportCommand.MESSAGE_FAILED);
+        assertCommandFailure(new ExportCommand("\\/:*?\"<>|"), model, commandHistory,
+                ExportCommand.MESSAGE_FAILED);
     }
 }
