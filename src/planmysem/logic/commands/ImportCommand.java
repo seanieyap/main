@@ -1,7 +1,6 @@
 package planmysem.logic.commands;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -9,7 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 
 import java.util.Arrays;
@@ -19,6 +17,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import planmysem.logic.CommandHistory;
+import planmysem.logic.commands.exceptions.CommandException;
 import planmysem.model.Model;
 import planmysem.model.recurrence.Recurrence;
 import planmysem.model.semester.Day;
@@ -50,17 +49,11 @@ public class ImportCommand extends Command {
     }
 
     @Override
-    public CommandResult execute(Model model, CommandHistory commandHistory) {
-        FileReader fileReader;
+    public CommandResult execute(Model model, CommandHistory commandHistory) throws CommandException {
         try {
+            FileReader fileReader;
             fileReader = new FileReader(this.fileName);
-        } catch (FileNotFoundException e) {
-            return new CommandResult(MESSAGE_FILE_NOT_FOUND);
-        }
-        BufferedReader br = new BufferedReader(fileReader);
-
-
-        try {
+            BufferedReader br = new BufferedReader(fileReader);
             String sCurrentLine = br.readLine();
             while (!("END:VCALENDAR".equals(sCurrentLine))) {
                 sCurrentLine = br.readLine();
@@ -77,12 +70,6 @@ public class ImportCommand extends Command {
                     while (!("END:VEVENT".equals(sCurrentLine))) {
                         sCurrentLine = br.readLine();
                         String[] sSplit = sCurrentLine.split(":");
-                        System.out.println((sSplit[0]));
-                        if (sSplit[0].contains(";")) {
-                            String[] buffer = sSplit[0].split(";");
-                            sSplit[0] = buffer[0];
-                            System.out.println(sSplit[0]);
-                        }
                         switch (sSplit[0]) {
                         case "SUMMARY":
                             name = sSplit[1];
@@ -132,13 +119,13 @@ public class ImportCommand extends Command {
                     }
                 }
             }
-        } catch (IOException | NullPointerException | DateTimeParseException e) {
-            return new CommandResult(MESSAGE_ERROR_IN_READING_FILE);
+        } catch (IOException | NullPointerException e) {
+            throw new CommandException(MESSAGE_ERROR_IN_READING_FILE);
         }
         if (this.failedImports == 0) {
             return new CommandResult(MESSAGE_SUCCESS);
         } else {
-            return new CommandResult(MESSAGE_SUCCESS + this.failedImports + " events are not within this semester.\n");
+            return new CommandResult(MESSAGE_SUCCESS + this.failedImports + " event(s) failed to import.\n");
         }
     }
 
