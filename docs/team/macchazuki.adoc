@@ -15,7 +15,7 @@ endif::[]
 
 == PROJECT: PlanMySem
 
-My team and I were tasked with enhancing a basic command line interface addressbook application, https://github.com/CS2113-AY1819S2-T08-3/main[AddressBook Level 3], for our Software Engineering project. +
+My team and I were tasked with enhancing a basic command line interface addressbook application, https://github.com/nusCS2113-AY1819S2/addressbook-level3[AddressBook Level 3], for our Software Engineering project. +
 
 We chose to morph it into a student planner called *PlanMySem*. This planner is made specially for NUS students and staff, containing features that will help them manage their school schedules more easily. +
 
@@ -28,9 +28,6 @@ These activities can also be efficiently managed via the intuitive tagging syste
 [#img-view]
 .[.underline]#Example of viewing the current week#
 image::Ui.png[width="790"]
-{zwsp}
-
-{zwsp}
 
 == Overview
 
@@ -82,8 +79,10 @@ An in-depth analysis of how the planner data is stored was necessary to identify
     ** View my RepoSense contribution analysis: https://nuscs2113-ay1819s2.github.io/dashboard-beta/#=undefined&search=macchazuki[here]
 * *Other contributions*:
 
+**Test coverage:
+*** I wrote JUnit tests for all my features and had close to 100% coverage. +
 ** Documentation:
-*** Wrote Use Cases on the Developer Guide: https://github.com/CS2113-AY1819S2-T08-3/main/blob/master/docs/DeveloperGuide.adoc[here]
+*** I wrote Use Cases on the Developer Guide: https://github.com/CS2113-AY1819S2-T08-3/main/blob/master/docs/DeveloperGuide.adoc[here]
 
 == Contributions to the User Guide
 
@@ -198,9 +197,9 @@ Reason for current choice: Using the library will allow `PlanMySem` to easily im
 In addition, as our application is a specially designed planner for NUS matters, I felt that it was unnecessary to have the same slots on multiple applications. +
 
 Hence, I chose to code the reading and writing of .ics files and add a disclaimer that importing of non-native .ics files is likely to cause errors.
-{zwsp}
 
 {zwsp}
+
 
 === Data Encryption / Decryption feature
 
